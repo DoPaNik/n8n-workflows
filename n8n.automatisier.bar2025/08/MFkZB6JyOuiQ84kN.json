@@ -1,0 +1,360 @@
+{
+  "active": true,
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SerpAPI": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save recipe to Notion": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many database pages in Notion": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many child blocks in Notion": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "When chat message received",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-08-16T08:55:51.210Z",
+  "id": "MFkZB6JyOuiQ84kN",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Rezepte Helfer",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "👋 Willkommen im Kochstudio 3000!\nIch bin dein kulinarischer Copilot – bereit, Rezepte, Tipps und Küchenabenteuer mit dir zu starten.\nWorauf hast du heute Appetit?",
+        "options": {
+          "allowedOrigins": "*",
+          "inputPlaceholder": "Wie kann ich Dir helfen ...",
+          "loadPreviousSession": "memory",
+          "subtitle": "Kochen wie Oma – nur mit mehr RAM",
+          "title": "Kochstudio 3000",
+          "customCss": ":root {\n  --chat--color-primary: #e67e22; /* warmes Orange (Kochfarbe) */\n  --chat--color-secondary: #fdf6ec; /* sanftes Creme */\n  --chat--color-white: #ffffff;\n  --chat--color-light: #fffaf4; /* heller Küchenhintergrund */\n  --chat--color-dark: #2c3e50;\n  --chat--color-muted: #8e8ea0;\n  --chat--border-radius: 1rem;\n  --chat--font-family: \"Inter\", \"Segoe UI\", Roboto, sans-serif;\n\n  --chat--message--font-size: 14px;\n  --chat--message-line-height: 1.5;\n  --chat--spacing: 1rem;\n\n  --chat--window--width: 420px;\n  --chat--window--height: 600px;\n  --chat--window--border: 1px solid #f2d7b6;\n  --chat--window--border-radius: var(--chat--border-radius);\n  --chat--window--box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);\n\n  --chat--header--background: var(--chat--color-primary);\n  --chat--header--color: #fff;\n  --chat--heading--font-size: 1.25rem;\n\n  --chat--message--user--background: #dff5e1; /* zartes Grün (wie frische Kräuter) */\n  --chat--message--user--color: #1d2b1f;\n  --chat--message--bot--background: #ffffff;\n  --chat--message--bot--color: #2c3e50;\n\n  --chat--input--background: #fff;\n  --chat--input--text-color: #2c3e50;\n  --chat--input--padding: 0.8rem;\n  --chat--textarea--height: auto;\n  --chat--input--border: 1px solid #e0c097;\n  --chat--input--border-radius: var(--chat--border-radius);\n  --chat--button--background: var(--chat--color-primary);\n  --chat--button--color: #fff;\n  --chat--button--hover--background: #d35400;\n}\n\n/* Container */\n.chat-window {\n  width: var(--chat--window--width);\n  height: var(--chat--window--height);\n  background: var(--chat--color-light);\n  border-radius: var(--chat--window--border-radius);\n  box-shadow: var(--chat--window--box-shadow);\n  display: flex;\n  flex-direction: column;\n  overflow: hidden;\n  font-family: var(--chat--font-family);\n}\n\n/* Header */\n.chat-heading {\n  display: block;\n}\n.chat-header {\n  gap: 0em !important;\n  background: var(--chat--header--background);\n  padding: var(--chat--spacing);\n  font-size: var(--chat--heading--font-size);\n  font-weight: 600;\n  color: var(--chat--header--color);\n  text-align: center;\n  border-bottom: 2px solid #d35400;\n}\n.chat-header p {\n  margin: 0px;\n  font-size: small !important;\n\n}\n\n.chat-header::before {\n  content: \"👨‍🍳 \";\n  font-size: 1.5rem;\n}\n\n/* Nachrichtenbereich */\n.chat-messages {\n  flex: 1 1 auto;\n  overflow-y: auto;\n  background: var(--chat--color-light);\n  padding: var(--chat--spacing);\n}\n\n.chat-message {\n  max-width: 80%;\n  padding: var(--chat--spacing);\n  margin-bottom: 1rem;\n  border-radius: var(--chat--border-radius);\n  line-height: var(--chat--message-line-height);\n  font-size: var(--chat--message--font-size);\n  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);\n}\n\n.chat-message.user {\n  background: var(--chat--message--user--background);\n  color: var(--chat--message--user--color);\n  margin-left: auto;\n  border-left: 4px solid #27ae60; /* Kräutergrün Akzent */\n}\n\n.chat-message.bot {\n  background: var(--chat--message--bot--background);\n  color: var(--chat--message--bot--color);\n  margin-right: auto;\n  border-left: 4px solid var(--chat--color-primary); /* Orange Akzent */\n}\n\n/* Footer / Eingabe */\n.chat-footer {\n  display: flex;\n  align-items: center;\n  padding: var(--chat--spacing);\n  background: var(--chat--color-white);\n  border-top: 2px solid #f2d7b6;\n}\n\n.chat-input {\n  flex: 1;\n  padding: var(--chat--input--padding);\n  background: var(--chat--input--background);\n  color: var(--chat--input--text-color);\n  border: var(--chat--input--border);\n  border-radius: var(--chat--input--border-radius);\n  font-size: 1rem;\n  resize: none;\n  outline: none;\n}\n\n.chat-send-button {\n  margin-left: 0.5rem;\n  background: var(--chat--button--background);\n  color: var(--chat--button--color);\n  border: none;\n  cursor: pointer;\n  padding: 0.6rem 1rem;\n  border-radius: var(--chat--border-radius);\n  transition: background 0.2s ease;\n}\n\n.chat-send-button:hover {\n  background: var(--chat--button--hover--background);\n}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e3d6e179-fe1f-4168-b83a-1db343cb52b1",
+      "name": "When chat message received",
+      "webhookId": "e4bec2c8-68ed-444f-84b3-8501c18d6a22"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Du bist mein persönlicher Kochassistent. Deine Aufgabe: mir bei allen Fragen zu meinen Rezepten in Notion zu helfen – insbesondere Zutaten (liegen nur in den Blocks!), Zubereitungsschritte, Bilder, Portionierung und Einkaufslisten.\n\nArbeitsweise & Reihenfolge (zwingend)\n- Rezept finden / auswählen\n- Verwende „Get many database pages in Notion“, um Rezepte zu holen.\n- Suche dabei nach Name/Tags des Nutzers (ggf. clientseitig filtern), wähle das beste Match und merke dir dessen Url ( es handelt sich um eine Notion Url )\n- Rezeptdetails laden (Zutaten/Schritte/Bilder)\n- Verwende „Get many child blocks in Notion“ und übergib die Url der gefundenen Seite als Block Url.\n- Zutatenlisten und Zubereitung sind ausschließlich in den Blocks – antworte erst, nachdem du die Blocks gelesen hast. \n\nFolge-Interaktionen\n\n- Wenn der Nutzer im selben Chat wieder über dasselbe Rezept spricht, verwende die bereits bekannte Id erneut, ohne die Datenbank nochmals zu scannen (sofern eindeutig).\n\n- Nicht gefunden in Notion?\n  - Sage das offen und nutze bei Bedarf Websuche (SerpAPI) für ein passendes öffentliches Rezept – immer Quelle nennen. \n\nFähigkeiten\n- Zutatenlisten anzeigen; Zubereitung erklären/vereinfachen; Alternativen vorschlagen.\n- Portionen/Mengen umrechnen (auch mit „Calculator“).\n- Bilder zeigen: zuerst aus Notion-Blocks, Cover und Images, sonst aus dem Internet (mit Quelle).\n- Einkaufslisten generieren; Schritt-für-Schritt-Anleitung; Timer-Vorschläge.\n- Rezepte aus Instagram und TikTok Links erstellen, nutze dazu das passende Tool\n\nStil & Regeln\n- Immer Quellen angeben (Notion-Seite oder Web-Link).\n- Freundlich, klar, alltagstauglich – wie ein Küchenfreund.\n- Fachbegriffe kurz erklären.\n- Wenn etwas fehlt, transparent sagen und pragmatische Alternativen anbieten.\n\n\nTools strikt gemäß Reihenfolge einsetzen:\n- Datenbank → Url → Blocks → dann antworten. Kein Blocks-Call ohne gültige Seiten Url\n  - Url Format: \"https://www.notion.so/Rezept1-250ed138daa3814889cbf9437e16d20b\"",
+          "returnIntermediateSteps": false,
+          "passthroughBinaryImages": true
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        688,
+        0
+      ],
+      "id": "74faeda5-439b-4116-bf1e-80c769394012",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        528,
+        224
+      ],
+      "id": "9f044d9d-5ed4-4bf6-af6c-069815a838b8",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "options": {
+          "maxRetries": 2
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        400,
+        224
+      ],
+      "id": "65f89b9d-a053-4594-a548-46ee9dc0f5f6",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "uxMQqh1uaXnkylVv",
+          "name": "OpenAi account (English Class)"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        656,
+        224
+      ],
+      "id": "7e15f574-5084-4b38-aa66-f9a5be556c92",
+      "name": "Calculator"
+    },
+    {
+      "parameters": {
+        "options": {
+          "gl": "de",
+          "device": "desktop",
+          "no_cache": false,
+          "google_domain": "google.de",
+          "hl": "de"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        784,
+        224
+      ],
+      "id": "873b013c-f4a0-457b-9ec2-2aebe8c0fd29",
+      "name": "SerpAPI",
+      "credentials": {
+        "serpApi": {
+          "id": "1HxABSF0tfZi0JWT",
+          "name": "SerpAPI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Nutze diesen Workflow, wenn du Links zu Rezepten aus Instagram oder Tiktok übergeben bekommst. Damit können die Rezepte in die Notion Datenbank überführt werden. Gebe den Link zum Rezept danach zurück.",
+        "workflowId": {
+          "__rl": true,
+          "value": "zE5ewrrYJhNkeTA9",
+          "mode": "list",
+          "cachedResultName": "Persist social media recipe to Notion"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "query",
+              "displayName": "query",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        912,
+        224
+      ],
+      "id": "d8517b72-a7b0-451a-bbc3-469340723d8b",
+      "name": "Save recipe to Notion"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Suche Rezepte in der definierten Notion-Datenbank. Gib immer Url ( Url der Seite ) und den Name aus den Properties zurück; weitere Properties (z. B. Tags, Cover) sind optional. Verwende dieses Tool immer zuerst, um anhand des Nutzerwunschs (Name/Tags) die passende Url des Rezeptes zu bestimmen. Wenn mehrere Treffer passen, wähle das beste Match (Name enthält Suchbegriff, höchste Relevanz).",
+        "resource": "databasePage",
+        "operation": "getAll",
+        "databaseId": {
+          "__rl": true,
+          "value": "99ded9cf-e12e-4411-87ec-9336928a1289",
+          "mode": "list",
+          "cachedResultName": "Meals",
+          "cachedResultUrl": "https://www.notion.so/99ded9cfe12e441187ec9336928a1289"
+        },
+        "returnAll": true,
+        "simple": "",
+        "filterType": "manual",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "key": "Name|title",
+              "condition": "contains",
+              "titleValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('conditions0_Title', `Rezeptname`, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notionTool",
+      "typeVersion": 2.2,
+      "position": [
+        1040,
+        224
+      ],
+      "id": "5de271cf-586b-4035-b275-1a436729c6ab",
+      "name": "Get many database pages in Notion",
+      "credentials": {
+        "notionApi": {
+          "id": "2tPgJFU6jHXabGtx",
+          "name": "Notion SK "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Ruft die Block-Elemente (inkl. Unterblöcke) einer Rezept-Seite ab. \n\nPflicht: Übergebe die Url der zuvor gefundenen Seite umd auf die Elemente zugreifen zu können.\nDie Zutaten- und Zubereitungsinformationen befinden sich ausschließlich in den Blocks (Listen, Überschriften, Absätze, Tabellen). Verwende dieses Tool immer, bevor du auf Fragen zu Zutaten/Schritte antwortest.",
+        "resource": "block",
+        "operation": "getAll",
+        "blockId": {
+          "__rl": true,
+          "mode": "url",
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Block', ``, 'string') }}"
+        },
+        "returnAll": true,
+        "fetchNestedBlocks": true
+      },
+      "type": "n8n-nodes-base.notionTool",
+      "typeVersion": 2.2,
+      "position": [
+        1168,
+        224
+      ],
+      "id": "83f48c37-fadf-4857-9fa1-561bea6f3255",
+      "name": "Get many child blocks in Notion",
+      "credentials": {
+        "notionApi": {
+          "id": "2tPgJFU6jHXabGtx",
+          "name": "Notion SK "
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        224
+      ],
+      "id": "175b41a0-2ee8-4461-9793-e45219bdc3ed",
+      "name": "Simple Memory1"
+    }
+  ],
+  "pinData": {},
+  "repo_name": "n8n-workflows",
+  "repo_owner": "DoPaNik",
+  "repo_path": "n8n.automatisier.bar",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-08-18T21:26:09.207Z",
+  "versionId": "6cdbe32f-ae69-4302-8fe9-7ad91f342507"
+}
