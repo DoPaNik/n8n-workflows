@@ -1,0 +1,583 @@
+{
+  "active": false,
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        []
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-08-18T22:19:41.055Z",
+  "id": "YRJxvVdip5Bqh4gJ",
+  "isArchived": false,
+  "meta": null,
+  "name": "books",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://hydra.automatisier.bar/api",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "t",
+              "value": "book"
+            },
+            {
+              "name": "author",
+              "value": "={{ $json.search.author }}"
+            },
+            {
+              "name": "o",
+              "value": "json"
+            },
+            {
+              "name": "title",
+              "value": "={{ $json.search.title }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {}
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -64,
+        48
+      ],
+      "id": "9671828d-8d42-4acb-bbe2-a934412645f8",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "67NNuckhgZC0l7CL",
+          "name": "Hydra2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.search.url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Type",
+              "value": "application/x-nzb"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -64,
+        -160
+      ],
+      "id": "181835b6-e3c9-4c4a-9e33-34f1c29c8794",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://nzb.automatisier.bar/api",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "mode",
+              "value": "addfile"
+            },
+            {
+              "name": "cat",
+              "value": "books"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "nzbfile",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        160,
+        -160
+      ],
+      "id": "4e9e867d-e90d-4094-8fa8-3433385a43e3",
+      "name": "HTTP Request2",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "yXYvKNwn66O4Q11y",
+          "name": "SABnzbd (NZB)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "channel.item",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        432,
+        144
+      ],
+      "id": "248d2e17-37e5-4caa-b35c-aca1bcc2809a",
+      "name": "Split Out",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "26c49bfa-9dc9-42f2-973e-fdbf5c1a7149",
+              "leftValue": "={{ $json.category }}",
+              "rightValue": "EBook - DE",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        608,
+        48
+      ],
+      "id": "2c7f3cec-464d-47aa-bbca-2e2dceda02a6",
+      "name": "Filter",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "search",
+              "type": "object"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -512,
+        -64
+      ],
+      "id": "ba8e0bde-2132-4e5d-9ec9-8e107afd6169",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.search.download }}",
+                    "rightValue": "true",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    },
+                    "id": "68178e8e-2105-4540-b3b5-8ea10d760a9a"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "ca9aecad-26df-4cb0-8aa7-87d044b454ae",
+                    "leftValue": "={{ $json.search.download }}",
+                    "rightValue": "false",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "false",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -288,
+        -64
+      ],
+      "id": "3defe600-2df7-44b2-a557-a0e77c15b111",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "98047451-a7a7-4644-aed9-a47d9904d7bf",
+              "name": "title",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "2fec7aa8-c377-404a-a40c-4d8e56ef8f69",
+              "name": "author",
+              "value": "={{ $json.attr[0]['@attributes'].value }}",
+              "type": "string"
+            },
+            {
+              "id": "67914fd6-afac-4da6-a432-c5dd3f75e3f7",
+              "name": "url",
+              "value": "={{ $json.link }}",
+              "type": "string"
+            },
+            {
+              "id": "810767a6-f55a-4143-9c8e-707688086da9",
+              "name": "bytes",
+              "value": "={{ $json.sizeBytes }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1040,
+        -32
+      ],
+      "id": "2ee77472-5a77-45f5-b060-a387d2e21614",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Eingehende Items durchlaufen und transformieren\nconst results = $input.all().map(item => {\n  const bytes = item.json.bytes || 0;\n\n  return {\n    title: item.json.title || \"Unbekannt\",\n    author: item.json.author || \"Unbekannt\",\n    sizeMB: Number((bytes / (1024 * 1024)).toFixed(2)),\n    url: item.json.url || \"\"\n  };\n});\n\n// Struktur zurückgeben\nreturn [\n  {\n    json: {\n      results,\n      message: \"Bitte wähle ein Ergebnis aus und bestätige den Download.\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1376,
+        -80
+      ],
+      "id": "f70e97f7-6fbe-474c-add3-bde3ce22fb10",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.channel.item }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "array",
+                      "operation": "empty",
+                      "singleValue": true
+                    },
+                    "id": "707b792f-bebd-4e5f-8f52-aaba2a7b68b5"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4eeb7044-000c-4916-96f4-73b16b27d896",
+                    "leftValue": "={{ $json.channel.item }}",
+                    "rightValue": 1,
+                    "operator": {
+                      "type": "array",
+                      "operation": "lengthGt",
+                      "rightType": "number"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a240a065-e9f2-4a8c-af85-4f2467a9838c",
+                    "leftValue": "={{ $json.channel.item }}",
+                    "rightValue": 1,
+                    "operator": {
+                      "type": "array",
+                      "operation": "lengthEquals",
+                      "rightType": "number"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        160,
+        32
+      ],
+      "id": "15376fe7-895a-497b-8b02-a55861e93eb5",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst results = null;\n\n// Struktur zurückgeben\nreturn [\n  {\n    json: {\n      results,\n      message: \"Es wurde kein passendes Buch gefunden.\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        368,
+        -80
+      ],
+      "id": "e4e145b9-d3be-4734-8918-4986fa466db4",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code-Node (JavaScript)\n// Erwartet: mehrere Items mit der von dir gezeigten Struktur.\n// Liefert: pro Item zusätzliche Felder sizeBytes und sizeMB.\n\nfunction getAttrValue(attrs, key) {\n  if (!Array.isArray(attrs)) return undefined;\n  const match = attrs.find(\n    x => x?.['@attributes']?.name?.toLowerCase() === String(key).toLowerCase()\n  );\n  return match?.['@attributes']?.value;\n}\n\nfunction toNumberOrNull(v) {\n  if (v === undefined || v === null) return null;\n  // nur Ziffern herausziehen (falls mal \"3542751 bytes\" o.ä. ankommt)\n  const digits = String(v).match(/\\d+/g)?.join('') ?? '';\n  if (!digits) return null;\n  const n = Number(digits);\n  return Number.isFinite(n) ? n : null;\n}\n\nreturn $input.all().map(item => {\n  const j = item.json ?? {};\n\n  // 1) Primärquelle: attr[name===\"size\"].value\n  let sizeStr = getAttrValue(j.attr, 'size');\n\n  // 2) Fallback: enclosure.@attributes.length\n  if (sizeStr == null) {\n    sizeStr = j?.enclosure?.['@attributes']?.length;\n  }\n\n  const sizeBytes = toNumberOrNull(sizeStr);\n  const sizeMB = sizeBytes != null ? Number((sizeBytes / (1024 * 1024)).toFixed(2)) : null;\n\n  return {\n    json: {\n      ...j,\n      sizeBytes,\n      sizeMB\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        816,
+        48
+      ],
+      "id": "5b64d770-e05f-4630-91cd-9a7ab19fc623",
+      "name": "Code2"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "search": {
+            "title": "Der Herr der Ringe",
+            "author": "Tolkien",
+            "download": false,
+            "url": null
+          }
+        }
+      }
+    ]
+  },
+  "repo_name": "n8n-workflows",
+  "repo_owner": "DoPaNik",
+  "repo_path": "git@github.com:DoPaNik/n8n-workflows.git",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-08-19T21:46:07.832Z",
+  "versionId": "3f7cba46-fdcf-4c52-8fe0-424839c36627"
+}
