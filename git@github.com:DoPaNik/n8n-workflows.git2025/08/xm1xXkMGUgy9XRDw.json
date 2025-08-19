@@ -1,0 +1,636 @@
+{
+  "active": false,
+  "connections": {
+    "Get Plex Libs": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Get Movies",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Shows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Movies": {
+      "main": [
+        [
+          {
+            "node": "List of Movies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Shows": {
+      "main": [
+        [
+          {
+            "node": "List of Shows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List of Movies": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List of Shows": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Insert or update rows in a table1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert or update rows in a table1": {
+      "main": [
+        [
+          {
+            "node": "Summarize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get Plex Libs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Split Seasons",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Split Episodes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Seasons": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Episodes": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Insert or update rows in a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Insert or update rows in a table2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert or update rows in a table": {
+      "main": [
+        []
+      ]
+    },
+    "Insert or update rows in a table2": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2025-08-16T23:06:21.207Z",
+  "id": "xm1xXkMGUgy9XRDw",
+  "isArchived": false,
+  "meta": null,
+  "name": "Plex-Update-MySQL",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "=https://plex.automatisier.bar/library/sections/{{ $json.key }}/all",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "options": {
+          "lowercaseHeaders": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        704,
+        32
+      ],
+      "id": "750b9b0c-4fda-42f8-b2c4-c960068397d7",
+      "name": "Get Shows",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "wpZ166BMjg3dr8fT",
+          "name": "Plex Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "MediaContainer.Metadata",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        928,
+        32
+      ],
+      "id": "38242ea6-7e81-416d-8f63-7eb7784f92d8",
+      "name": "List of Shows"
+    },
+    {
+      "parameters": {
+        "url": "https://plex.automatisier.bar/library/sections/",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "options": {
+          "lowercaseHeaders": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        32,
+        -80
+      ],
+      "id": "da692639-e117-4abf-b720-e45c371f619b",
+      "name": "Get Plex Libs",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "wpZ166BMjg3dr8fT",
+          "name": "Plex Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "MediaContainer.Directory",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        256,
+        -80
+      ],
+      "id": "907a79bd-210d-4436-aaa5-b461fb92c561",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ef3c2c3f-c24a-414f-8d77-b58d50531344",
+              "leftValue": "={{ $json.type }}",
+              "rightValue": "movie",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        -80
+      ],
+      "id": "a7e7bbd8-3149-46d7-83fb-b1b2206a70ab",
+      "name": "If"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1152,
+        -320
+      ],
+      "id": "f0ea1424-c8dc-4d19-a2e8-384c1ee656e7",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * n8n Code node\n * Transformiert Plex-Items in ein reduziertes Schema für MySQL.\n * Erwartet items: [{ json: { ...plex fields... } }, ...]\n */\n\nfunction toInt(v) {\n  if (v === undefined || v === null || v === '') return null;\n  const n = Number(v);\n  return Number.isFinite(n) ? Math.trunc(n) : null;\n}\n\nfunction toDecimal(v) {\n  if (v === undefined || v === null || v === '') return null;\n  const n = Number(v);\n  return Number.isFinite(n) ? n : null;\n}\n\n/**\n * Plex liefert gemischte Zeitangaben:\n * - Unix Sekunden (z.B. lastViewedAt, addedAt, updatedAt)\n * - ISO-Strings (z.B. originallyAvailableAt: \"2025-06-18\")\n */\nfunction toMysqlDateTimeFromEpochSeconds(v) {\n  const n = toInt(v);\n  if (!n) return null;\n  const d = new Date(n * 1000);\n  // YYYY-MM-DD HH:MM:SS (lokal unabhängig)\n  const pad = (x) => String(x).padStart(2, '0');\n  return `${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())}`;\n}\n\nfunction toMysqlDate(v) {\n  // Wenn ISO-YYYY-MM-DD -> so lassen, ansonsten versuchen zu parsen\n  if (!v) return null;\n  if (/^\\d{4}-\\d{2}-\\d{2}$/.test(String(v))) return String(v);\n  const d = new Date(v);\n  if (isNaN(d.getTime())) return null;\n  const pad = (x) => String(x).padStart(2, '0');\n  return `${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())}`;\n}\n\n/**\n * Plex-Tag-Arrays wie Genre/Director/Writer/Role kommen oft als:\n *   [{ tag: \"Horror\" }, { tag: \"Thriller\" }]\n * Wir wandeln zu kommaseparierten Strings um.\n */\nfunction joinTags(arr, { valueKey = 'tag', maxLen = 255 } = {}) {\n  if (!Array.isArray(arr)) return null;\n  const list = arr\n    .map(x => (x && x[valueKey] != null ? String(x[valueKey]).trim() : ''))\n    .filter(Boolean);\n  if (list.length === 0) return null;\n  const s = list.join(', ');\n  return s.length > maxLen ? s.slice(0, maxLen) : s;\n}\n\n// Manche Nutzlasten haben Keys groß geschrieben (Genre) – wir fangen beides ab.\nfunction getTagArray(obj, key) {\n  if (!obj || typeof obj !== 'object') return undefined;\n  return obj[key] || obj[key?.toLowerCase?.()] || obj[key?.toUpperCase?.()];\n}\n\nconst out = items.map(({ json }) => {\n  const durationMs = toInt(json.duration);\n  const durationMin = durationMs ? Math.round(durationMs / 60000) : null;\n\n  const genres   = joinTags(getTagArray(json, 'Genre'));\n  const directors = joinTags(getTagArray(json, 'Director'));\n  const writers  = joinTags(getTagArray(json, 'Writer'));\n  // Für Cast nur die Personennamen (tag). Wenn Rollen/Charaktere gebraucht werden, separat ablegen.\n  const cast     = joinTags(getTagArray(json, 'Role'));\n\n  let viewCount = toInt(json.viewCount);\n  const lastViewedAt = toMysqlDateTimeFromEpochSeconds(json.lastViewedAt);\n  \n  if ((viewCount === null || viewCount === 0) && lastViewedAt !== null) {\n    viewCount = 1;\n  }\n\n\n  const obj = {\n    // Primärschlüssel für DB: Plex ratingKey ist stabil und einzigartig\n    plex_rating_key: toInt(json.ratingKey),\n\n    // Eindeutige Referenzen (Optional, aber hilfreich)\n    plex_guid: json.guid || null,\n    slug: json.slug || null,\n\n    // Kern\n    type: json.type || null,                          // movie/show/episode\n    title: json.title || null,\n    year: toInt(json.year),\n    studio: json.studio || null,\n\n    // Inhalt/Bewertungen\n    content_rating: json.contentRating || null,\n    content_rating_age: toInt(json.contentRatingAge),\n    summary: json.summary || null,\n    tagline: json.tagline || null,\n    rating: toDecimal(json.rating),                   // Kritiker\n    audience_rating: toDecimal(json.audienceRating),  // Publikum\n\n    // Daten/Zeit\n    release_date: toMysqlDate(json.originallyAvailableAt), // DATE\n    duration_ms: durationMs,\n    duration_min: durationMin,\n\n    // Medienpfade (wie geliefert; ggf. vorne Base-URL im Ingest ergänzen)\n    poster_path: json.thumb || null,\n    backdrop_path: json.art || null,\n\n    // Tags/Personen (flach)\n    genres: genres,\n    directors: directors,\n    writers: writers,\n    cast: cast,\n\n    // Nutzung\n    view_count: viewCount,\n    last_viewed_at: lastViewedAt,\n    // DATETIME\n    added_at: toMysqlDateTimeFromEpochSeconds(json.addedAt),            // DATETIME\n    updated_at: toMysqlDateTimeFromEpochSeconds(json.updatedAt),        // DATETIME\n  };\n\n  return { json: obj };\n});\n\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1376,
+        -320
+      ],
+      "id": "b58a5d66-c1df-4a61-9266-c06098e11c98",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "url": "=https://plex.automatisier.bar/library/sections/{{ $json.key }}/all",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "options": {
+          "lowercaseHeaders": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        704,
+        -336
+      ],
+      "id": "98fd6e0c-3d0e-4bfd-b6ca-5a0ac105e0c7",
+      "name": "Get Movies",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "wpZ166BMjg3dr8fT",
+          "name": "Plex Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "MediaContainer.Metadata",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        928,
+        -336
+      ],
+      "id": "521a3a7d-deed-4bbe-ab98-0e8ce95352f5",
+      "name": "List of Movies"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "table": {
+          "__rl": true,
+          "value": "media_entries",
+          "mode": "list",
+          "cachedResultName": "media_entries"
+        },
+        "columnToMatchOn": "plex_rating_key",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.4,
+      "position": [
+        1600,
+        -320
+      ],
+      "id": "ead01adb-5922-4140-a41b-cf1890351a6b",
+      "name": "Insert or update rows in a table1",
+      "credentials": {
+        "mySql": {
+          "id": "Qt3900T1jFe5tTld",
+          "name": "MySQL Plex (AllInkl)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "start"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -192,
+        -80
+      ],
+      "id": "1df71a32-d582-4745-905c-fb3653904f41",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "sum",
+              "field": "changedRows"
+            },
+            {
+              "aggregation": "sum",
+              "field": "warningStatus"
+            },
+            {
+              "field": "affectedRows"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        1824,
+        -320
+      ],
+      "id": "e2cf019d-1434-4182-b12d-04dd2189be83",
+      "name": "Summarize"
+    },
+    {
+      "parameters": {
+        "url": "=https://plex.automatisier.bar/library/metadata/{{ $json.ratingKey }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1232,
+        16
+      ],
+      "id": "9b13f96b-71c0-47f4-8b7f-94d927edfc5b",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "wpZ166BMjg3dr8fT",
+          "name": "Plex Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://plex.automatisier.bar/library/metadata/{{ $json.ratingKey }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2128,
+        -224
+      ],
+      "id": "ce404a14-04c9-4ae0-b130-fcb011d13ff3",
+      "name": "HTTP Request1",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "wpZ166BMjg3dr8fT",
+          "name": "Plex Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "MediaContainer.Metadata",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1456,
+        16
+      ],
+      "id": "40f55709-f8b2-4933-9d0a-a2622e698066",
+      "name": "Split Seasons"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "MediaContainer.Metadata",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2352,
+        -496
+      ],
+      "id": "fbf91fa3-5080-4a6a-bd4f-334bf8d8374d",
+      "name": "Split Episodes"
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * n8n Code node\n * Transformiert Plex-Items in ein reduziertes Schema für MySQL.\n * Erwartet items: [{ json: { ...plex fields... } }, ...]\n */\n\nfunction toInt(v) {\n  if (v === undefined || v === null || v === '') return null;\n  const n = Number(v);\n  return Number.isFinite(n) ? Math.trunc(n) : null;\n}\n\nfunction toDecimal(v) {\n  if (v === undefined || v === null || v === '') return null;\n  const n = Number(v);\n  return Number.isFinite(n) ? n : null;\n}\n\n/**\n * Plex liefert gemischte Zeitangaben:\n * - Unix Sekunden (z.B. lastViewedAt, addedAt, updatedAt)\n * - ISO-Strings (z.B. originallyAvailableAt: \"2025-06-18\")\n */\nfunction toMysqlDateTimeFromEpochSeconds(v) {\n  const n = toInt(v);\n  if (!n) return null;\n  const d = new Date(n * 1000);\n  // YYYY-MM-DD HH:MM:SS (lokal unabhängig)\n  const pad = (x) => String(x).padStart(2, '0');\n  return `${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())}`;\n}\n\nfunction toMysqlDate(v) {\n  // Wenn ISO-YYYY-MM-DD -> so lassen, ansonsten versuchen zu parsen\n  if (!v) return null;\n  if (/^\\d{4}-\\d{2}-\\d{2}$/.test(String(v))) return String(v);\n  const d = new Date(v);\n  if (isNaN(d.getTime())) return null;\n  const pad = (x) => String(x).padStart(2, '0');\n  return `${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())}`;\n}\n\n/**\n * Plex-Tag-Arrays wie Genre/Director/Writer/Role kommen oft als:\n *   [{ tag: \"Horror\" }, { tag: \"Thriller\" }]\n * Wir wandeln zu kommaseparierten Strings um.\n */\nfunction joinTags(arr, { valueKey = 'tag', maxLen = 255 } = {}) {\n  if (!Array.isArray(arr)) return null;\n  const list = arr\n    .map(x => (x && x[valueKey] != null ? String(x[valueKey]).trim() : ''))\n    .filter(Boolean);\n  if (list.length === 0) return null;\n  const s = list.join(', ');\n  return s.length > maxLen ? s.slice(0, maxLen) : s;\n}\n\n// Manche Nutzlasten haben Keys groß geschrieben (Genre) – wir fangen beides ab.\nfunction getTagArray(obj, key) {\n  if (!obj || typeof obj !== 'object') return undefined;\n  return obj[key] || obj[key?.toLowerCase?.()] || obj[key?.toUpperCase?.()];\n}\n\nconst out = items.map(({ json }) => {\n  const durationMs = toInt(json.duration);\n  const durationMin = durationMs ? Math.round(durationMs / 60000) : null;\n\n  const genres   = joinTags(getTagArray(json, 'Genre'));\n  const directors = joinTags(getTagArray(json, 'Director'));\n  const writers  = joinTags(getTagArray(json, 'Writer'));\n  // Für Cast nur die Personennamen (tag). Wenn Rollen/Charaktere gebraucht werden, separat ablegen.\n  const cast     = joinTags(getTagArray(json, 'Role'));\n\n  let viewCount = toInt(json.viewCount);\n  const lastViewedAt = toMysqlDateTimeFromEpochSeconds(json.lastViewedAt);\n  \n  if ((viewCount === null || viewCount === 0) && lastViewedAt !== null) {\n    viewCount = 1;\n  }\n\n\n  const obj = {\n    // Primärschlüssel für DB: Plex ratingKey ist stabil und einzigartig\n    plex_rating_key: toInt(json.ratingKey),\n    parent_rating_key: toInt(json.parentRatingKey),\n    grandparent_rating_key: toInt(json.grandparentRatingKey),\n\n    // Eindeutige Referenzen (Optional, aber hilfreich)\n    plex_guid: json.guid || null,\n    slug: json.slug || null,\n\n    // Kern\n    type: json.type || null,                          // movie/show/episode\n    title: json.title || null,\n    year: toInt(json.year),\n    studio: json.studio || null,\n\n    // Inhalt/Bewertungen\n    content_rating: json.contentRating || null,\n    content_rating_age: toInt(json.contentRatingAge),\n    summary: json.summary || null,\n    tagline: json.tagline || null,\n    rating: toDecimal(json.rating),                   // Kritiker\n    audience_rating: toDecimal(json.audienceRating),  // Publikum\n\n    // Daten/Zeit\n    release_date: toMysqlDate(json.originallyAvailableAt), // DATE\n    duration_ms: durationMs,\n    duration_min: durationMin,\n\n    // Medienpfade (wie geliefert; ggf. vorne Base-URL im Ingest ergänzen)\n    poster_path: json.thumb || null,\n    backdrop_path: json.art || null,\n\n    // Tags/Personen (flach)\n    genres: genres,\n    directors: directors,\n    writers: writers,\n    cast: cast,\n\n    // Nutzung\n    view_count: viewCount,\n    last_viewed_at: lastViewedAt,\n    // DATETIME\n    added_at: toMysqlDateTimeFromEpochSeconds(json.addedAt),            // DATETIME\n    updated_at: toMysqlDateTimeFromEpochSeconds(json.updatedAt),        // DATETIME\n  };\n\n  return { json: obj };\n});\n\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3088,
+        16
+      ],
+      "id": "3ba412c6-d99d-45f8-be60-c69fa02d57e2",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * n8n Code node\n * Transformiert Plex-Items in ein reduziertes Schema für MySQL.\n * Erwartet items: [{ json: { ...plex fields... } }, ...]\n */\n\nfunction toInt(v) {\n  if (v === undefined || v === null || v === '') return null;\n  const n = Number(v);\n  return Number.isFinite(n) ? Math.trunc(n) : null;\n}\n\nfunction toDecimal(v) {\n  if (v === undefined || v === null || v === '') return null;\n  const n = Number(v);\n  return Number.isFinite(n) ? n : null;\n}\n\n/**\n * Plex liefert gemischte Zeitangaben:\n * - Unix Sekunden (z.B. lastViewedAt, addedAt, updatedAt)\n * - ISO-Strings (z.B. originallyAvailableAt: \"2025-06-18\")\n */\nfunction toMysqlDateTimeFromEpochSeconds(v) {\n  const n = toInt(v);\n  if (!n) return null;\n  const d = new Date(n * 1000);\n  // YYYY-MM-DD HH:MM:SS (lokal unabhängig)\n  const pad = (x) => String(x).padStart(2, '0');\n  return `${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())}`;\n}\n\nfunction toMysqlDate(v) {\n  // Wenn ISO-YYYY-MM-DD -> so lassen, ansonsten versuchen zu parsen\n  if (!v) return null;\n  if (/^\\d{4}-\\d{2}-\\d{2}$/.test(String(v))) return String(v);\n  const d = new Date(v);\n  if (isNaN(d.getTime())) return null;\n  const pad = (x) => String(x).padStart(2, '0');\n  return `${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())}`;\n}\n\n/**\n * Plex-Tag-Arrays wie Genre/Director/Writer/Role kommen oft als:\n *   [{ tag: \"Horror\" }, { tag: \"Thriller\" }]\n * Wir wandeln zu kommaseparierten Strings um.\n */\nfunction joinTags(arr, { valueKey = 'tag', maxLen = 255 } = {}) {\n  if (!Array.isArray(arr)) return null;\n  const list = arr\n    .map(x => (x && x[valueKey] != null ? String(x[valueKey]).trim() : ''))\n    .filter(Boolean);\n  if (list.length === 0) return null;\n  const s = list.join(', ');\n  return s.length > maxLen ? s.slice(0, maxLen) : s;\n}\n\n// Manche Nutzlasten haben Keys groß geschrieben (Genre) – wir fangen beides ab.\nfunction getTagArray(obj, key) {\n  if (!obj || typeof obj !== 'object') return undefined;\n  return obj[key] || obj[key?.toLowerCase?.()] || obj[key?.toUpperCase?.()];\n}\n\nconst out = items.map(({ json }) => {\n  const durationMs = toInt(json.duration);\n  const durationMin = durationMs ? Math.round(durationMs / 60000) : null;\n\n  const genres   = joinTags(getTagArray(json, 'Genre'));\n  const directors = joinTags(getTagArray(json, 'Director'));\n  const writers  = joinTags(getTagArray(json, 'Writer'));\n  // Für Cast nur die Personennamen (tag). Wenn Rollen/Charaktere gebraucht werden, separat ablegen.\n  const cast     = joinTags(getTagArray(json, 'Role'));\n\n  let viewCount = toInt(json.viewCount);\n  const lastViewedAt = toMysqlDateTimeFromEpochSeconds(json.lastViewedAt);\n  \n  if ((viewCount === null || viewCount === 0) && lastViewedAt !== null) {\n    viewCount = 1;\n  }\n\n\n  const obj = {\n    // Primärschlüssel für DB: Plex ratingKey ist stabil und einzigartig\n    plex_rating_key: toInt(json.ratingKey),\n    parent_rating_key: toInt(json.parentRatingKey),\n    grandparent_rating_key: toInt(json.grandparentRatingKey),\n\n    // Eindeutige Referenzen (Optional, aber hilfreich)\n    plex_guid: json.guid || null,\n    slug: json.slug || null,\n\n    // Kern\n    type: json.type || null,                          // movie/show/episode\n    title: json.title || null,\n    show_title: json.grandparentTitle || null,\n    episode_number: json.index || null,\n    season_number: json.parentIndex || null,\n    year: toInt(json.year),\n    studio: json.studio || null,\n\n    // Inhalt/Bewertungen\n    content_rating: json.contentRating || null,\n    content_rating_age: toInt(json.contentRatingAge),\n    summary: json.summary || null,\n    tagline: json.tagline || null,\n    rating: toDecimal(json.rating),                   // Kritiker\n    audience_rating: toDecimal(json.audienceRating),  // Publikum\n\n    // Daten/Zeit\n    release_date: toMysqlDate(json.originallyAvailableAt), // DATE\n    duration_ms: durationMs,\n    duration_min: durationMin,\n\n    // Medienpfade (wie geliefert; ggf. vorne Base-URL im Ingest ergänzen)\n    poster_path: json.thumb || null,\n    backdrop_path: json.art || null,\n\n    // Tags/Personen (flach)\n    genres: genres,\n    directors: directors,\n    writers: writers,\n    cast: cast,\n\n    // Nutzung\n    view_count: viewCount,\n    last_viewed_at: lastViewedAt,\n    // DATETIME\n    added_at: toMysqlDateTimeFromEpochSeconds(json.addedAt),            // DATETIME\n    updated_at: toMysqlDateTimeFromEpochSeconds(json.updatedAt),        // DATETIME\n  };\n\n  return { json: obj };\n});\n\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2608,
+        -512
+      ],
+      "id": "6ee00937-4eef-4ea8-9057-361e72c91ef6",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "table": {
+          "__rl": true,
+          "value": "media_entries",
+          "mode": "list",
+          "cachedResultName": "media_entries"
+        },
+        "columnToMatchOn": "plex_rating_key",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.4,
+      "position": [
+        3056,
+        -608
+      ],
+      "id": "8d9aa8c4-0f42-406e-9c42-2e1c3719624c",
+      "name": "Insert or update rows in a table",
+      "credentials": {
+        "mySql": {
+          "id": "Qt3900T1jFe5tTld",
+          "name": "MySQL Plex (AllInkl)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "table": {
+          "__rl": true,
+          "value": "media_entries",
+          "mode": "list",
+          "cachedResultName": "media_entries"
+        },
+        "columnToMatchOn": "plex_rating_key",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.4,
+      "position": [
+        3376,
+        16
+      ],
+      "id": "3787b3fe-8872-4022-9449-eccec61f4805",
+      "name": "Insert or update rows in a table2",
+      "credentials": {
+        "mySql": {
+          "id": "Qt3900T1jFe5tTld",
+          "name": "MySQL Plex (AllInkl)"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "repo_name": "n8n-workflows",
+  "repo_owner": "DoPaNik",
+  "repo_path": "git@github.com:DoPaNik/n8n-workflows.git",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-08-17T21:39:00.529Z",
+  "versionId": "0ba7e4cf-db4f-4c88-b2c0-92f2f9ced3e9"
+}
