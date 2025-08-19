@@ -1,0 +1,722 @@
+{
+  "active": true,
+  "connections": {
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "cambridge_b2_assessor": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store1": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "cambridge_b2_assessor",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "cambridge_b2_assessor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload your file here": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Upload file for Dominik",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Upload file for Kosta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-08-01T07:04:55.386Z",
+  "id": "1bsWMNe7k1ncx6tZ",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Evaluating-student-speech-transcripts",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "const binaryData = $input.item.binary.transcription;\n\nif (!binaryData || !binaryData.data) {\n  throw new Error('Binary data \"transcription\" not found.');\n}\n\n// VTT-Datei dekodieren\nconst buffer = Buffer.from(binaryData.data, binaryData.encoding || 'base64');\nconst input = buffer.toString('utf-8');\n\n// VTT-Zeilen verarbeiten\nconst lines = input.split('\\n');\nconst speakerMap = {};\n\nfor (let i = 0; i < lines.length; i++) {\n  const line = lines[i].trim();\n\n  // Zeitmarken und leere Zeilen überspringen\n  if (line === '' || line.includes('-->')) continue;\n\n  // Zeile mit <v Speaker>Text</v>\n  const match = line.match(/^<v\\s+([^>]+)>(.*?)(<\\/v>)?$/);\n  if (match) {\n    const speaker = match[1].trim();\n    let text = match[2].trim();\n\n    // Entferne schließende Tags falls nicht durch Regex gesäubert\n    text = text.replace(/<\\/v>$/, '').trim();\n\n    if (!speakerMap[speaker]) {\n      speakerMap[speaker] = text;\n    } else {\n      speakerMap[speaker] += ' ' + text;\n    }\n  }\n}\n\n// Output vorbereiten\nconst items = Object.entries(speakerMap).map(([speaker, text]) => ({\n  json: { speaker, text }\n}));\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -192,
+        128
+      ],
+      "id": "dc5ab203-de91-4495-8451-397d5f6e3306",
+      "name": "Code",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=The following transcript is from a speaker in an English learning session. Analyze the text and give feedback, suggested improvements, and an approximate CEFR level (e.g., A2, B1, B2, C1).\n\nTranscript (spoken by {{ $json.speaker }}):\n{{ $json.text }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are an English teacher evaluating student speech transcripts. Provide clear, constructive feedback on grammar, vocabulary, sentence structure, and overall fluency. Assume that the speaker is a non-native learner in a classroom."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        160,
+        128
+      ],
+      "id": "f6b2ae6c-4dcf-45db-928e-fddc7ca84dd7",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        160,
+        336
+      ],
+      "id": "bcac2949-7afe-4733-b402-0d1232c5e007",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "vkPgUEaSdiqHGv3b",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"speaker\": \"Alice Müller\",\n  \"analysis\": {\n    \"cefr_level\": \"B2\",\n    \"feedback\": \"The speaker uses a broad vocabulary and complex sentence structures.\",\n    \"suggestions\": [\n      \"Watch out for minor word order issues.\",\n      \"Use conditionals more precisely.\",\n      \"Practice speaking with more natural intonation.\"\n    ]\n  }\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        352,
+        336
+      ],
+      "id": "5c68a997-89e4-4220-9efd-d88a8d2c89ba",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "18aa0399-0b94-473a-98e5-5e26684f88a6",
+              "leftValue": "={{ $json.output.speaker }}",
+              "rightValue": "Pabst, Dominik",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        688,
+        32
+      ],
+      "id": "e88cd165-4db5-4466-888b-940cec1454a6",
+      "name": "Filter",
+      "notesInFlow": true,
+      "notes": "Filter for Dominik"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "18aa0399-0b94-473a-98e5-5e26684f88a6",
+              "leftValue": "={{ $json.output.speaker }}",
+              "rightValue": "Stojanovski, Kosta",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        688,
+        224
+      ],
+      "id": "835b9f09-1b46-43fd-8160-935dc713bb5c",
+      "name": "Filter1",
+      "notesInFlow": true,
+      "notes": "Filer Kosta"
+    },
+    {
+      "parameters": {
+        "jsCode": "const { speaker, analysis } = $json.output;\nconst safeName = speaker.replace(/\\s+/g, '_').toLowerCase();\nconst suggestions = analysis.suggestions.map(s => `<li>${s}</li>`).join('\\n');\n\n// Today's date\nconst now = new Date();\nconst dateString = now.toLocaleDateString('en-GB', {\n  year: 'numeric', month: 'long', day: 'numeric'\n});\nconst dateFileString = now.toISOString().substring(0, 10);\n\nconst html = `\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Language Feedback for ${speaker}</title>\n  <style>\n    body { font-family: sans-serif; padding: 2rem; line-height: 1.6; background-color: #f9f9f9; color: #333; }\n    h1 { color: #222; }\n    h2 { color: #444; margin-top: 2rem; }\n    ul { margin-top: 0.5rem; }\n    .level { font-weight: bold; color: #0070f3; }\n    .footer { margin-top: 3rem; font-size: 0.8rem; color: #999; }\n  </style>\n</head>\n<body>\n  <h1>Language Feedback for ${speaker}</h1>\n  <p><span class=\"level\">CEFR Level: ${analysis.cefr_level}</span></p>\n\n  <h2>🗣️ General Feedback</h2>\n  <p>${analysis.feedback}</p>\n\n  <h2>✍️ Suggestions for Improvement</h2>\n  <ul>${suggestions}</ul>\n\n  <div class=\"footer\">\n    <p>Generated automatically on ${dateString}</p>\n  </div>\n</body>\n</html>\n`;\n\nreturn [{\n  binary: {\n    data: {\n      data: Buffer.from(html).toString('base64'),\n      mimeType: 'text/html',\n      fileName: `${dateFileString}_feedback_${safeName}.html`\n    }\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        32
+      ],
+      "id": "eb6f5471-65ed-436c-ad26-31e50871e5eb",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const { speaker, analysis } = $json.output;\nconst safeName = speaker.replace(/\\s+/g, '_').toLowerCase();\nconst suggestions = analysis.suggestions.map(s => `<li>${s}</li>`).join('\\n');\n\n// Today's date\nconst now = new Date();\nconst dateString = now.toLocaleDateString('en-GB', {\n  year: 'numeric', month: 'long', day: 'numeric'\n});\nconst dateFileString = now.toISOString().substring(0, 10);\n\nconst html = `\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Language Feedback for ${speaker}</title>\n  <style>\n    body { font-family: sans-serif; padding: 2rem; line-height: 1.6; background-color: #f9f9f9; color: #333; }\n    h1 { color: #222; }\n    h2 { color: #444; margin-top: 2rem; }\n    ul { margin-top: 0.5rem; }\n    .level { font-weight: bold; color: #0070f3; }\n    .footer { margin-top: 3rem; font-size: 0.8rem; color: #999; }\n  </style>\n</head>\n<body>\n  <h1>Language Feedback for ${speaker}</h1>\n  <p><span class=\"level\">CEFR Level: ${analysis.cefr_level}</span></p>\n\n  <h2>🗣️ General Feedback</h2>\n  <p>${analysis.feedback}</p>\n\n  <h2>✍️ Suggestions for Improvement</h2>\n  <ul>${suggestions}</ul>\n\n  <div class=\"footer\">\n    <p>Generated automatically on ${dateString}</p>\n  </div>\n</body>\n</html>\n`;\n\nreturn [{\n  binary: {\n    data: {\n      data: Buffer.from(html).toString('base64'),\n      mimeType: 'text/html',\n      fileName: `${dateFileString}_feedback_${safeName}.html`\n    }\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        224
+      ],
+      "id": "543cbc8e-69f9-42d1-a917-cb8c32251495",
+      "name": "Code2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        -528
+      ],
+      "id": "c3844fa4-9750-402e-9a95-b8b2cb4caf57",
+      "name": "When clicking ‘Execute workflow’",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1w_3rKczklbyDXGpXIoJFHrnBCW8PYPpo",
+          "mode": "list",
+          "cachedResultName": "b2-cambridge-english-assessing-writing-performance.pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/1w_3rKczklbyDXGpXIoJFHrnBCW8PYPpo/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -192,
+        -528
+      ],
+      "id": "dd285ce6-c6bf-4f4a-a2e0-819b447b6b6f",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "YBBQzNGyDGKINCDK",
+          "name": "Google Drive account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        32,
+        -624
+      ],
+      "id": "ea8ead19-881c-488a-a43d-36554e9f5f2f",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "jqMqXSc19ZYhBqeD",
+          "name": "Supabase (English Class)"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        64,
+        -400
+      ],
+      "id": "157bad62-96f1-4516-abe6-a834a48748f6",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "uxMQqh1uaXnkylVv",
+          "name": "OpenAi account (English Class)"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        192,
+        -400
+      ],
+      "id": "4da03584-8c93-40af-a730-62754b898b82",
+      "name": "Default Data Loader",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "description": "Provides structured evaluation criteria and sample performance levels for English B2 tasks, based on the official Cambridge English Assessment Scale."
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1.1,
+      "position": [
+        192,
+        656
+      ],
+      "id": "2240fd0d-1de7-48ec-939f-b4f08e5410b4",
+      "name": "cambridge_b2_assessor"
+    },
+    {
+      "parameters": {
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {
+          "queryName": "match_documents"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        96,
+        848
+      ],
+      "id": "d6980f09-54b3-4d95-aa46-ca2db107bc3d",
+      "name": "Supabase Vector Store1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "jqMqXSc19ZYhBqeD",
+          "name": "Supabase (English Class)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        192,
+        1056
+      ],
+      "id": "6a79d137-b99c-41fc-8b4b-2de335701a2a",
+      "name": "Embeddings OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "uxMQqh1uaXnkylVv",
+          "name": "OpenAi account (English Class)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        416,
+        848
+      ],
+      "id": "67ad8d2b-9724-4fdd-8c9d-4fda2cf44088",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "uxMQqh1uaXnkylVv",
+          "name": "OpenAi account (English Class)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "basicAuth",
+        "formTitle": "Upload your transcription here",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "transcription",
+              "fieldType": "file",
+              "acceptFileTypes": ".vtt",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -416,
+        128
+      ],
+      "id": "d4b63061-8f21-4cca-b7ad-a20419c7d94d",
+      "name": "Upload your file here",
+      "webhookId": "82848bc4-5ea2-4e5a-8bb6-3c09b94a8c5d",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "IsRp5fVKcHRRtp5h",
+          "name": "English - VTT Upload"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Uplaod of VTT\n",
+        "height": 240,
+        "width": 288
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -528,
+        64
+      ],
+      "typeVersion": 1,
+      "id": "97ff5cae-bef2-448b-8210-8e2a274b928e",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## AI Agent to evaluate the input\n",
+        "height": 592,
+        "width": 464,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        64,
+        -32
+      ],
+      "typeVersion": 1,
+      "id": "d12340c5-24f5-4386-9d12-826bdd4e2ac1",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Knowledge database to evaluate the content\n",
+        "height": 608,
+        "width": 480,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        64,
+        576
+      ],
+      "typeVersion": 1,
+      "id": "029593aa-b4c1-4c47-8625-c6247c40d425",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "url",
+          "value": "https://drive.google.com/drive/folders/1mdXcNGVWNlG1VuTxtfTPBPdXtABmFwMT",
+          "__regex": "https:\\/\\/drive\\.google\\.com(?:\\/.*|)\\/folders\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1376,
+        224
+      ],
+      "id": "754ea5e3-7547-4c40-bb09-d10e9c32436c",
+      "name": "Upload file for Kosta",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "YBBQzNGyDGKINCDK",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "url",
+          "value": "https://drive.google.com/drive/folders/1mdXcNGVWNlG1VuTxtfTPBPdXtABmFwMT",
+          "__regex": "https:\\/\\/drive\\.google\\.com(?:\\/.*|)\\/folders\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1376,
+        32
+      ],
+      "id": "d6539f6d-ea53-4aa1-88c0-5e06f2cbbd5d",
+      "name": "Upload file for Dominik",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "YBBQzNGyDGKINCDK",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Upload feedback to shared Google Drive folder\n\n",
+        "height": 448,
+        "width": 464,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1200,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "faa9a918-e14b-4846-87a8-a030b38e8068",
+      "name": "Sticky Note3"
+    }
+  ],
+  "pinData": {},
+  "repo_name": "n8n-workflows",
+  "repo_owner": "DoPaNik",
+  "repo_path": "git@github.com:DoPaNik/n8n-workflows.git",
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Berlin",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-08-03T13:15:20.072Z",
+  "versionId": "a033a7e7-0a4e-4be6-b2ea-ab37a17f8a59"
+}
