@@ -1,0 +1,425 @@
+{
+  "active": true,
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query in MySQL": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Database": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "compare_movies": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wikipedia": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call n8n Workflow Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call n8n Workflow Tool1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-06-05T18:16:53.457Z",
+  "id": "ksIAZC8X1eZPs9YG",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Plex",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi 👋 Wie kann ich Dir helfen?",
+        "options": {
+          "inputPlaceholder": "Schreibe deine Frage ...",
+          "loadPreviousSession": "notSupported",
+          "showWelcomeScreen": true,
+          "getStarted": "Neuer Chat",
+          "subtitle": "Made with 🤍",
+          "title": "🤖 Grenzlandresidenz-Butler-Bot (ChatGBB)",
+          "customCss": ":root {\n/* Homarr Neutral Dark Theme */\n/* Base palette */\n--chat--color-primary: #ef4444;            /* red-500 (accent, matches Homarr logo) */\n--chat--color-primary-shade-50: #dc2626;   /* red-600 */\n--chat--color-primary-shade-100: #b91c1c;  /* red-700 */\n--chat--color-secondary: #f97316;          /* orange-500 (secondary accent) */\n--chat--color-secondary-shade-50: #ea580c; /* orange-600 */\n--chat--color-white: #f5f5f5;              /* text white */\n--chat--color-light: #1e1e1e;              /* background */\n--chat--color-light-shade-50: #181818;\n--chat--color-light-shade-100: #141414;\n--chat--color-medium: #2a2a2a;\n--chat--color-dark: #111111;\n--chat--color-disabled: #525252;\n--chat--color-typing: #9ca3af;\n\n/* Layout / font / motion */\n--chat--spacing: 1rem;\n--chat--border-radius: 0.5rem;\n--chat--transition-duration: 0.2s;\n--chat--font-family: (\"Inter\", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial);\n\n/* Window */\n--chat--window--width: 420px;\n--chat--window--height: 640px;\n--chat--window--bottom: var(--chat--spacing);\n--chat--window--right: var(--chat--spacing);\n--chat--window--z-index: 9999;\n--chat--window--border: 1px solid rgba(255, 255, 255, 0.05);\n--chat--window--border-radius: var(--chat--border-radius);\n--chat--window--margin-bottom: var(--chat--spacing);\n\n/* Header */\n--chat--header-height: auto;\n--chat--header--padding: calc(var(--chat--spacing) * 0.85) var(--chat--spacing);\n--chat--header--background: #111111;\n--chat--header--color: #f5f5f5;\n--chat--header--border-top: none;\n--chat--header--border-bottom: 1px solid rgba(255,255,255,0.05);\n--chat--header--border-left: none;\n--chat--header--border-right: none;\n--chat--heading--font-size: 1.1rem;\n--chat--subtitle--font-size: 0.85rem;\n--chat--subtitle--line-height: 1.6;\n\n/* Messages */\n--chat--message--font-size: 1rem;\n--chat--message--padding: calc(var(--chat--spacing) * 0.8);\n--chat--message--border-radius: 0.5rem;\n--chat--message-line-height: 1.55;\n--chat--message--margin-bottom: calc(var(--chat--spacing) * 1);\n--chat--message--bot--background: #1e1e1e;\n--chat--message--bot--color: #e5e5e5;\n--chat--message--bot--border: 1px solid #2a2a2a;\n--chat--message--user--background: #2a2a2a;\n--chat--message--user--color: #f5f5f5;\n--chat--message--user--border: 1px solid #3a3a3a;\n--chat--message--pre--background: #111111;\n--chat--messages-list--padding: var(--chat--spacing);\n\n/* Toggle */\n--chat--toggle--size: 56px;\n--chat--toggle--width: var(--chat--toggle--size);\n--chat--toggle--height: var(--chat--toggle--size);\n--chat--toggle--border-radius: 12px;\n--chat--toggle--background: #181818;\n--chat--toggle--hover--background: #262626;\n--chat--toggle--active--background: #333333;\n--chat--toggle--color: var(--chat--color-primary);\n\n/* Input */\n--chat--textarea--height: 54px;\n--chat--textarea--max-height: 30rem;\n--chat--input--font-size: 1rem;\n--chat--input--border: 1px solid rgba(255,255,255,0.08);\n--chat--input--border-radius: 0.5rem;\n--chat--input--padding: 0.85rem 0.9rem;\n--chat--input--background: #111111;\n--chat--input--text-color: #f5f5f5;\n--chat--input--line-height: 1.5;\n--chat--input--placeholder--font-size: var(--chat--input--font-size);\n--chat--input--border-active: 1px solid rgba(239, 68, 68, 0.6);\n--chat--input--left--panel--width: 2rem;\n\n/* Buttons */\n--chat--button--color: #111111;\n--chat--button--background: var(--chat--color-primary);\n--chat--button--padding: calc(var(--chat--spacing) * 0.45) var(--chat--spacing);\n--chat--button--border-radius: 0.5rem;\n--chat--button--hover--color: #111111;\n--chat--button--hover--background: var(--chat--color-primary-shade-50);\n--chat--close--button--color-hover: var(--chat--color-primary);\n\n/* Send & File */\n--chat--input--send--button--background: transparent;\n--chat--input--send--button--color: #9ca3af;\n--chat--input--send--button--background-hover: rgba(239, 68, 68, 0.1);\n--chat--input--send--button--color-hover: #f5f5f5;\n--chat--input--file--button--background: transparent;\n--chat--input--file--button--color: #9ca3af;\n--chat--input--file--button--background-hover: rgba(249, 115, 22, 0.12);\n--chat--input--file--button--color-hover: #f5f5f5;\n--chat--files-spacing: 0.25rem;\n\n/* Body & Footer */\n--chat--body--background: #1e1e1e;\n--chat--footer--background: #1e1e1e;\n--chat--footer--color: #e5e5e5;\n}\n\n/* Homarr Neutral Theme container */\n.chat-theme-homarr-neutral {\n  background: var(--chat--body--background);\n  color: var(--chat--color-white);\n  border: var(--chat--window--border);\n  border-radius: var(--chat--window--border-radius);\n  box-shadow: 0 4px 20px rgba(0,0,0,0.25);\n}\n\n/* Header */\n.chat-theme-homarr-neutral .chat-header, .chat-theme-homarr-neutral header {\n  background: var(--chat--header--background);\n  color: var(--chat--header--color);\n  border-bottom: var(--chat--header--border-bottom);\n}\n.chat-header {\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\";\n  font-weight: 700;\n  font-size: 1.375rem;\n  line-height: 1.4;\n  color: rgb(193, 194, 197);\n  gap: 0 !important;\n}\n.chat-header p {\n  margin-top: -10px;\n}\n\n/* Messages */\n.chat-theme-homarr-neutral .chat-message {\n  background: var(--chat--message--bot--background);\n  border: var(--chat--message--bot--border);\n  border-radius: var(--chat--message--border-radius);\n  padding: var(--chat--message--padding);\n  margin-bottom: var(--chat--message--margin-bottom);\n  line-height: var(--chat--message-line-height);\n}\n.chat-theme-homarr-neutral .chat-message.user {\n  background: var(--chat--message--user--background);\n  color: var(--chat--message--user--color);\n  border: var(--chat--message--user--border);\n}\n\n/* Code blocks */\n.chat-theme-homarr-neutral pre, .chat-theme-homarr-neutral code {\n  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;\n  background: var(--chat--message--pre--background);\n  border: 1px solid #2a2a2a;\n  border-radius: 0.5rem;\n  color: #f5f5f5;\n}\n\n/* Input */\n.chat-theme-homarr-neutral .chat-input {\n  background: var(--chat--footer--background);\n  color: var(--chat--input--text-color);\n  border-top: 1px solid rgba(255,255,255,0.05);\n}\n.chat-theme-homarr-neutral .chat-textarea, .chat-theme-homarr-neutral textarea {\n  width: 100%;\n  background: var(--chat--input--background);\n  color: var(--chat--input--text-color);\n  border: var(--chat--input--border);\n  border-radius: var(--chat--input--border-radius);\n  padding: var(--chat--input--padding);\n}\n.chat-theme-homarr-neutral .chat-textarea:focus, .chat-theme-homarr-neutral textarea:focus {\n  outline: none;\n  border: var(--chat--input--border-active);\n  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.25);\n}\n\n/* Buttons */\n.chat-theme-homarr-neutral .btn, .chat-theme-homarr-neutral button {\n  background: var(--chat--button--background);\n  color: var(--chat--button--color);\n  border-radius: var(--chat--button--border-radius);\n  padding: var(--chat--button--padding);\n  border: none;\n  transition: background var(--chat--transition-duration) ease;\n}\n.chat-theme-homarr-neutral .btn:hover, .chat-theme-homarr-neutral button:hover {\n  background: var(--chat--button--hover--background);\n  color: var(--chat--button--hover--color);\n}\n\n/* Send/File buttons */\n.chat-theme-homarr-neutral .btn-icon {\n  background: var(--chat--input--send--button--background);\n  color: var(--chat--input--send--button--color);\n  border-radius: 8px;\n}\n.chat-theme-homarr-neutral .btn-icon:hover {\n  background: var(--chat--input--send--button--background-hover);\n  color: var(--chat--input--send--button--color-hover);\n}\n\n.chat-message-markdown table {\n  width: 100%;\n  table-layout: fixed;\n  text-align: left;\n}\n\n/* Limit message width */\n/* .chat-message { max-width: 60ch; } */",
+          "responseMode": "lastNode"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -240,
+        48
+      ],
+      "id": "5d908b63-a881-4bcf-9324-706a5db83678",
+      "name": "When chat message received",
+      "webhookId": "0e819910-3d5b-46c2-90b7-532e23687e25"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {
+          "maxRetries": 2
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -16,
+        272
+      ],
+      "id": "f1277f4e-07aa-40cb-93bc-88f21218e00f",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "rBP1D8my0vyEVHZa",
+          "name": "OpenAi (Plex)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Dieses Tool dient ausschließlich zum Abrufen von Informationen aus der Tabelle `media_entries`.\n\n- Verwende ausschließlich **SELECT-Abfragen**.\n- Keine Veränderungen der Daten (kein INSERT, UPDATE, DELETE).\n- Die Tabelle enthält Metadaten zu Filmen, Serien, Staffeln und Episoden.\n\n### Nutzungshinweise\n- **Filme**: `WHERE type = 'movie'`.\n- **Serien**: `WHERE type = 'show'`.\n- **Staffeln**: `WHERE type = 'season'` und nutze `season_number`, `season_title`, sowie `parent_rating_key`.\n- **Episoden**: `WHERE type = 'episode'` und nutze `episode_number`, `season_number`, `parent_rating_key` (Season) und `grandparent_rating_key` (Show).\n- **Titelsuche**: Immer mit `LIKE` oder `REGEXP`, z. B. `WHERE show_title LIKE '%Buffy%'`.\n- **Zählanfragen**: Verwende `COUNT(*)`.\n- **Detailanfragen**: Selektiere alle relevanten Spalten.\n\n### Relevante Felder\n- Titel/Zuordnung: `title`, `show_title`, `season_title`, `season_number`, `episode_number`, `year`, `type`\n- Metadaten: `summary`, `tagline`, `rating`, `audience_rating`, `genres`, `directors`, `writers`, `cast`, `studio`, `release_date`, `duration_min`\n- Verwaltung: `poster_path`, `backdrop_path`, `view_count`, `last_viewed_at`, `added_at`, `updated_at`\n\n### Ergebnisse\n- Mehrere Datensätze: Übersichtsliste (Titel, Jahr, Staffel/Episode, Rating).\n- Einzelner Datensatz: Detailinfos (Titel, Jahr, Staffel/Episode, Bewertung, Genres, Regie, Cast, Zusammenfassung).\n- Keine Daten: ehrlich mitteilen.\n\n### Einschränkungen\n- Es dürfen **nur Daten aus `media_entries`** genutzt werden.\n- Keine eigenen Inhalte oder Interpretationen.\n\n### Beispiel-SQLs\n(Siehe Systemprompt)",
+        "operation": "executeQuery",
+        "query": "{{ $fromAI('SQL-Statement', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySqlTool",
+      "typeVersion": 2.4,
+      "position": [
+        368,
+        272
+      ],
+      "id": "e13b0863-4e38-45d1-a485-68c516eb5386",
+      "name": "Execute a SQL query in MySQL",
+      "credentials": {
+        "mySql": {
+          "id": "Qt3900T1jFe5tTld",
+          "name": "MySQL Plex (AllInkl)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Updated die MySQL 'media_entries' Tabelle der Plex Datenbank mit den neusten Werten vom Plexserver. Es wird ein INSERT or UPDATE ausgeführt. Das Tool liefert die Anzahl aller Zeilen (sum_changedRows) die berücksichtigt wurden, sowie die Anzahl der Warnungen (sum_warningStatus) und den Tatsächlich angepassten und geänderten Zeilen (count_affectedRows) zurück.\n",
+        "workflowId": {
+          "__rl": true,
+          "value": "xm1xXkMGUgy9XRDw",
+          "mode": "list",
+          "cachedResultName": "Plex-Update-MySQL"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [
+            ""
+          ],
+          "schema": [
+            {
+              "id": "",
+              "displayName": "",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        496,
+        272
+      ],
+      "id": "ee69ee41-43e2-454c-97e8-4b8e785fa1b1",
+      "name": "Update Database"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        112,
+        272
+      ],
+      "id": "813ebe00-f23d-4671-811f-f2625f17a1c6",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "rBP1D8my0vyEVHZa",
+          "name": "OpenAi (Plex)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Vergleicht 2–10 Filmtitel aus der lokalen Mediendatenbank. Führt fehlertolerante Titelsuche aus und liefert eine Markdown-Tabelle zurück.\nDie zu vergleichenden Titel sollen als `titles-as-array` im Json-Format übergeben werden: \n{ \"titles\": [\"Heat (1995)\", \"The Dark Knight (2008)\"] }\n\nDas Erscheinungsjahr ist optional.\nSollte die Liste nur ein Element enthalten, soll nachgefragt werden mit was verglichen werden soll.",
+        "workflowId": {
+          "__rl": true,
+          "value": "yXUe3rWs2AyZrMfq",
+          "mode": "list",
+          "cachedResultName": "Movie Compare Tool"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "titles": "={{ $fromAI('titles-as-array', ``, 'json') }}"
+          },
+          "matchingColumns": [
+            "titles"
+          ],
+          "schema": [
+            {
+              "id": "titles",
+              "displayName": "titles",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "array",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        624,
+        272
+      ],
+      "id": "8c14e33d-5866-4117-8852-c11ce3c21530",
+      "name": "compare_movies"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        240,
+        272
+      ],
+      "id": "deecddc0-e9d2-4da6-a5a8-9d90216a1717",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolWikipedia",
+      "typeVersion": 1,
+      "position": [
+        752,
+        272
+      ],
+      "id": "0dbd2ec7-fa49-403c-9ad7-5c82c27e580a",
+      "name": "Wikipedia"
+    },
+    {
+      "parameters": {
+        "description": "Nutze dieses Tool im die Warteliste von Sonarr zu bekommen",
+        "workflowId": {
+          "__rl": true,
+          "value": "OBB6mgG1FN323XFL",
+          "mode": "list",
+          "cachedResultName": "Sonarr Waiting List"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        880,
+        272
+      ],
+      "id": "2b9896a4-e850-4257-a4a2-034b62a5ed3d",
+      "name": "Call n8n Workflow Tool"
+    },
+    {
+      "parameters": {
+        "needsFallback": true,
+        "options": {
+          "systemMessage": "Du bist ein hilfreicher Assistent für Filme und Serien.\nDu hast Zugriff auf eine MySQL-Datenbank mit der Tabelle `media_entries`, die Metadaten zu Filmen, Serien, Staffeln und Episoden enthält.\n\n### Datenbankfelder\nDu kannst folgende Spalten verwenden:\n- plex_rating_key (Primärschlüssel)\n- plex_guid\n- slug\n- type (movie / show / season / episode)\n- title (Titel, Episodentitel oder Staffeltitel)\n- show_title (Serientitel, falls Season oder Episode)\n- season_title (Staffeltitel, falls Episode)\n- season_number (Staffelnummer)\n- episode_number (Episodennummer)\n- year (Erscheinungsjahr)\n- studio\n- content_rating, content_rating_age\n- summary (Inhaltsbeschreibung)\n- tagline\n- rating (Kritikerbewertung)\n- audience_rating (Publikumsbewertung)\n- release_date\n- duration_min (Laufzeit in Minuten)\n- poster_path, backdrop_path\n- genres\n- directors\n- writers\n- cast\n- view_count\n- last_viewed_at\n- added_at\n- updated_at\n- parent_rating_key (Verweis auf Season oder Show)\n- grandparent_rating_key (Verweis auf Show)\n\n### Richtlinien\n- **Titelabfragen**: Verwende nie `=`, sondern `LIKE` oder `REGEXP`, um auch Teilstrings zu finden. Beispiel: `WHERE show_title LIKE '%Buffy%'`.\n- **Filme/Serien finden**: Suche nach `title` oder `show_title` und optional `year`.\n- **Serienanfragen**:\n  - Staffeln: nutze `season_number`, `season_title` und die Verbindung über `show_title`.\n  - Episoden: nutze `episode_number` und `title` zusammen mit `season_number` oder `show_title`.\n- **Beliebtheit/Bestbewertet**: Nutze `rating`, `audience_rating` oder `view_count`.\n- **Genres, Regisseure, Schauspieler**: Verwende `genres`, `directors`, `cast`.\n- **Hierarchie**:\n  - Episode → Season über `parent_rating_key`.\n  - Season → Show über `parent_rating_key`.\n  - Episode → Show über `grandparent_rating_key`.\n- **Antwortstruktur**:\n  - Mehrere Treffer: Übersichtsliste (Titel, Jahr, Staffel/Episode, Rating).\n  - Einzelner Treffer: Detailinfos (Titel, Jahr, Staffel/Episode, Bewertung, Genres, Regie, Cast, Zusammenfassung).\n- **Integrität**: Verwende ausschließlich Datenbankinhalte. Keine erfundenen Infos.\n- **Updates**: Datenbankänderungen erfolgen nur über das Tool `Update Database`.\n- **Filmvergleich**:\n  - Wenn Filme verglichen werden müssen, nutze immer das Tool `compare_movies` (bis zu 10 Titel sind möglich)\n  - Das Tool erwartet eine Liste von Titel. Zum Beispiel [\"Heat (1995)\", \"The Dark Knight (2008)\"]. Das Erscheinungsjahr ist optional, aber wenn angegeben, sollte es im Format \"Titel (Jahr)\" sein.\n  - Frage nach, wenn weniger als 2 Titel erkannt wurden\n  - Nutze keine eigenen Schätzwerte\n- **Was bisher geschah**:\n  - Bei Anfragen, die eine Zusammenfassung einzelner Folgen von Serien betreffen, kann auf Wikipedia zugegriffen werden, aber nur dann\n  - Es darf nicht gespoilert werden, also gib nur Informationen zurück, die in den schon gesehen Folgen Verfügar sind\n  - Reichere ansonsten nicht mir Wikipedia Wissen an\n\n### Antwortformat\n- **Übersichten**: Tabelle mit Titel, Jahr, Staffel/Episode, Rating.\n- **Details**: Fließtext mit allen verfügbaren Infos.\n- **Vergleiche**: Es MUSS stehts der Output des Tools `compare_movies` ohne Veränderung zurückgegeben werden\n- **Keine Daten**: klare Antwort, dass nichts gefunden wurde.\n\n---\n\n### Beispiele für SQL-Abfragen\n```sql\n-- 1. Anzahl aller Episoden einer Serie\nSELECT COUNT(*) AS episode_count\nFROM media_entries\nWHERE type = 'episode'\n  AND show_title LIKE '%Buffy%';\n\n-- 2. Liste aller Staffeln einer Serie\nSELECT season_number, season_title, year, rating\nFROM media_entries\nWHERE type = 'season'\n  AND show_title LIKE '%Game of Thrones%'\nORDER BY season_number ASC;\n\n-- 3. Episoden einer bestimmten Staffel\nSELECT episode_number, title, release_date, rating\nFROM media_entries\nWHERE type = 'episode'\n  AND show_title LIKE '%Stranger Things%'\n  AND season_number = 1\nORDER BY episode_number ASC;\n\n-- 4. Bestbewerteter Film\nSELECT title, year, rating, audience_rating\nFROM media_entries\nWHERE type = 'movie'\nORDER BY rating DESC\nLIMIT 1;\n\n-- 5. Top 5 Serien nach View Count\nSELECT show_title AS title, year, view_count\nFROM media_entries\nWHERE type = 'show'\nORDER BY view_count DESC\nLIMIT 5;\n\n-- 6. Filme mit einem bestimmten Schauspieler\nSELECT title, year, cast, rating\nFROM media_entries\nWHERE type = 'movie'\n  AND cast LIKE '%Harrison Ford%';\n\n-- 7. Detailinfos zu einer Episode\nSELECT show_title, season_number, episode_number, title, release_date, rating, summary, cast\nFROM media_entries\nWHERE type = 'episode'\n  AND show_title LIKE '%The Office%'\n  AND season_number = 2\n  AND episode_number = 12;\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        48
+      ],
+      "id": "6d26cae0-06a0-40e9-9498-eb7c45e9fb9a",
+      "name": "AI Agent1",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "description": "Das Tool durchsucht meine Bücher und lädt ein ausgewähltes Buch nach Rückfrage herunter.\n\nAblauf in zwei Schritten\n\nSuche:\n– Eingangsdaten enthalten `title` und `author`.\n– Das Tool liefert eine Liste passender Treffer zurück und fragt, welches Buch geladen werden soll. Die Treffer enthalten den Titel, den Autor, die Größe sowie die notwendige Url für den Download. Die URL MUSS sich auf jeden Fall gemerkt werden, da diese für den Download notwendig ist.\n\nDownload:\n– Nach Auswahl MUSS der zum Buch gehörende Link `url` übergeben werden.\n– Um das Buch laden zu können MUSS ebenfalls der Wert `download` auf `true` gesetzt werden.\n\n\nDie Anfrage muss wie folgt aussehen \n\n{\"search\": {\n\"title\": \"Das Buch 1\",\n\"author\": \"Der Author\",\n\"download\": false,\n\"url\": \"book-file-url\" }\n}",
+        "workflowId": {
+          "__rl": true,
+          "value": "YRJxvVdip5Bqh4gJ",
+          "mode": "list",
+          "cachedResultName": "books"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "search": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('search', `Die Büchersuche soll wie folgt übergeben werden:\n\n{\n\"title\": \"Das Buch 1\",\n\"author\": \"Der Author\",\n\"download\": false,\n\"url\": \"file-url\"\n}`, 'string') }}"
+          },
+          "matchingColumns": [
+            "search"
+          ],
+          "schema": [
+            {
+              "id": "search",
+              "displayName": "search",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "object",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        1008,
+        272
+      ],
+      "id": "1e6aa2fa-44a9-464d-80c9-0be6c6dd1f15",
+      "name": "Call n8n Workflow Tool1"
+    }
+  ],
+  "pinData": {},
+  "repo_name": "n8n-workflows",
+  "repo_owner": "DoPaNik",
+  "repo_path": "git@github.com:DoPaNik/n8n-workflows.git",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-08-19T21:44:33.608Z",
+  "versionId": "290375d1-8248-43b6-bb17-72d2948a3fe0"
+}
