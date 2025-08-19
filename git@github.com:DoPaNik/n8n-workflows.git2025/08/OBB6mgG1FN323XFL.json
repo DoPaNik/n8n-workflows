@@ -1,0 +1,424 @@
+{
+  "active": false,
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-08-18T19:56:16.351Z",
+  "id": "OBB6mgG1FN323XFL",
+  "isArchived": false,
+  "meta": null,
+  "name": "Sonarr Waiting List",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://sonarr.automatisier.bar/api/v3/queue/details",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        16,
+        48
+      ],
+      "id": "8fce7fae-888b-4f7d-955f-0dc6d16af3ef",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "F8RLnXJTuzdScO27",
+          "name": "Sonarr"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://sonarr.automatisier.bar/api/v3/episode/{{ $json.episodeId }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        560,
+        -32
+      ],
+      "id": "f3db3142-e244-4a82-b08d-911e102b3200",
+      "name": "HTTP Request1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "F8RLnXJTuzdScO27",
+          "name": "Sonarr"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b8a2ea27-f07b-464f-97d3-f353ab776465",
+              "name": "estimatedCompletionTime",
+              "value": "={{ $json.estimatedCompletionTime }}",
+              "type": "string"
+            },
+            {
+              "id": "bb437828-d4a1-4256-8d75-2459699772fb",
+              "name": "episodeId",
+              "value": "={{ $json.episodeId }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        688,
+        144
+      ],
+      "id": "ee8f4acc-8c79-47c2-81bf-e5d99a5d4a81",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "430ae57f-c87f-4f97-85fb-d44f45805570",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            },
+            {
+              "id": "babc9e8f-8683-4e58-8859-f38d3980d935",
+              "name": "title",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "f2b064a6-b7e5-426d-a341-809b40350e0c",
+              "name": "tvdbId",
+              "value": "={{ $json.tvdbId }}",
+              "type": "number"
+            },
+            {
+              "id": "954e26c5-c475-4de9-a6dc-64c62e1e68ac",
+              "name": "series.title",
+              "value": "={{ $json.series.title }}",
+              "type": "string"
+            },
+            {
+              "id": "e91a4b12-aee3-4c86-bb05-9268e57a45f0",
+              "name": "series.tvMazeId",
+              "value": "={{ $json.series.tvMazeId }}",
+              "type": "number"
+            },
+            {
+              "id": "2efb49f5-ebb5-4e7d-9e54-ec70de3c9cf2",
+              "name": "series.tmdbId",
+              "value": "={{ $json.series.tmdbId }}",
+              "type": "number"
+            },
+            {
+              "id": "b8473c95-3ac3-4e5e-ad44-a163fd609645",
+              "name": "series.imdbId",
+              "value": "={{ $json.series.imdbId }}",
+              "type": "string"
+            },
+            {
+              "id": "913fa516-d3dd-44f9-bdb1-c92b3f3249df",
+              "name": "seasonNumber",
+              "value": "={{ $json.seasonNumber }}",
+              "type": "number"
+            },
+            {
+              "id": "7805b0cc-d608-4fd6-a667-488b7e41c7f0",
+              "name": "episodeNumber",
+              "value": "={{ $json.episodeNumber }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        752,
+        -64
+      ],
+      "id": "97701079-9319-4c7f-b5af-ea4936187d67",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "id",
+              "field2": "episodeId"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        912,
+        48
+      ],
+      "id": "b07b81fa-1532-4075-9049-e7819465214e",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b825bc9f-fac7-4ffb-ba06-614f37f68321",
+              "name": "title",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "f5cbc18d-87f6-44bb-a94f-2a5e0d159c1f",
+              "name": "series.title",
+              "value": "={{ $json.series.title }}",
+              "type": "string"
+            },
+            {
+              "id": "47280a03-adc0-42d9-9218-d389d4b1bd96",
+              "name": "estimatedCompletionTime",
+              "value": "={{ $json.estimatedCompletionTime }}",
+              "type": "string"
+            },
+            {
+              "id": "3d207178-2b60-4d46-97e4-5c7bd869713d",
+              "name": "episode",
+              "value": "=S{{ $json.seasonNumber }}E{{ $json.episodeNumber }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1136,
+        128
+      ],
+      "id": "23a1e0be-8d57-47d6-9418-d218fa78a6ec",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        240,
+        48
+      ],
+      "id": "1c9f26fb-ceb3-4481-b083-b0693053b515",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -208,
+        48
+      ],
+      "id": "7af02dcc-ac01-4da5-9764-ff43362fff85",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * Wandelt ein UTC-Datum in CEST (Europe/Berlin) um.\n * @param {string|Date} utcDate - UTC-Datum als ISO-String oder Date-Objekt\n * @returns {string} Datum/Zeit in CEST\n */\nfunction utcToCest(utcDate) {\n  const date = new Date(utcDate);\n  return date.toLocaleString(\"de-DE\", {\n    timeZone: \"Europe/Berlin\",\n    hour12: false\n  });\n}\n\n// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.title = item.json.series.title + \" - \" + item.json.title ;\n  item.json.series = undefined;\n  item.json.estimatedCompletionTime = utcToCest(item.json.estimatedCompletionTime);\n  \n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        -192
+      ],
+      "id": "105c7271-dc38-4c9b-b3d6-75d32f44189f",
+      "name": "Code"
+    }
+  ],
+  "pinData": {
+    "HTTP Request": [
+      {
+        "json": {
+          "seriesId": 45,
+          "episodeId": 2907,
+          "seasonNumber": 1,
+          "languages": [
+            {
+              "id": 1,
+              "name": "English"
+            },
+            {
+              "id": 4,
+              "name": "German"
+            }
+          ],
+          "quality": {
+            "quality": {
+              "id": 18,
+              "name": "WEBDL-2160p",
+              "source": "web",
+              "resolution": 2160
+            },
+            "revision": {
+              "version": 1,
+              "real": 0,
+              "isRepack": false
+            }
+          },
+          "customFormats": [
+            {
+              "id": 1,
+              "name": "German"
+            }
+          ],
+          "customFormatScore": 5,
+          "size": 4441605813,
+          "title": "Dexter.Wiedererwachen.S01E07.GERMAN.DL.DV.2160P.WEB.H265-RiLE",
+          "sizeleft": 4441605813,
+          "timeleft": "3.14:39:53.1085192",
+          "estimatedCompletionTime": "2025-08-22T10:43:12Z",
+          "added": "2025-08-15T09:35:16Z",
+          "status": "delay",
+          "protocol": "usenet",
+          "downloadClient": "SABnzbd",
+          "downloadClientHasPostImportCategory": false,
+          "indexer": "NZBHydra2 - GER",
+          "episodeHasFile": false,
+          "id": 1848534938
+        }
+      }
+    ]
+  },
+  "repo_name": "n8n-workflows",
+  "repo_owner": "DoPaNik",
+  "repo_path": "git@github.com:DoPaNik/n8n-workflows.git",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-08-18T20:53:41.615Z",
+  "versionId": "78ddce51-f93a-4f35-b50d-8e73c6b5a9a3"
+}
