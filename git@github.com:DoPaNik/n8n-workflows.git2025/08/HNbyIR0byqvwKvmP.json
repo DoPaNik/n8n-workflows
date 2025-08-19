@@ -1,0 +1,121 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Generate an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image": {
+      "main": [
+        [
+          {
+            "node": "Create a post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-08-03T21:21:14.521Z",
+  "id": "HNbyIR0byqvwKvmP",
+  "isArchived": false,
+  "meta": null,
+  "name": "LinkedIn AI Post Generator",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f129e30b-13e1-4dbd-84b5-2414ed8d1667",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are a content writer for LinkedIn. Using the topic provided in the input, research current information and craft a LinkedIn post that integrates relevant facts and insights. Use the provided sample posts to mimic my writing style. Write the post in German and keep it engaging, informative, and aligned with a personal brand voice."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        144,
+        0
+      ],
+      "id": "13ec2176-faf5-4a42-8b31-83c0e8420e65",
+      "name": "Message a model"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "prompt": "A modern, professional illustration representing the LinkedIn post topic.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        464,
+        0
+      ],
+      "id": "7b4568ec-3426-4fa8-9bed-956d8b5930ac",
+      "name": "Generate an image"
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [
+        446,
+        48
+      ],
+      "id": "6be3b0da-292a-4406-9afd-a3db32e9de3c",
+      "name": "Create a post"
+    }
+  ],
+  "pinData": {},
+  "repo_name": "n8n-workflows",
+  "repo_owner": "DoPaNik",
+  "repo_path": "git@github.com:DoPaNik/n8n-workflows.git",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-08-03T21:21:14.521Z",
+  "versionId": "92e12ac6-cc0a-4a81-b9c6-f2a9ab0aca7b"
+}
