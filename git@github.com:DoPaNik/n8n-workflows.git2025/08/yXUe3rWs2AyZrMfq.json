@@ -1,0 +1,166 @@
+{
+  "active": false,
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-08-18T12:08:12.814Z",
+  "id": "yXUe3rWs2AyZrMfq",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Movie Compare Tool",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "jsonExample",
+        "jsonExample": "{ \"titles\": [\"Heat (1995)\", \"The Dark Knight (2008)\"] }"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -496,
+        -48
+      ],
+      "id": "86ffed51-b317-406e-85da-fb6b39280e91",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const arr = (items[0].json.titles || []).slice(0, 10);\nreturn arr.map(t => {\n  const m = String(t).match(/^(.*?)(?:\\s*\\((\\d{4})\\))?$/);\n  const title = (m?.[1] || '').trim();\n  const year  = m?.[2] ? Number(m[2]) : null;\n  const lowerTitle = title.toLowerCase();\n  return {\n    json: {\n      lowerTitle,\n      likePrefix: lowerTitle + '%',\n      likeContains: '%' + lowerTitle + '%',\n      q_year: Number.isFinite(year) ? year : null,\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -176,
+        -48
+      ],
+      "id": "48ed41ae-69a7-480a-945e-98a8a113e392",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n  m.title,\n  m.year,\n  m.duration_min,\n  m.rating,\n  m.audience_rating,\n  m.genres,\n  m.directors,\n  m.studio,\n  m.content_rating,\n  m.release_date\nFROM media_entries m\nWHERE m.type = 'movie'\n  AND (\n    LOWER(m.title) = $1\n    OR LOWER(m.title) LIKE $2\n    OR LOWER(m.title) LIKE $3\n  )\nORDER BY\n  (LOWER(m.title) = $4) DESC,\n  (LOWER(m.title) LIKE $5) DESC,\n  NULLIF(INSTR(LOWER(m.title), $6), 0),\n  CASE WHEN $7 IS NULL THEN 0 ELSE ABS(COALESCE(m.year,0) - $8) END,\n  LENGTH(m.title)\nLIMIT 1;\n",
+        "options": {
+          "queryReplacement": "={{$json.lowerTitle}},\n{{$json.likePrefix}},\n{{$json.likeContains}},\n{{$json.lowerTitle}},\n{{$json.likePrefix}},\n{{$json.lowerTitle}},\n{{$json.q_year}},\n{{$json.q_year}}\n"
+        }
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.4,
+      "position": [
+        304,
+        -32
+      ],
+      "id": "2c607660-95f6-4ea0-ae9b-e61a14768993",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "mySql": {
+          "id": "Qt3900T1jFe5tTld",
+          "name": "MySQL Plex (AllInkl)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function mdEscape(s) {\n  return String(s ?? '')\n    .replace(/\\|/g, '\\\\|')  // Pipe escapen\n    .replace(/`/g, '\\\\`')   // Backtick escapen\n    .trim();\n}\n\nfunction toList(x) {\n  if (Array.isArray(x)) return x.filter(Boolean);\n  if (x == null) return [];\n  return String(x).split(',').map(s => s.trim()).filter(Boolean);\n}\n\nfunction fmtDe(n) {\n  if (n === null || n === undefined || n === '') return '–';\n  const num = Number(n);\n  if (!Number.isFinite(num)) return '–';\n  return num.toFixed(1).replace('.', ',');\n}\n\nfunction bar5(score01to10) {\n  if (score01to10 == null || score01to10 === '') return '`☆☆☆☆☆` –';\n  const s5 = Math.max(0, Math.min(5, Math.round(Number(score01to10) / 2)));\n  const bar = '★'.repeat(s5) + '☆'.repeat(5 - s5);\n  const num = (Number(score01to10) / 2);\n  const disp = num.toFixed(1).replace('.', ','); // DE-Komma\n  return '`' + bar + '` ' + disp;\n}\n\nfunction truncate(s, max=30) {\n  s = String(s ?? '');\n  return s.length <= max ? s : s.slice(0, max - 1) + '…';\n}\n\nconst rows = items.map(i => i.json).filter(r => r && r.title);\n\nlet md = `### 🎬 Filmvergleich\\n\\n`;\n\nif (!rows.length) {\n  return [{ json: { markdown: md + '*Keine Treffer.*' } }];\n}\n\n// Kopf\nmd += '| Titel | ⭐ Kritiker | 👥 Publikum | Genres | Regie | Jahr | ⏱ |\\n';\nmd += '|---|:---:|:---:|:---:|---|---|:---:|\\n';\n\n// Zeilen\nfor (const r of rows) {\n  const title = '**' + mdEscape(r.title) + '**';\n  const year = r.year ?? '–';\n  const runtime = r.duration_min ?? '–';\n  const critics = bar5(r.rating);\n  const audience = bar5(r.audience_rating);\n\n  const genresFull = toList(r.genres).join(', ');\n  const directorsFull = toList(r.directors).join(', ');\n\n  const genres = truncate(genresFull, 22);\n  const directors = truncate(directorsFull, 22);\n\n  const release = r.release_date || '–';\n\n  md += `| ${title} | ${critics} | ${audience} | ${mdEscape(genres)} | ${mdEscape(directors)} | ${year} | ${runtime} |\\n`;\n}\n\n// Stats/Fazit\nconst stats = rows.map(r => ({\n  title: r.title,\n  runtime: r.duration_min != null ? Number(r.duration_min) : null,\n  critics: r.rating != null ? Number(r.rating) : null,\n  audience: r.audience_rating != null ? Number(r.audience_rating) : null,\n  genres: toList(r.genres).map(g => g.toLowerCase()),\n}));\n\nconst bestCritics = stats.filter(x => Number.isFinite(x.critics))\n  .sort((a,b) => b.critics - a.critics || (Number.isFinite(a.audience)&&Number.isFinite(b.audience) ? b.audience - a.audience : 0) || 0)[0];\n\nconst longest = stats.filter(x => Number.isFinite(x.runtime))\n  .sort((a,b) => b.runtime - a.runtime)[0];\n\nlet overlap = [];\nif (stats.length >= 2) {\n  const base = new Set(stats[0].genres);\n  const common = stats.slice(1).reduce((acc, cur) => {\n    const s = new Set(cur.genres);\n    return new Set([...acc].filter(x => s.has(x)));\n  }, base);\n  overlap = [...common];\n}\n\nmd += `\\n**Kurzfazit**\\n`;\nif (bestCritics) md += `- 🏆 Bestes Rating: *${mdEscape(bestCritics.title)}* (${fmtDe(bestCritics.critics/2)})\\n`;\nif (longest) md += `- ⏱ Längste Laufzeit: *${mdEscape(longest.title)}* (${longest.runtime})\\n`;\nif (overlap.length) md += `- 🧬 Gemeinsame Genres: ${overlap.map(g => '`'+g+'`').join(', ')}\\n`;\n\nreturn [{ json: { markdown: md } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        -160
+      ],
+      "id": "ef5feab7-1c94-4173-b2f5-c5350934f176",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        32,
+        -48
+      ],
+      "id": "1f6364f2-bd67-440f-835d-c45510a23b7b",
+      "name": "Loop Over Items"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "titles": [
+            "Goldfinger",
+            "Se7en"
+          ]
+        }
+      }
+    ]
+  },
+  "repo_name": "n8n-workflows",
+  "repo_owner": "DoPaNik",
+  "repo_path": "git@github.com:DoPaNik/n8n-workflows.git",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-08-18T17:49:18.710Z",
+  "versionId": "fbf97ef0-9a44-4535-ad12-44e0ab1381ad"
+}
