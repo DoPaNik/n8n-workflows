@@ -1,0 +1,1367 @@
+{
+  "active": false,
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Create a database page": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload a file": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Upload a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Create a database page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        []
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "Create a database page1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a database page1": {
+      "main": [
+        []
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-08-13T16:36:10.110Z",
+  "id": "zE5ewrrYJhNkeTA9",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Persist social media recipe to Notion",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/clockworks~tiktok-scraper/run-sync-get-dataset-items",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"excludePinnedPosts\": false,\n    \"postURLs\": [\n        \"{{ $json.query }}\"\n    ],\n    \"proxyCountryCode\": \"None\",\n    \"resultsPerPage\": 100,\n    \"scrapeRelatedVideos\": false,\n    \"shouldDownloadAvatars\": false,\n    \"shouldDownloadCovers\": false,\n    \"shouldDownloadMusicCovers\": false,\n    \"shouldDownloadSlideshowImages\": false,\n    \"shouldDownloadSubtitles\": false,\n    \"shouldDownloadVideos\": false\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -144,
+        80
+      ],
+      "id": "05aded26-1bfb-4d74-b7eb-a519aa647b11",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "C4JSEXJmatMD50PV",
+          "name": "APIFY"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "99ded9cf-e12e-4411-87ec-9336928a1289",
+          "mode": "list",
+          "cachedResultName": "Meals",
+          "cachedResultUrl": "https://www.notion.so/99ded9cfe12e441187ec9336928a1289"
+        },
+        "title": "Neues Rezept",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Want to Try|checkbox",
+              "checkboxValue": true
+            },
+            {
+              "key": "Recipe Link|url",
+              "urlValue": "={{ $json.output.submittedVideoUrl }}"
+            },
+            {
+              "key": "Source|rich_text",
+              "textContent": "={{ $json.output.authorMeta.name }}"
+            }
+          ]
+        },
+        "blockUi": {
+          "blockValues": [
+            {
+              "type": "image",
+              "url": "={{ $json.output.url }}"
+            },
+            {
+              "textContent": "={{ $json.output.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        1568,
+        80
+      ],
+      "id": "8a18cae2-dc43-41a6-8edc-f23f6a063c6f",
+      "name": "Create a database page",
+      "credentials": {
+        "notionApi": {
+          "id": "2tPgJFU6jHXabGtx",
+          "name": "Notion SK "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "path": "=/{{ $json.id }}.jpeg",
+        "binaryData": true
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1,
+      "position": [
+        304,
+        0
+      ],
+      "id": "003aa198-1ceb-4124-9882-b37bc42fe0b8",
+      "name": "Upload a file",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "RYAs7jzTvFnHltCv",
+          "name": "Dropbox DP OAuth"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.videoMeta.originalCoverUrl }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        80,
+        0
+      ],
+      "id": "6629161e-ffde-4925-8299-b4716d769133",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.dropboxapi.com/2/sharing/create_shared_link",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"path\": \"{{ $json.path_lower }}\",\n  \"short_url\": false\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        528,
+        0
+      ],
+      "id": "0a08cb62-1785-40f3-9a79-d1cde6f66c19",
+      "name": "HTTP Request2",
+      "credentials": {
+        "dropboxApi": {
+          "id": "U5flJN0leoBdf2va",
+          "name": "Dropbox account DP"
+        },
+        "dropboxOAuth2Api": {
+          "id": "RYAs7jzTvFnHltCv",
+          "name": "Dropbox DP OAuth"
+        },
+        "oAuth2Api": {
+          "id": "wvPpHzrEVZZddeuw",
+          "name": "Dropbox OAuth2 - Custom Scope - sharing.write"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {
+          "clashHandling": {
+            "values": {
+              "resolveClash": "addSuffix"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        976,
+        80
+      ],
+      "id": "e3c45cfd-6f7f-4bab-8f2c-c01fafa9d385",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code Node (JavaScript) – Dropbox-Shared-Link -> Notion-tauglicher Raw-Link\n// Erwartet: pro Item entweder ein Objekt mit .json.url ODER ein Item, dessen json ein Array dieser Objekte ist.\n// Schreibt: json.url (überschrieben), json.notionUrl, json.changed, optional json.info/error.\n\nconst OVERWRITE_URL = true; // auf false setzen, wenn du das Originalfeld behalten willst\n\nfunction parseHttpUrl(str) {\n  const m = String(str || '').trim().match(/^https?:\\/\\/([^\\/?#]+)([^?#]*)(\\?[^#]*)?/i);\n  if (!m) return null;\n  return { host: m[1], path: m[2] || '/', query: m[3] || '', original: m[0] };\n}\n\nfunction parseQuery(qs) {\n  const out = {};\n  if (!qs) return out;\n  const s = qs.replace(/^\\?/, '');\n  if (!s) return out;\n  for (const part of s.split('&')) {\n    if (!part) continue;\n    const eq = part.indexOf('=');\n    const k = eq >= 0 ? part.slice(0, eq) : part;\n    const v = eq >= 0 ? part.slice(eq + 1) : '';\n    const key = decodeURIComponent(k || '');\n    const val = decodeURIComponent(v.replace(/\\+/g, ' '));\n    if (key) out[key] = val;\n  }\n  return out;\n}\n\nfunction buildQuery(obj) {\n  const pairs = [];\n  for (const [k, v] of Object.entries(obj)) {\n    if (v === undefined || v === null || v === '') continue;\n    pairs.push(encodeURIComponent(k) + '=' + encodeURIComponent(String(v)));\n  }\n  return pairs.length ? '?' + pairs.join('&') : '';\n}\n\nfunction toNotionUrl(input) {\n  const parsed = parseHttpUrl(input);\n  if (!parsed) {\n    return { notionUrl: input, changed: false, error: 'Keine gültige http/https-URL.' };\n  }\n\n  const host = parsed.host.toLowerCase();\n  const isDropbox =\n    /(^|\\.)dropbox\\.com$/.test(host) || /(^|\\.)dropboxusercontent\\.com$/.test(host);\n\n  if (!isDropbox) {\n    return { notionUrl: input, changed: false, info: 'Keine Dropbox-URL – unverändert.' };\n  }\n\n  const path = parsed.path;\n  const params = parseQuery(parsed.query);\n  const rlkey = params.rlkey;\n\n  const isFileShare = /^\\/s\\//i.test(path) || /^\\/scl\\/fi\\//i.test(path);\n\n  if (isFileShare) {\n    // Raw-Link bauen (nur rlkey mitnehmen)\n    const newHost = 'dl.dropboxusercontent.com';\n    const q = rlkey ? buildQuery({ rlkey }) : '';\n    const out = `https://${newHost}${path}${q}`;\n    return { notionUrl: out, changed: out !== parsed.original };\n  } else {\n    // Fallback: Download-Link (?dl=1). Notion kann das meist NICHT als Bild einbetten.\n    params.dl = '1';\n    delete params.raw;\n    delete params.preview;\n    const q = buildQuery(params);\n    const out = `https://${parsed.host}${path}${q}`;\n    return {\n      notionUrl: out,\n      changed: out !== parsed.original,\n      info: 'Fallback (?dl=1), da kein Datei-Share-Link (/s/ oder /scl/fi/).',\n    };\n  }\n}\n\n// 1) Input aus n8n holen\nconst incoming = $input.all();\n\n// 2) Falls ein Item ein ARRAY in item.json enthält, auf einzelne Items „entpacken“\nconst normalized = [];\nfor (const it of incoming) {\n  if (Array.isArray(it.json)) {\n    for (const el of it.json) normalized.push({ json: el });\n  } else {\n    normalized.push(it);\n  }\n}\n\n// 3) Jedes Item verarbeiten\nconst outItems = normalized.map(item => {\n  const inputUrl =\n    item.json?.url ??\n    item.json?.link ??\n    item.json?.shared_link ??\n    item.json?.sharedLink ??\n    item.json?.href ??\n    item.url;\n\n  if (!inputUrl) {\n    return { json: { ...item.json, notionUrl: null, changed: false, error: 'Kein URL-Feld gefunden.' } };\n  }\n\n  const res = toNotionUrl(inputUrl);\n\n  const outJson = {\n    ...item.json,\n    notionUrl: res.notionUrl,\n    changed: !!res.changed,\n  };\n  if (res.info) outJson.info = res.info;\n  if (res.error) outJson.error = res.error;\n\n  if (OVERWRITE_URL) {\n    outJson.url = res.notionUrl; // Originalfeld überschreiben, damit sofort sichtbar\n  }\n\n  return { json: outJson };\n});\n\nreturn outItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        752,
+        0
+      ],
+      "id": "ebef8d83-a811-45e5-b589-e19a5d29457d",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code Node (JavaScript)\n// Input: item.json.notionUrl (oder item.json.url) = Notion-Seitenlink\n// Output pro Item:\n//   - json.deepLink        -> notion://www.notion.so/... (öffnet direkt die App)\n//   - json.universalLink   -> https://www.notion.so/... (Fallback/Universal Link)\n//   - json.markdown        -> \"[In Notion öffnen](notion://...) • [Im Browser](https://...)\"\n//   - json.changed         -> bool, ob normalisiert wurde\n// Keine Nutzung von URL/URLSearchParams (kompatibel mit n8n Code Node)\n\nfunction parseHttpUrl(str) {\n  const m = String(str || '').trim().match(/^https?:\\/\\/([^\\/?#]+)([^?#]*)(\\?[^#]*)?/i);\n  if (!m) return null;\n  return { host: m[1], path: m[2] || '/', query: m[3] || '' };\n}\n\nfunction normalizeNotionHost(host) {\n  host = host.toLowerCase();\n  // Alle Varianten auf www.notion.so zusammenführen\n  if (host === 'notion.so' || host === 'www.notion.so') return 'www.notion.so';\n  if (host.endsWith('.notion.site')) return 'www.notion.so';\n  return host; // Unbekannt -> belassen\n}\n\nfunction buildUniversalFromAny(url) {\n  const p = parseHttpUrl(url);\n  if (!p) return null;\n\n  const normHost = normalizeNotionHost(p.host);\n  if (!/notion\\.so$/.test(normHost)) {\n    // kein Notion-Link -> nicht ändern\n    return { universal: url, changed: false };\n  }\n  // Query (z. B. ?pvs=4, ?v=…) beibehalten\n  const universal = `https://${normHost}${p.path}${p.query || ''}`;\n  return { universal, changed: universal !== url };\n}\n\nfunction toDeepLink(universalUrl) {\n  // Aus einem https://www.notion.so/... einen notion://www.notion.so/... bauen\n  const p = parseHttpUrl(universalUrl);\n  if (!p) return null;\n  if (!/(^|\\.)(notion\\.so)$/.test(p.host.toLowerCase())) return null;\n  return `notion://www.notion.so${p.path}${p.query || ''}`;\n}\n\nconst items = $input.all();\nconst out = [];\n\nfor (const item of items) {\n  const src =\n    item.json?.notionUrl ??\n    item.json?.url ??\n    item.json?.href ??\n    item.url;\n\n  if (!src) {\n    out.push({ json: { ...item.json, error: 'Kein Notion-Link im Item gefunden.' } });\n    continue;\n  }\n\n  const uni = buildUniversalFromAny(src);\n  if (!uni) {\n    out.push({ json: { ...item.json, error: 'Ungültige URL.' } });\n    continue;\n  }\n\n  const deep = toDeepLink(uni.universal);\n  const markdown = `[In Notion öffnen](${deep}) • [Im Browser](${uni.universal})`;\n\n  out.push({\n    json: {\n      ...item.json,\n      deepLink: deep,\n      universalLink: uni.universal,\n      markdown,\n      changed: !!uni.changed,\n    }\n  });\n}\n\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1776,
+        80
+      ],
+      "id": "0e277a4e-0a17-42c4-ac93-4f3f599f5ec7",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Hier sind die Rohdaten aus einer TikTok-Beschreibung.  \nBitte wende die Regeln aus dem Systemprompt an und gib das Ergebnis als JSON im definierten Format zurück.\n\nsubmittedVideoUrl: {{ $json.webVideoUrl_2 }}\nauthorMeta.name: {{ $json.authorMeta_2.name }}\nurl: {{ $json.url_1 }}\noriginalText: |\n{{ $json.text_2 }}\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Rolle: Du bist ein Rezept-Aufbereiter, der aus TikTok-Beschreibungen präzise, klar strukturierte Rezepte extrahiert.\n\nAufgabe:\n\nEntferne alle Inhalte, die nicht zum Rezept gehören (z. B. Hashtags, Werbung, Eigenwerbung, Social-Media-Links, irrelevante Kommentare, Emojis, Clickbait-Texte).\n\nLasse die eigentlichen Zutaten und Zubereitungsschritte unverändert.\n\nFormatiere das Ergebnis so, dass es für Notion optimiert ist:\n\nÜberschrift als Titel\n\nAbschnitt Zutaten als Liste\n\nAbschnitt Zubereitung als nummerierte Liste\n\nKeine unnötigen Leerzeilen oder Sonderzeichen\n\nStelle sicher, dass das gesamte Ergebnis unter 2000 Zeichen bleibt.\n\nVerwende klare, leicht lesbare Struktur ohne Fachjargon, wenn dieser nicht im Originalrezept enthalten war.\n\nKeine Änderungen am Rezeptinhalt vornehmen, nur irrelevantes Material entfernen und Format anpassen."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        1232,
+        80
+      ],
+      "id": "4ff6f5a3-6e7d-4f15-aac3-c1165935fcb3",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1104,
+        288
+      ],
+      "id": "ae4267de-3d3c-4267-ad6c-3d67a9689834",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "uxMQqh1uaXnkylVv",
+          "name": "OpenAi account (English Class)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"submittedVideoUrl\": \"https://www.tiktok.com/@kochkanal/video/1234567890\",\n  \"authorMeta\": {\n    \"name\": \"kochkanal\"\n  },\n  \"url\": \"https://dl.dropboxusercontent.com/scl/fi/123456/987654.jpeg?rlkey=absc123456\",\n  \"text\": \"# Rezeptname\\n\\n**Zutaten:**\\n- 200 g Mehl\\n- 100 g Zucker\\n- 2 Eier\\n\\n**Zubereitung:**\\n1. Mehl und Zucker in eine Schüssel geben.\\n2. Eier hinzufügen und zu einem glatten Teig verrühren.\\n3. Bei 180°C 25 Minuten backen.\"\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1408,
+        288
+      ],
+      "id": "fd1424b3-ce6c-40b3-a49f-76eb78af91a3",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/apify~instagram-scraper/run-sync-get-dataset-items",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"addParentData\": false,\n    \"directUrls\": [\n        \"{{ $json.query }}\"\n    ],\n    \"enhanceUserSearchWithFacebookPage\": false,\n    \"isUserReelFeedURL\": false,\n    \"isUserTaggedFeedURL\": false,\n    \"resultsLimit\": 1,\n    \"searchLimit\": 1,\n    \"searchType\": \"hashtag\"\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        16,
+        288
+      ],
+      "id": "566c919e-3c1e-4448-b086-037849199486",
+      "name": "HTTP Request3",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "C4JSEXJmatMD50PV",
+          "name": "APIFY"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "94cfa092-25d4-4a58-8f24-b99813db374a",
+              "leftValue": "={{ $json.query }}",
+              "rightValue": "https://www.instagram.com/",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
+            },
+            {
+              "id": "8ec158c4-a40e-40cd-afba-4f92d35424f2",
+              "leftValue": "={{ $json.query }}",
+              "rightValue": "https://vm.tiktok.com/",
+              "operator": {
+                "type": "string",
+                "operation": "notStartsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -432,
+        160
+      ],
+      "id": "0864f8b2-e788-430c-b50f-2607775d430f",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "99ded9cf-e12e-4411-87ec-9336928a1289",
+          "mode": "list",
+          "cachedResultName": "Meals",
+          "cachedResultUrl": "https://www.notion.so/99ded9cfe12e441187ec9336928a1289"
+        },
+        "title": "Neues Rezept",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Want to Try|checkbox",
+              "checkboxValue": true
+            },
+            {
+              "key": "Recipe Link|url",
+              "urlValue": "={{ $json.inputUrl }}"
+            },
+            {
+              "key": "Source|rich_text",
+              "textContent": "={{ $json.ownerUsername }}"
+            }
+          ]
+        },
+        "blockUi": {
+          "blockValues": [
+            {
+              "type": "image",
+              "url": "={{ $json.displayUrl }}"
+            },
+            {
+              "textContent": "={{ $json.caption }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        352,
+        288
+      ],
+      "id": "6b6648f6-4f83-4844-af4a-2c67f0cbc5af",
+      "name": "Create a database page1",
+      "credentials": {
+        "notionApi": {
+          "id": "2tPgJFU6jHXabGtx",
+          "name": "Notion SK "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputSource": "jsonExample",
+        "jsonExample": "{\n  \"query\": \"Link to source\"\n}"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -640,
+        160
+      ],
+      "id": "49bdc10c-54cf-4bc7-99d9-7e3edf598480",
+      "name": "When Executed by Another Workflow"
+    }
+  ],
+  "pinData": {
+    "HTTP Request": [
+      {
+        "json": {
+          "id": "7525463108811230486",
+          "text": "Lecker gewürztes Ofengemüse mit marinierten Kartoffeln und gerösteten Mandeln auf einem cremigen Tsatsiki? Ein perfektes Essen an warmen Sommertagen. Was soll ich da noch sagen, außer: HER DAMIT!\n\n#############\n##  REZEPT ##\n#############\n-----------------------\nMediterrane Bowl (3 Portionen)\n-----------------------\n600g kleine Kartoffeln (z.B. Drilling)\n1/2 Kopf Brokkoli (250g)\n1 rote Paprika (200g)\n1 Zwiebel\n2 Knoblauchzehen\n180g Kichererbsen (Abtropfgewicht)\n200g kleine Tomaten\n40g Mandeln\n1/2 Limette (Zeste)\n2 Esslöffel Olivenöl\n1 Esslöffel Tomatenmark\n1 Esslöffel Ahornsirup (oder anderer Zucker)\n1 Teelöffel Paprikapulver (geräuchert)\n1,5 Teelöffel Salz\n1,5 Teelöffel Kreuzkümmel\n1 Teelöffel Oregano\n1 Teelöffel Thymian\n\nTsatsiki:\n300g veganer griechischer Joghurt oder Skyr\n1/2 Gurke (160g, geraspelt & ausgepresst)\n1-2 Knoblauchzehen (gepresst)\n10g frischer Dill (fein gehackt)\n1 Esslöffel Olivenöl\n1 Esslöffel Limettensaft\n1 Teelöffel Weißweinessig\n3/4 Teelöffel Salz\n1/3 Teelöffel Pfeffer\n-----------------------\nKartoffeln abwaschen und in Hälften schneiden. In einer Schüssel mit 1 Esslöffel Olivenöl, Oregano, Thymian, 1/2 Teelöffel Salz sowie Limettenzeste vermischen. Auf ein Backblech verteilen und 15 Minuten bei 200 Grad Ober- und Unterhitze backen.\nVom Brokkoli die Röschen trennen, den Strunk schälen und grob stückeln. Paprika und Zwiebel in Streifen schneiden, Knoblauch kleinwürfeln. Das Gemüse rein in eine Schüssel, dazu die Kichererbsen und Tomaten. Ebenso wie Kreuzkümmel, Ahornsirup, Paprikapulver, Tomatenmark, 1 Teelöffel Salz als auch 1 Esslöffel Olivenöl. Alles gut vermischen. Die Kartoffeln auf dem Blech wenden und das Gemüse drauf verteilen. Erneut in den Ofen und 25 Minuten lang backen. Zwischendurch nochmal durchmischen.\nFür das Tsatsiki alle Zutaten in eine Schüssel geben, verrühren und kühl stellen. Noch Mandeln grob hacken und in einer Pfanne anrösten. Ist das Gemüse fertig, kann serviert werden!\n-----------------------\n\n#vegan #veganfood #plantbased #food #foodporn #healthy #veganrecipes #bowl #veganbowl #mediteranbowl #ofengemüse #tzaziki #greekrecipes #griechisch #vegangreek",
+          "textLanguage": "de",
+          "createTime": 1752158422,
+          "createTimeISO": "2025-07-10T14:40:22.000Z",
+          "locationCreated": "DE",
+          "isAd": false,
+          "authorMeta": {
+            "id": "7271266635431248929",
+            "name": "andiverwuerzt",
+            "profileUrl": "https://www.tiktok.com/@andiverwuerzt",
+            "nickName": "Andi Verwürzt",
+            "verified": false,
+            "signature": "Vegane Gerichte\nkönnen unglaublich lecker sein und\ndas möchte ich hier zeigen.",
+            "bioLink": null,
+            "originalAvatarUrl": "https://p16-common-sign-useast2a.tiktokcdn-us.com/tos-useast2a-avt-0068-euttp/c502f26336cb42c4c5cc8dd0a86d3f6c~tplv-tiktokx-cropcenter:720:720.jpeg?dr=9640&refresh_token=912f4c5c&x-expires=1755291600&x-signature=Q3YZH4XmiUQ%2B%2FkD%2BZX8iIX8cyIw%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast5",
+            "avatar": "https://p16-common-sign-useast2a.tiktokcdn-us.com/tos-useast2a-avt-0068-euttp/c502f26336cb42c4c5cc8dd0a86d3f6c~tplv-tiktokx-cropcenter:720:720.jpeg?dr=9640&refresh_token=912f4c5c&x-expires=1755291600&x-signature=Q3YZH4XmiUQ%2B%2FkD%2BZX8iIX8cyIw%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast5",
+            "privateAccount": false,
+            "roomId": "",
+            "ttSeller": false,
+            "following": 0,
+            "friends": 0,
+            "fans": 26300,
+            "heart": 427400,
+            "video": 410,
+            "digg": 0
+          },
+          "musicMeta": {
+            "musicName": "Originalton - Andi Verwürzt",
+            "musicAuthor": "Andi Verwürzt",
+            "musicOriginal": true,
+            "playUrl": "https://v19.tiktokcdn-us.com/f864f1846c53c30ef6853d7005d4c389/689d5533/video/tos/no1a/tos-no1a-v-2370-no/oYCBiBLUeU3FnthvIQBOifGsk0bYoMCtQFAJgB/?a=1233&bti=ODszNWYuMDE6&ch=0&cr=0&dr=0&er=0&lr=default&cd=0%7C0%7C0%7C0&br=250&bt=125&ft=GSDrKInz7ThcWa~KXq8Zmo&mime_type=audio_mpeg&qs=6&rc=NDY4OjtkPGRmZTtlNjtpOUBpMzpmZXE5cnB3NDMzbzU8NUA0L2AuMC1gNjMxMC4tYmEtYSMwLjZeMmRjLmthLS1kMTFzcw%3D%3D&vvpl=1&l=2025081321155665C74B45F80A6504225F&btag=e00090000",
+            "coverMediumUrl": "https://p16-common-sign-useast2a.tiktokcdn-us.com/tos-useast2a-avt-0068-euttp/c502f26336cb42c4c5cc8dd0a86d3f6c~tplv-tiktokx-cropcenter:720:720.jpeg?dr=9640&refresh_token=912f4c5c&x-expires=1755291600&x-signature=Q3YZH4XmiUQ%2B%2FkD%2BZX8iIX8cyIw%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast5",
+            "originalCoverMediumUrl": "https://p16-common-sign-useast2a.tiktokcdn-us.com/tos-useast2a-avt-0068-euttp/c502f26336cb42c4c5cc8dd0a86d3f6c~tplv-tiktokx-cropcenter:720:720.jpeg?dr=9640&refresh_token=912f4c5c&x-expires=1755291600&x-signature=Q3YZH4XmiUQ%2B%2FkD%2BZX8iIX8cyIw%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast5",
+            "musicId": "7525463124783893270"
+          },
+          "locationMeta": {
+            "address": "City Haus II, Platz d. Republik 6, 60325 Frankfurt am Main, Germany",
+            "city": "Frankfurt",
+            "cityCode": "2925533",
+            "countryCode": "2921044",
+            "locationName": "Die Welt",
+            "locationId": "21568226338689588"
+          },
+          "webVideoUrl": "https://www.tiktok.com/@andiverwuerzt/video/7525463108811230486",
+          "mediaUrls": [],
+          "videoMeta": {
+            "height": 1024,
+            "width": 576,
+            "duration": 71,
+            "coverUrl": "https://p16-common-sign-no.tiktokcdn-us.com/tos-no1a-p-0037-no/oIqeNbgCaiAXVAkoATAaI0EvfhCBdCFknBxVbi~tplv-tiktokx-origin.image?dr=9636&x-expires=1755291600&x-signature=VCfgj6IfbJvrr%2FDQ0hvaj8fLYT0%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5",
+            "originalCoverUrl": "https://p16-common-sign-no.tiktokcdn-us.com/tos-no1a-p-0037-no/oIqeNbgCaiAXVAkoATAaI0EvfhCBdCFknBxVbi~tplv-tiktokx-origin.image?dr=9636&x-expires=1755291600&x-signature=VCfgj6IfbJvrr%2FDQ0hvaj8fLYT0%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5",
+            "definition": "540p",
+            "format": "mp4",
+            "subtitleLinks": [
+              {
+                "language": "eng-US",
+                "downloadLink": "https://v16m-webapp.tiktokcdn-us.com/67051305400c47ce1a58981805fdcfad/689fa3d3/video/tos/useast5/tos-useast5-v-0068c799-tx/7bc94db523c9465f9a0794b798f600ba/?a=1988&bti=ODszNWYuMDE6&ch=0&cr=3&dr=0&lr=all&cd=0%7C0%7C0%7C&cv=1&br=30896&bt=15448&ds=4&ft=4KLMeMzm8Zmo0EP6GI4jVC6ZdpWrKsd.&mime_type=video_mp4&qs=13&rc=M3FxeHA5cjV3NDMzbzgzNUBpM3FxeHA5cjV3NDMzbzgzNUBvbWpuMmRzLmthLS1kLzFzYSNvbWpuMmRzLmthLS1kLzFzcw%3D%3D&l=2025081321155665C74B45F80A6504225F&btag=e00050000",
+                "tiktokLink": "https://v16m-webapp.tiktokcdn-us.com/67051305400c47ce1a58981805fdcfad/689fa3d3/video/tos/useast5/tos-useast5-v-0068c799-tx/7bc94db523c9465f9a0794b798f600ba/?a=1988&bti=ODszNWYuMDE6&ch=0&cr=3&dr=0&lr=all&cd=0%7C0%7C0%7C&cv=1&br=30896&bt=15448&ds=4&ft=4KLMeMzm8Zmo0EP6GI4jVC6ZdpWrKsd.&mime_type=video_mp4&qs=13&rc=M3FxeHA5cjV3NDMzbzgzNUBpM3FxeHA5cjV3NDMzbzgzNUBvbWpuMmRzLmthLS1kLzFzYSNvbWpuMmRzLmthLS1kLzFzcw%3D%3D&l=2025081321155665C74B45F80A6504225F&btag=e00050000",
+                "source": "MT",
+                "sourceUnabbreviated": "machine translation",
+                "version": "4"
+              },
+              {
+                "language": "deu-DE",
+                "downloadLink": "https://v16m-webapp.tiktokcdn-us.com/7bc3ca1f1142a26153835523b1111584/689fa3d3/video/tos/useast5/tos-useast5-v-0068c799-tx/5065b1f0e6fb4eb4a456143e23cb7ecf/?a=1988&bti=ODszNWYuMDE6&ch=0&cr=3&dr=0&lr=all&cd=0%7C0%7C0%7C&cv=1&br=30896&bt=15448&ds=4&ft=4KLMeMzm8Zmo0EP6GI4jVC6ZdpWrKsd.&mime_type=video_mp4&qs=13&rc=M3FxeHA5cjV3NDMzbzgzNUBpM3FxeHA5cjV3NDMzbzgzNUBvbWpuMmRzLmthLS1kLzFzYSNvbWpuMmRzLmthLS1kLzFzcw%3D%3D&l=2025081321155665C74B45F80A6504225F&btag=e00050000",
+                "tiktokLink": "https://v16m-webapp.tiktokcdn-us.com/7bc3ca1f1142a26153835523b1111584/689fa3d3/video/tos/useast5/tos-useast5-v-0068c799-tx/5065b1f0e6fb4eb4a456143e23cb7ecf/?a=1988&bti=ODszNWYuMDE6&ch=0&cr=3&dr=0&lr=all&cd=0%7C0%7C0%7C&cv=1&br=30896&bt=15448&ds=4&ft=4KLMeMzm8Zmo0EP6GI4jVC6ZdpWrKsd.&mime_type=video_mp4&qs=13&rc=M3FxeHA5cjV3NDMzbzgzNUBpM3FxeHA5cjV3NDMzbzgzNUBvbWpuMmRzLmthLS1kLzFzYSNvbWpuMmRzLmthLS1kLzFzcw%3D%3D&l=2025081321155665C74B45F80A6504225F&btag=e00050000",
+                "source": "ASR",
+                "sourceUnabbreviated": "automatic speech recognition",
+                "version": "1:whisper_lid"
+              }
+            ]
+          },
+          "diggCount": 8215,
+          "shareCount": 2445,
+          "playCount": 275100,
+          "collectCount": 10539,
+          "commentCount": 52,
+          "mentions": [],
+          "detailedMentions": [],
+          "hashtags": [],
+          "effectStickers": [],
+          "isSlideshow": false,
+          "isPinned": false,
+          "isSponsored": false,
+          "submittedVideoUrl": "https://vm.tiktok.com/ZNdQgds81/"
+        }
+      }
+    ],
+    "Merge": [
+      {
+        "json": {
+          ".tag_1": "file",
+          "url_1": "https://dl.dropboxusercontent.com/scl/fi/r65rprx3u9rdryfyxa71j/7525463108811230486.jpeg?rlkey=pb3539gr837k7d73q9k9qgk9n",
+          "id_1": "id:3wW_G9HHGo8AAAAAAAAACg",
+          "name_1": "7525463108811230486.jpeg",
+          "path_lower_1": "/7525463108811230486.jpeg",
+          "link_permissions_1": {
+            "resolved_visibility": {
+              ".tag": "public"
+            },
+            "requested_visibility": {
+              ".tag": "public"
+            },
+            "can_revoke": true,
+            "effective_audience": {
+              ".tag": "public"
+            },
+            "link_access_level": {
+              ".tag": "viewer"
+            },
+            "visibility_policies": [
+              {
+                "policy": {
+                  ".tag": "public"
+                },
+                "resolved_policy": {
+                  ".tag": "public"
+                },
+                "allowed": true
+              },
+              {
+                "policy": {
+                  ".tag": "team_only"
+                },
+                "resolved_policy": {
+                  ".tag": "no_one"
+                },
+                "allowed": false,
+                "disallowed_reason": {
+                  ".tag": "user_not_on_team"
+                }
+              },
+              {
+                "policy": {
+                  ".tag": "password"
+                },
+                "resolved_policy": {
+                  ".tag": "password"
+                },
+                "allowed": true
+              }
+            ],
+            "can_set_expiry": true,
+            "can_remove_expiry": true,
+            "allow_download": true,
+            "can_allow_download": true,
+            "can_disallow_download": true,
+            "allow_comments": false,
+            "team_restricts_comments": false,
+            "audience_options": [
+              {
+                "audience": {
+                  ".tag": "public"
+                },
+                "allowed": true
+              },
+              {
+                "audience": {
+                  ".tag": "team"
+                },
+                "allowed": false,
+                "disallowed_reason": {
+                  ".tag": "user_not_on_team"
+                }
+              },
+              {
+                "audience": {
+                  ".tag": "no_one"
+                },
+                "allowed": true
+              }
+            ],
+            "can_set_password": true,
+            "can_remove_password": true,
+            "require_password": false,
+            "can_use_extended_sharing_controls": true
+          },
+          "preview_type_1": "photo",
+          "created_timestamp_1": "2025-08-13T21:17:17Z",
+          "client_modified_1": "2025-08-13T21:17:16Z",
+          "server_modified_1": "2025-08-13T21:17:16Z",
+          "rev_1": "0163c45ae67f1cf00000003000b54b3",
+          "size_1": 2796531,
+          "notionUrl_1": "https://dl.dropboxusercontent.com/scl/fi/r65rprx3u9rdryfyxa71j/7525463108811230486.jpeg?rlkey=pb3539gr837k7d73q9k9qgk9n",
+          "changed_1": true,
+          "id_2": "7525463108811230486",
+          "text_2": "Lecker gewürztes Ofengemüse mit marinierten Kartoffeln und gerösteten Mandeln auf einem cremigen Tsatsiki? Ein perfektes Essen an warmen Sommertagen. Was soll ich da noch sagen, außer: HER DAMIT!\n\n#############\n##  REZEPT ##\n#############\n-----------------------\nMediterrane Bowl (3 Portionen)\n-----------------------\n600g kleine Kartoffeln (z.B. Drilling)\n1/2 Kopf Brokkoli (250g)\n1 rote Paprika (200g)\n1 Zwiebel\n2 Knoblauchzehen\n180g Kichererbsen (Abtropfgewicht)\n200g kleine Tomaten\n40g Mandeln\n1/2 Limette (Zeste)\n2 Esslöffel Olivenöl\n1 Esslöffel Tomatenmark\n1 Esslöffel Ahornsirup (oder anderer Zucker)\n1 Teelöffel Paprikapulver (geräuchert)\n1,5 Teelöffel Salz\n1,5 Teelöffel Kreuzkümmel\n1 Teelöffel Oregano\n1 Teelöffel Thymian\n\nTsatsiki:\n300g veganer griechischer Joghurt oder Skyr\n1/2 Gurke (160g, geraspelt & ausgepresst)\n1-2 Knoblauchzehen (gepresst)\n10g frischer Dill (fein gehackt)\n1 Esslöffel Olivenöl\n1 Esslöffel Limettensaft\n1 Teelöffel Weißweinessig\n3/4 Teelöffel Salz\n1/3 Teelöffel Pfeffer\n-----------------------\nKartoffeln abwaschen und in Hälften schneiden. In einer Schüssel mit 1 Esslöffel Olivenöl, Oregano, Thymian, 1/2 Teelöffel Salz sowie Limettenzeste vermischen. Auf ein Backblech verteilen und 15 Minuten bei 200 Grad Ober- und Unterhitze backen.\nVom Brokkoli die Röschen trennen, den Strunk schälen und grob stückeln. Paprika und Zwiebel in Streifen schneiden, Knoblauch kleinwürfeln. Das Gemüse rein in eine Schüssel, dazu die Kichererbsen und Tomaten. Ebenso wie Kreuzkümmel, Ahornsirup, Paprikapulver, Tomatenmark, 1 Teelöffel Salz als auch 1 Esslöffel Olivenöl. Alles gut vermischen. Die Kartoffeln auf dem Blech wenden und das Gemüse drauf verteilen. Erneut in den Ofen und 25 Minuten lang backen. Zwischendurch nochmal durchmischen.\nFür das Tsatsiki alle Zutaten in eine Schüssel geben, verrühren und kühl stellen. Noch Mandeln grob hacken und in einer Pfanne anrösten. Ist das Gemüse fertig, kann serviert werden!\n-----------------------\n\n#vegan #veganfood #plantbased #food #foodporn #healthy #veganrecipes #bowl #veganbowl #mediteranbowl #ofengemüse #tzaziki #greekrecipes #griechisch #vegangreek",
+          "textLanguage_2": "de",
+          "createTime_2": 1752158422,
+          "createTimeISO_2": "2025-07-10T14:40:22.000Z",
+          "locationCreated_2": "DE",
+          "isAd_2": false,
+          "authorMeta_2": {
+            "id": "7271266635431248929",
+            "name": "andiverwuerzt",
+            "profileUrl": "https://www.tiktok.com/@andiverwuerzt",
+            "nickName": "Andi Verwürzt",
+            "verified": false,
+            "signature": "Vegane Gerichte\nkönnen unglaublich lecker sein und\ndas möchte ich hier zeigen.",
+            "bioLink": null,
+            "originalAvatarUrl": "https://p16-common-sign-useast2a.tiktokcdn-us.com/tos-useast2a-avt-0068-euttp/c502f26336cb42c4c5cc8dd0a86d3f6c~tplv-tiktokx-cropcenter:720:720.jpeg?dr=9640&refresh_token=912f4c5c&x-expires=1755291600&x-signature=Q3YZH4XmiUQ%2B%2FkD%2BZX8iIX8cyIw%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast5",
+            "avatar": "https://p16-common-sign-useast2a.tiktokcdn-us.com/tos-useast2a-avt-0068-euttp/c502f26336cb42c4c5cc8dd0a86d3f6c~tplv-tiktokx-cropcenter:720:720.jpeg?dr=9640&refresh_token=912f4c5c&x-expires=1755291600&x-signature=Q3YZH4XmiUQ%2B%2FkD%2BZX8iIX8cyIw%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast5",
+            "privateAccount": false,
+            "roomId": "",
+            "ttSeller": false,
+            "following": 0,
+            "friends": 0,
+            "fans": 26300,
+            "heart": 427400,
+            "video": 410,
+            "digg": 0
+          },
+          "musicMeta_2": {
+            "musicName": "Originalton - Andi Verwürzt",
+            "musicAuthor": "Andi Verwürzt",
+            "musicOriginal": true,
+            "playUrl": "https://v19.tiktokcdn-us.com/f864f1846c53c30ef6853d7005d4c389/689d5533/video/tos/no1a/tos-no1a-v-2370-no/oYCBiBLUeU3FnthvIQBOifGsk0bYoMCtQFAJgB/?a=1233&bti=ODszNWYuMDE6&ch=0&cr=0&dr=0&er=0&lr=default&cd=0%7C0%7C0%7C0&br=250&bt=125&ft=GSDrKInz7ThcWa~KXq8Zmo&mime_type=audio_mpeg&qs=6&rc=NDY4OjtkPGRmZTtlNjtpOUBpMzpmZXE5cnB3NDMzbzU8NUA0L2AuMC1gNjMxMC4tYmEtYSMwLjZeMmRjLmthLS1kMTFzcw%3D%3D&vvpl=1&l=2025081321155665C74B45F80A6504225F&btag=e00090000",
+            "coverMediumUrl": "https://p16-common-sign-useast2a.tiktokcdn-us.com/tos-useast2a-avt-0068-euttp/c502f26336cb42c4c5cc8dd0a86d3f6c~tplv-tiktokx-cropcenter:720:720.jpeg?dr=9640&refresh_token=912f4c5c&x-expires=1755291600&x-signature=Q3YZH4XmiUQ%2B%2FkD%2BZX8iIX8cyIw%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast5",
+            "originalCoverMediumUrl": "https://p16-common-sign-useast2a.tiktokcdn-us.com/tos-useast2a-avt-0068-euttp/c502f26336cb42c4c5cc8dd0a86d3f6c~tplv-tiktokx-cropcenter:720:720.jpeg?dr=9640&refresh_token=912f4c5c&x-expires=1755291600&x-signature=Q3YZH4XmiUQ%2B%2FkD%2BZX8iIX8cyIw%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast5",
+            "musicId": "7525463124783893270"
+          },
+          "locationMeta_2": {
+            "address": "City Haus II, Platz d. Republik 6, 60325 Frankfurt am Main, Germany",
+            "city": "Frankfurt",
+            "cityCode": "2925533",
+            "countryCode": "2921044",
+            "locationName": "Die Welt",
+            "locationId": "21568226338689588"
+          },
+          "webVideoUrl_2": "https://www.tiktok.com/@andiverwuerzt/video/7525463108811230486",
+          "mediaUrls_2": [],
+          "videoMeta_2": {
+            "height": 1024,
+            "width": 576,
+            "duration": 71,
+            "coverUrl": "https://p16-common-sign-no.tiktokcdn-us.com/tos-no1a-p-0037-no/oIqeNbgCaiAXVAkoATAaI0EvfhCBdCFknBxVbi~tplv-tiktokx-origin.image?dr=9636&x-expires=1755291600&x-signature=VCfgj6IfbJvrr%2FDQ0hvaj8fLYT0%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5",
+            "originalCoverUrl": "https://p16-common-sign-no.tiktokcdn-us.com/tos-no1a-p-0037-no/oIqeNbgCaiAXVAkoATAaI0EvfhCBdCFknBxVbi~tplv-tiktokx-origin.image?dr=9636&x-expires=1755291600&x-signature=VCfgj6IfbJvrr%2FDQ0hvaj8fLYT0%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5",
+            "definition": "540p",
+            "format": "mp4",
+            "subtitleLinks": [
+              {
+                "language": "eng-US",
+                "downloadLink": "https://v16m-webapp.tiktokcdn-us.com/67051305400c47ce1a58981805fdcfad/689fa3d3/video/tos/useast5/tos-useast5-v-0068c799-tx/7bc94db523c9465f9a0794b798f600ba/?a=1988&bti=ODszNWYuMDE6&ch=0&cr=3&dr=0&lr=all&cd=0%7C0%7C0%7C&cv=1&br=30896&bt=15448&ds=4&ft=4KLMeMzm8Zmo0EP6GI4jVC6ZdpWrKsd.&mime_type=video_mp4&qs=13&rc=M3FxeHA5cjV3NDMzbzgzNUBpM3FxeHA5cjV3NDMzbzgzNUBvbWpuMmRzLmthLS1kLzFzYSNvbWpuMmRzLmthLS1kLzFzcw%3D%3D&l=2025081321155665C74B45F80A6504225F&btag=e00050000",
+                "tiktokLink": "https://v16m-webapp.tiktokcdn-us.com/67051305400c47ce1a58981805fdcfad/689fa3d3/video/tos/useast5/tos-useast5-v-0068c799-tx/7bc94db523c9465f9a0794b798f600ba/?a=1988&bti=ODszNWYuMDE6&ch=0&cr=3&dr=0&lr=all&cd=0%7C0%7C0%7C&cv=1&br=30896&bt=15448&ds=4&ft=4KLMeMzm8Zmo0EP6GI4jVC6ZdpWrKsd.&mime_type=video_mp4&qs=13&rc=M3FxeHA5cjV3NDMzbzgzNUBpM3FxeHA5cjV3NDMzbzgzNUBvbWpuMmRzLmthLS1kLzFzYSNvbWpuMmRzLmthLS1kLzFzcw%3D%3D&l=2025081321155665C74B45F80A6504225F&btag=e00050000",
+                "source": "MT",
+                "sourceUnabbreviated": "machine translation",
+                "version": "4"
+              },
+              {
+                "language": "deu-DE",
+                "downloadLink": "https://v16m-webapp.tiktokcdn-us.com/7bc3ca1f1142a26153835523b1111584/689fa3d3/video/tos/useast5/tos-useast5-v-0068c799-tx/5065b1f0e6fb4eb4a456143e23cb7ecf/?a=1988&bti=ODszNWYuMDE6&ch=0&cr=3&dr=0&lr=all&cd=0%7C0%7C0%7C&cv=1&br=30896&bt=15448&ds=4&ft=4KLMeMzm8Zmo0EP6GI4jVC6ZdpWrKsd.&mime_type=video_mp4&qs=13&rc=M3FxeHA5cjV3NDMzbzgzNUBpM3FxeHA5cjV3NDMzbzgzNUBvbWpuMmRzLmthLS1kLzFzYSNvbWpuMmRzLmthLS1kLzFzcw%3D%3D&l=2025081321155665C74B45F80A6504225F&btag=e00050000",
+                "tiktokLink": "https://v16m-webapp.tiktokcdn-us.com/7bc3ca1f1142a26153835523b1111584/689fa3d3/video/tos/useast5/tos-useast5-v-0068c799-tx/5065b1f0e6fb4eb4a456143e23cb7ecf/?a=1988&bti=ODszNWYuMDE6&ch=0&cr=3&dr=0&lr=all&cd=0%7C0%7C0%7C&cv=1&br=30896&bt=15448&ds=4&ft=4KLMeMzm8Zmo0EP6GI4jVC6ZdpWrKsd.&mime_type=video_mp4&qs=13&rc=M3FxeHA5cjV3NDMzbzgzNUBpM3FxeHA5cjV3NDMzbzgzNUBvbWpuMmRzLmthLS1kLzFzYSNvbWpuMmRzLmthLS1kLzFzcw%3D%3D&l=2025081321155665C74B45F80A6504225F&btag=e00050000",
+                "source": "ASR",
+                "sourceUnabbreviated": "automatic speech recognition",
+                "version": "1:whisper_lid"
+              }
+            ]
+          },
+          "diggCount_2": 8215,
+          "shareCount_2": 2445,
+          "playCount_2": 275100,
+          "collectCount_2": 10539,
+          "commentCount_2": 52,
+          "mentions_2": [],
+          "detailedMentions_2": [],
+          "hashtags_2": [],
+          "effectStickers_2": [],
+          "isSlideshow_2": false,
+          "isPinned_2": false,
+          "isSponsored_2": false,
+          "submittedVideoUrl_2": "https://vm.tiktok.com/ZNdQgds81/",
+          "id": "7525463108811230486",
+          "text": "Lecker gewürztes Ofengemüse mit marinierten Kartoffeln und gerösteten Mandeln auf einem cremigen Tsatsiki? Ein perfektes Essen an warmen Sommertagen. Was soll ich da noch sagen, außer: HER DAMIT!\n\n#############\n##  REZEPT ##\n#############\n-----------------------\nMediterrane Bowl (3 Portionen)\n-----------------------\n600g kleine Kartoffeln (z.B. Drilling)\n1/2 Kopf Brokkoli (250g)\n1 rote Paprika (200g)\n1 Zwiebel\n2 Knoblauchzehen\n180g Kichererbsen (Abtropfgewicht)\n200g kleine Tomaten\n40g Mandeln\n1/2 Limette (Zeste)\n2 Esslöffel Olivenöl\n1 Esslöffel Tomatenmark\n1 Esslöffel Ahornsirup (oder anderer Zucker)\n1 Teelöffel Paprikapulver (geräuchert)\n1,5 Teelöffel Salz\n1,5 Teelöffel Kreuzkümmel\n1 Teelöffel Oregano\n1 Teelöffel Thymian\n\nTsatsiki:\n300g veganer griechischer Joghurt oder Skyr\n1/2 Gurke (160g, geraspelt & ausgepresst)\n1-2 Knoblauchzehen (gepresst)\n10g frischer Dill (fein gehackt)\n1 Esslöffel Olivenöl\n1 Esslöffel Limettensaft\n1 Teelöffel Weißweinessig\n3/4 Teelöffel Salz\n1/3 Teelöffel Pfeffer\n-----------------------\nKartoffeln abwaschen und in Hälften schneiden. In einer Schüssel mit 1 Esslöffel Olivenöl, Oregano, Thymian, 1/2 Teelöffel Salz sowie Limettenzeste vermischen. Auf ein Backblech verteilen und 15 Minuten bei 200 Grad Ober- und Unterhitze backen.\nVom Brokkoli die Röschen trennen, den Strunk schälen und grob stückeln. Paprika und Zwiebel in Streifen schneiden, Knoblauch kleinwürfeln. Das Gemüse rein in eine Schüssel, dazu die Kichererbsen und Tomaten. Ebenso wie Kreuzkümmel, Ahornsirup, Paprikapulver, Tomatenmark, 1 Teelöffel Salz als auch 1 Esslöffel Olivenöl. Alles gut vermischen. Die Kartoffeln auf dem Blech wenden und das Gemüse drauf verteilen. Erneut in den Ofen und 25 Minuten lang backen. Zwischendurch nochmal durchmischen.\nFür das Tsatsiki alle Zutaten in eine Schüssel geben, verrühren und kühl stellen. Noch Mandeln grob hacken und in einer Pfanne anrösten. Ist das Gemüse fertig, kann serviert werden!\n-----------------------\n\n#vegan #veganfood #plantbased #food #foodporn #healthy #veganrecipes #bowl #veganbowl #mediteranbowl #ofengemüse #tzaziki #greekrecipes #griechisch #vegangreek",
+          "textLanguage": "de",
+          "createTime": 1752158422,
+          "createTimeISO": "2025-07-10T14:40:22.000Z",
+          "locationCreated": "DE",
+          "isAd": false,
+          "authorMeta": {
+            "id": "7271266635431248929",
+            "name": "andiverwuerzt",
+            "profileUrl": "https://www.tiktok.com/@andiverwuerzt",
+            "nickName": "Andi Verwürzt",
+            "verified": false,
+            "signature": "Vegane Gerichte\nkönnen unglaublich lecker sein und\ndas möchte ich hier zeigen.",
+            "bioLink": null,
+            "originalAvatarUrl": "https://p16-common-sign-useast2a.tiktokcdn-us.com/tos-useast2a-avt-0068-euttp/c502f26336cb42c4c5cc8dd0a86d3f6c~tplv-tiktokx-cropcenter:720:720.jpeg?dr=9640&refresh_token=912f4c5c&x-expires=1755291600&x-signature=Q3YZH4XmiUQ%2B%2FkD%2BZX8iIX8cyIw%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast5",
+            "avatar": "https://p16-common-sign-useast2a.tiktokcdn-us.com/tos-useast2a-avt-0068-euttp/c502f26336cb42c4c5cc8dd0a86d3f6c~tplv-tiktokx-cropcenter:720:720.jpeg?dr=9640&refresh_token=912f4c5c&x-expires=1755291600&x-signature=Q3YZH4XmiUQ%2B%2FkD%2BZX8iIX8cyIw%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast5",
+            "privateAccount": false,
+            "roomId": "",
+            "ttSeller": false,
+            "following": 0,
+            "friends": 0,
+            "fans": 26300,
+            "heart": 427400,
+            "video": 410,
+            "digg": 0
+          },
+          "musicMeta": {
+            "musicName": "Originalton - Andi Verwürzt",
+            "musicAuthor": "Andi Verwürzt",
+            "musicOriginal": true,
+            "playUrl": "https://v19.tiktokcdn-us.com/f864f1846c53c30ef6853d7005d4c389/689d5533/video/tos/no1a/tos-no1a-v-2370-no/oYCBiBLUeU3FnthvIQBOifGsk0bYoMCtQFAJgB/?a=1233&bti=ODszNWYuMDE6&ch=0&cr=0&dr=0&er=0&lr=default&cd=0%7C0%7C0%7C0&br=250&bt=125&ft=GSDrKInz7ThcWa~KXq8Zmo&mime_type=audio_mpeg&qs=6&rc=NDY4OjtkPGRmZTtlNjtpOUBpMzpmZXE5cnB3NDMzbzU8NUA0L2AuMC1gNjMxMC4tYmEtYSMwLjZeMmRjLmthLS1kMTFzcw%3D%3D&vvpl=1&l=2025081321155665C74B45F80A6504225F&btag=e00090000",
+            "coverMediumUrl": "https://p16-common-sign-useast2a.tiktokcdn-us.com/tos-useast2a-avt-0068-euttp/c502f26336cb42c4c5cc8dd0a86d3f6c~tplv-tiktokx-cropcenter:720:720.jpeg?dr=9640&refresh_token=912f4c5c&x-expires=1755291600&x-signature=Q3YZH4XmiUQ%2B%2FkD%2BZX8iIX8cyIw%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast5",
+            "originalCoverMediumUrl": "https://p16-common-sign-useast2a.tiktokcdn-us.com/tos-useast2a-avt-0068-euttp/c502f26336cb42c4c5cc8dd0a86d3f6c~tplv-tiktokx-cropcenter:720:720.jpeg?dr=9640&refresh_token=912f4c5c&x-expires=1755291600&x-signature=Q3YZH4XmiUQ%2B%2FkD%2BZX8iIX8cyIw%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast5",
+            "musicId": "7525463124783893270"
+          },
+          "locationMeta": {
+            "address": "City Haus II, Platz d. Republik 6, 60325 Frankfurt am Main, Germany",
+            "city": "Frankfurt",
+            "cityCode": "2925533",
+            "countryCode": "2921044",
+            "locationName": "Die Welt",
+            "locationId": "21568226338689588"
+          },
+          "webVideoUrl": "https://www.tiktok.com/@andiverwuerzt/video/7525463108811230486",
+          "mediaUrls": [],
+          "videoMeta": {
+            "height": 1024,
+            "width": 576,
+            "duration": 71,
+            "coverUrl": "https://p16-common-sign-no.tiktokcdn-us.com/tos-no1a-p-0037-no/oIqeNbgCaiAXVAkoATAaI0EvfhCBdCFknBxVbi~tplv-tiktokx-origin.image?dr=9636&x-expires=1755291600&x-signature=VCfgj6IfbJvrr%2FDQ0hvaj8fLYT0%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5",
+            "originalCoverUrl": "https://p16-common-sign-no.tiktokcdn-us.com/tos-no1a-p-0037-no/oIqeNbgCaiAXVAkoATAaI0EvfhCBdCFknBxVbi~tplv-tiktokx-origin.image?dr=9636&x-expires=1755291600&x-signature=VCfgj6IfbJvrr%2FDQ0hvaj8fLYT0%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5",
+            "definition": "540p",
+            "format": "mp4",
+            "subtitleLinks": [
+              {
+                "language": "eng-US",
+                "downloadLink": "https://v16m-webapp.tiktokcdn-us.com/67051305400c47ce1a58981805fdcfad/689fa3d3/video/tos/useast5/tos-useast5-v-0068c799-tx/7bc94db523c9465f9a0794b798f600ba/?a=1988&bti=ODszNWYuMDE6&ch=0&cr=3&dr=0&lr=all&cd=0%7C0%7C0%7C&cv=1&br=30896&bt=15448&ds=4&ft=4KLMeMzm8Zmo0EP6GI4jVC6ZdpWrKsd.&mime_type=video_mp4&qs=13&rc=M3FxeHA5cjV3NDMzbzgzNUBpM3FxeHA5cjV3NDMzbzgzNUBvbWpuMmRzLmthLS1kLzFzYSNvbWpuMmRzLmthLS1kLzFzcw%3D%3D&l=2025081321155665C74B45F80A6504225F&btag=e00050000",
+                "tiktokLink": "https://v16m-webapp.tiktokcdn-us.com/67051305400c47ce1a58981805fdcfad/689fa3d3/video/tos/useast5/tos-useast5-v-0068c799-tx/7bc94db523c9465f9a0794b798f600ba/?a=1988&bti=ODszNWYuMDE6&ch=0&cr=3&dr=0&lr=all&cd=0%7C0%7C0%7C&cv=1&br=30896&bt=15448&ds=4&ft=4KLMeMzm8Zmo0EP6GI4jVC6ZdpWrKsd.&mime_type=video_mp4&qs=13&rc=M3FxeHA5cjV3NDMzbzgzNUBpM3FxeHA5cjV3NDMzbzgzNUBvbWpuMmRzLmthLS1kLzFzYSNvbWpuMmRzLmthLS1kLzFzcw%3D%3D&l=2025081321155665C74B45F80A6504225F&btag=e00050000",
+                "source": "MT",
+                "sourceUnabbreviated": "machine translation",
+                "version": "4"
+              },
+              {
+                "language": "deu-DE",
+                "downloadLink": "https://v16m-webapp.tiktokcdn-us.com/7bc3ca1f1142a26153835523b1111584/689fa3d3/video/tos/useast5/tos-useast5-v-0068c799-tx/5065b1f0e6fb4eb4a456143e23cb7ecf/?a=1988&bti=ODszNWYuMDE6&ch=0&cr=3&dr=0&lr=all&cd=0%7C0%7C0%7C&cv=1&br=30896&bt=15448&ds=4&ft=4KLMeMzm8Zmo0EP6GI4jVC6ZdpWrKsd.&mime_type=video_mp4&qs=13&rc=M3FxeHA5cjV3NDMzbzgzNUBpM3FxeHA5cjV3NDMzbzgzNUBvbWpuMmRzLmthLS1kLzFzYSNvbWpuMmRzLmthLS1kLzFzcw%3D%3D&l=2025081321155665C74B45F80A6504225F&btag=e00050000",
+                "tiktokLink": "https://v16m-webapp.tiktokcdn-us.com/7bc3ca1f1142a26153835523b1111584/689fa3d3/video/tos/useast5/tos-useast5-v-0068c799-tx/5065b1f0e6fb4eb4a456143e23cb7ecf/?a=1988&bti=ODszNWYuMDE6&ch=0&cr=3&dr=0&lr=all&cd=0%7C0%7C0%7C&cv=1&br=30896&bt=15448&ds=4&ft=4KLMeMzm8Zmo0EP6GI4jVC6ZdpWrKsd.&mime_type=video_mp4&qs=13&rc=M3FxeHA5cjV3NDMzbzgzNUBpM3FxeHA5cjV3NDMzbzgzNUBvbWpuMmRzLmthLS1kLzFzYSNvbWpuMmRzLmthLS1kLzFzcw%3D%3D&l=2025081321155665C74B45F80A6504225F&btag=e00050000",
+                "source": "ASR",
+                "sourceUnabbreviated": "automatic speech recognition",
+                "version": "1:whisper_lid"
+              }
+            ]
+          },
+          "diggCount": 8215,
+          "shareCount": 2445,
+          "playCount": 275100,
+          "collectCount": 10539,
+          "commentCount": 52,
+          "mentions": [],
+          "detailedMentions": [],
+          "hashtags": [],
+          "effectStickers": [],
+          "isSlideshow": false,
+          "isPinned": false,
+          "isSponsored": false,
+          "submittedVideoUrl": "https://vm.tiktok.com/ZNdQgds81/"
+        }
+      }
+    ],
+    "Create a database page": [
+      {
+        "json": {
+          "id": "24eed138-daa3-81d7-ac4d-f6e73bb135b3",
+          "name": "Neues Rezept",
+          "url": "https://www.notion.so/Neues-Rezept-24eed138daa381d7ac4df6e73bb135b3",
+          "property_created": "2025-08-13T21:36:00.000Z",
+          "property_on_the_list": false,
+          "property_meal_type": [],
+          "property_summary": "",
+          "property_rand": "318",
+          "property_want_to_try": true,
+          "property_ingredients": [],
+          "property_rating": null,
+          "property_auf_dem_speiseplan": false,
+          "property_tags": [],
+          "property_n_hrwert_kcal_pro_portion": null,
+          "property_source": "andiverwuerzt",
+          "property_images": [],
+          "property_meal_planning": [],
+          "property_date": null,
+          "property_basis": [],
+          "property_instant_gratification": "",
+          "property_planned_for_shopping": false,
+          "property_planned": "",
+          "property_aufwand": null,
+          "property_recipe_link": "https://www.tiktok.com/@andiverwuerzt/video/7525463108811230486",
+          "property_name": "Neues Rezept"
+        }
+      }
+    ],
+    "Upload a file": [
+      {
+        "json": {
+          "name": "7525463108811230486.jpeg",
+          "path_lower": "/7525463108811230486.jpeg",
+          "path_display": "/7525463108811230486.jpeg",
+          "id": "id:3wW_G9HHGo8AAAAAAAAACg",
+          "client_modified": "2025-08-13T21:17:16Z",
+          "server_modified": "2025-08-13T21:17:16Z",
+          "rev": "0163c45ae67f1cf00000003000b54b3",
+          "size": 2796531,
+          "is_downloadable": true,
+          "content_hash": "afa6d53c2353a27ed871ea38fd1e3410222415790e7fec07192b0217440401f5"
+        }
+      }
+    ],
+    "HTTP Request2": [
+      {
+        "json": {
+          "url": "https://www.dropbox.com/scl/fi/r65rprx3u9rdryfyxa71j/7525463108811230486.jpeg?rlkey=pb3539gr837k7d73q9k9qgk9n&dl=0",
+          "visibility": {
+            ".tag": "public"
+          },
+          "path": "/7525463108811230486.jpeg"
+        }
+      }
+    ],
+    "AI Agent": [
+      {
+        "json": {
+          "output": {
+            "submittedVideoUrl": "https://www.tiktok.com/@andiverwuerzt/video/7525463108811230486",
+            "authorMeta": {
+              "name": "andiverwuerzt"
+            },
+            "url": "https://dl.dropboxusercontent.com/scl/fi/r65rprx3u9rdryfyxa71j/7525463108811230486.jpeg?rlkey=pb3539gr837k7d73q9k9qgk9n",
+            "text": "Mediterrane Bowl (3 Portionen)\n\nZutaten:\n- 600g kleine Kartoffeln (z.B. Drilling)\n- 1/2 Kopf Brokkoli (250g)\n- 1 rote Paprika (200g)\n- 1 Zwiebel\n- 2 Knoblauchzehen\n- 180g Kichererbsen (Abtropfgewicht)\n- 200g kleine Tomaten\n- 40g Mandeln\n- 1/2 Limette (Zeste)\n- 2 Esslöffel Olivenöl\n- 1 Esslöffel Tomatenmark\n- 1 Esslöffel Ahornsirup (oder anderer Zucker)\n- 1 Teelöffel Paprikapulver (geräuchert)\n- 1,5 Teelöffel Salz\n- 1,5 Teelöffel Kreuzkümmel\n- 1 Teelöffel Oregano\n- 1 Teelöffel Thymian\n\nTsatsiki:\n- 300g veganer griechischer Joghurt oder Skyr\n- 1/2 Gurke (160g, geraspelt & ausgepresst)\n- 1-2 Knoblauchzehen (gepresst)\n- 10g frischer Dill (fein gehackt)\n- 1 Esslöffel Olivenöl\n- 1 Esslöffel Limettensaft\n- 1 Teelöffel Weißweinessig\n- 3/4 Teelöffel Salz\n- 1/3 Teelöffel Pfeffer\n\nZubereitung:\n1. Kartoffeln abwaschen und in Hälften schneiden. In einer Schüssel mit 1 Esslöffel Olivenöl, Oregano, Thymian, 1/2 Teelöffel Salz sowie Limettenzeste vermischen. Auf ein Backblech verteilen und 15 Minuten bei 200 Grad Ober- und Unterhitze backen.\n2. Vom Brokkoli die Röschen trennen, den Strunk schälen und grob stückeln. Paprika und Zwiebel in Streifen schneiden, Knoblauch kleinwürfeln.\n3. Das Gemüse in eine Schüssel geben, dazu die Kichererbsen und Tomaten.\n4. Kreuzkümmel, Ahornsirup, Paprikapulver, Tomatenmark, 1 Teelöffel Salz sowie 1 Esslöffel Olivenöl hinzufügen. Alles gut vermischen.\n5. Die Kartoffeln auf dem Blech wenden und das Gemüse darauf verteilen.\n6. Erneut in den Ofen geben und 25 Minuten lang backen. Zwischendurch nochmal durchmischen.\n7. Für das Tsatsiki alle Zutaten in eine Schüssel geben, verrühren und kühl stellen.\n8. Mandeln grob hacken und in einer Pfanne anrösten.\n9. Ist das Gemüse fertig, kann serviert werden!"
+          }
+        }
+      }
+    ],
+    "Code": [
+      {
+        "json": {
+          "url": "https://dl.dropboxusercontent.com/scl/fi/r65rprx3u9rdryfyxa71j/7525463108811230486.jpeg?rlkey=pb3539gr837k7d73q9k9qgk9n",
+          "visibility": {
+            ".tag": "public"
+          },
+          "path": "/7525463108811230486.jpeg",
+          "notionUrl": "https://dl.dropboxusercontent.com/scl/fi/r65rprx3u9rdryfyxa71j/7525463108811230486.jpeg?rlkey=pb3539gr837k7d73q9k9qgk9n",
+          "changed": true
+        }
+      }
+    ],
+    "HTTP Request1": [
+      {
+        "json": {
+          "id": "7525463108811230486",
+          "text": "Lecker gewürztes Ofengemüse mit marinierten Kartoffeln und gerösteten Mandeln auf einem cremigen Tsatsiki? Ein perfektes Essen an warmen Sommertagen. Was soll ich da noch sagen, außer: HER DAMIT!\n\n#############\n##  REZEPT ##\n#############\n-----------------------\nMediterrane Bowl (3 Portionen)\n-----------------------\n600g kleine Kartoffeln (z.B. Drilling)\n1/2 Kopf Brokkoli (250g)\n1 rote Paprika (200g)\n1 Zwiebel\n2 Knoblauchzehen\n180g Kichererbsen (Abtropfgewicht)\n200g kleine Tomaten\n40g Mandeln\n1/2 Limette (Zeste)\n2 Esslöffel Olivenöl\n1 Esslöffel Tomatenmark\n1 Esslöffel Ahornsirup (oder anderer Zucker)\n1 Teelöffel Paprikapulver (geräuchert)\n1,5 Teelöffel Salz\n1,5 Teelöffel Kreuzkümmel\n1 Teelöffel Oregano\n1 Teelöffel Thymian\n\nTsatsiki:\n300g veganer griechischer Joghurt oder Skyr\n1/2 Gurke (160g, geraspelt & ausgepresst)\n1-2 Knoblauchzehen (gepresst)\n10g frischer Dill (fein gehackt)\n1 Esslöffel Olivenöl\n1 Esslöffel Limettensaft\n1 Teelöffel Weißweinessig\n3/4 Teelöffel Salz\n1/3 Teelöffel Pfeffer\n-----------------------\nKartoffeln abwaschen und in Hälften schneiden. In einer Schüssel mit 1 Esslöffel Olivenöl, Oregano, Thymian, 1/2 Teelöffel Salz sowie Limettenzeste vermischen. Auf ein Backblech verteilen und 15 Minuten bei 200 Grad Ober- und Unterhitze backen.\nVom Brokkoli die Röschen trennen, den Strunk schälen und grob stückeln. Paprika und Zwiebel in Streifen schneiden, Knoblauch kleinwürfeln. Das Gemüse rein in eine Schüssel, dazu die Kichererbsen und Tomaten. Ebenso wie Kreuzkümmel, Ahornsirup, Paprikapulver, Tomatenmark, 1 Teelöffel Salz als auch 1 Esslöffel Olivenöl. Alles gut vermischen. Die Kartoffeln auf dem Blech wenden und das Gemüse drauf verteilen. Erneut in den Ofen und 25 Minuten lang backen. Zwischendurch nochmal durchmischen.\nFür das Tsatsiki alle Zutaten in eine Schüssel geben, verrühren und kühl stellen. Noch Mandeln grob hacken und in einer Pfanne anrösten. Ist das Gemüse fertig, kann serviert werden!\n-----------------------\n\n#vegan #veganfood #plantbased #food #foodporn #healthy #veganrecipes #bowl #veganbowl #mediteranbowl #ofengemüse #tzaziki #greekrecipes #griechisch #vegangreek",
+          "textLanguage": "de",
+          "createTime": 1752158422,
+          "createTimeISO": "2025-07-10T14:40:22.000Z",
+          "locationCreated": "DE",
+          "isAd": false,
+          "authorMeta": {
+            "id": "7271266635431248929",
+            "name": "andiverwuerzt",
+            "profileUrl": "https://www.tiktok.com/@andiverwuerzt",
+            "nickName": "Andi Verwürzt",
+            "verified": false,
+            "signature": "Vegane Gerichte\nkönnen unglaublich lecker sein und\ndas möchte ich hier zeigen.",
+            "bioLink": null,
+            "originalAvatarUrl": "https://p16-common-sign-useast2a.tiktokcdn-us.com/tos-useast2a-avt-0068-euttp/c502f26336cb42c4c5cc8dd0a86d3f6c~tplv-tiktokx-cropcenter:720:720.jpeg?dr=9640&refresh_token=912f4c5c&x-expires=1755291600&x-signature=Q3YZH4XmiUQ%2B%2FkD%2BZX8iIX8cyIw%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast5",
+            "avatar": "https://p16-common-sign-useast2a.tiktokcdn-us.com/tos-useast2a-avt-0068-euttp/c502f26336cb42c4c5cc8dd0a86d3f6c~tplv-tiktokx-cropcenter:720:720.jpeg?dr=9640&refresh_token=912f4c5c&x-expires=1755291600&x-signature=Q3YZH4XmiUQ%2B%2FkD%2BZX8iIX8cyIw%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast5",
+            "privateAccount": false,
+            "roomId": "",
+            "ttSeller": false,
+            "following": 0,
+            "friends": 0,
+            "fans": 26300,
+            "heart": 427400,
+            "video": 410,
+            "digg": 0
+          },
+          "musicMeta": {
+            "musicName": "Originalton - Andi Verwürzt",
+            "musicAuthor": "Andi Verwürzt",
+            "musicOriginal": true,
+            "playUrl": "https://v19.tiktokcdn-us.com/f864f1846c53c30ef6853d7005d4c389/689d5533/video/tos/no1a/tos-no1a-v-2370-no/oYCBiBLUeU3FnthvIQBOifGsk0bYoMCtQFAJgB/?a=1233&bti=ODszNWYuMDE6&ch=0&cr=0&dr=0&er=0&lr=default&cd=0%7C0%7C0%7C0&br=250&bt=125&ft=GSDrKInz7ThcWa~KXq8Zmo&mime_type=audio_mpeg&qs=6&rc=NDY4OjtkPGRmZTtlNjtpOUBpMzpmZXE5cnB3NDMzbzU8NUA0L2AuMC1gNjMxMC4tYmEtYSMwLjZeMmRjLmthLS1kMTFzcw%3D%3D&vvpl=1&l=2025081321155665C74B45F80A6504225F&btag=e00090000",
+            "coverMediumUrl": "https://p16-common-sign-useast2a.tiktokcdn-us.com/tos-useast2a-avt-0068-euttp/c502f26336cb42c4c5cc8dd0a86d3f6c~tplv-tiktokx-cropcenter:720:720.jpeg?dr=9640&refresh_token=912f4c5c&x-expires=1755291600&x-signature=Q3YZH4XmiUQ%2B%2FkD%2BZX8iIX8cyIw%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast5",
+            "originalCoverMediumUrl": "https://p16-common-sign-useast2a.tiktokcdn-us.com/tos-useast2a-avt-0068-euttp/c502f26336cb42c4c5cc8dd0a86d3f6c~tplv-tiktokx-cropcenter:720:720.jpeg?dr=9640&refresh_token=912f4c5c&x-expires=1755291600&x-signature=Q3YZH4XmiUQ%2B%2FkD%2BZX8iIX8cyIw%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast5",
+            "musicId": "7525463124783893270"
+          },
+          "locationMeta": {
+            "address": "City Haus II, Platz d. Republik 6, 60325 Frankfurt am Main, Germany",
+            "city": "Frankfurt",
+            "cityCode": "2925533",
+            "countryCode": "2921044",
+            "locationName": "Die Welt",
+            "locationId": "21568226338689588"
+          },
+          "webVideoUrl": "https://www.tiktok.com/@andiverwuerzt/video/7525463108811230486",
+          "mediaUrls": [],
+          "videoMeta": {
+            "height": 1024,
+            "width": 576,
+            "duration": 71,
+            "coverUrl": "https://p16-common-sign-no.tiktokcdn-us.com/tos-no1a-p-0037-no/oIqeNbgCaiAXVAkoATAaI0EvfhCBdCFknBxVbi~tplv-tiktokx-origin.image?dr=9636&x-expires=1755291600&x-signature=VCfgj6IfbJvrr%2FDQ0hvaj8fLYT0%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5",
+            "originalCoverUrl": "https://p16-common-sign-no.tiktokcdn-us.com/tos-no1a-p-0037-no/oIqeNbgCaiAXVAkoATAaI0EvfhCBdCFknBxVbi~tplv-tiktokx-origin.image?dr=9636&x-expires=1755291600&x-signature=VCfgj6IfbJvrr%2FDQ0hvaj8fLYT0%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=useast5",
+            "definition": "540p",
+            "format": "mp4",
+            "subtitleLinks": [
+              {
+                "language": "eng-US",
+                "downloadLink": "https://v16m-webapp.tiktokcdn-us.com/67051305400c47ce1a58981805fdcfad/689fa3d3/video/tos/useast5/tos-useast5-v-0068c799-tx/7bc94db523c9465f9a0794b798f600ba/?a=1988&bti=ODszNWYuMDE6&ch=0&cr=3&dr=0&lr=all&cd=0%7C0%7C0%7C&cv=1&br=30896&bt=15448&ds=4&ft=4KLMeMzm8Zmo0EP6GI4jVC6ZdpWrKsd.&mime_type=video_mp4&qs=13&rc=M3FxeHA5cjV3NDMzbzgzNUBpM3FxeHA5cjV3NDMzbzgzNUBvbWpuMmRzLmthLS1kLzFzYSNvbWpuMmRzLmthLS1kLzFzcw%3D%3D&l=2025081321155665C74B45F80A6504225F&btag=e00050000",
+                "tiktokLink": "https://v16m-webapp.tiktokcdn-us.com/67051305400c47ce1a58981805fdcfad/689fa3d3/video/tos/useast5/tos-useast5-v-0068c799-tx/7bc94db523c9465f9a0794b798f600ba/?a=1988&bti=ODszNWYuMDE6&ch=0&cr=3&dr=0&lr=all&cd=0%7C0%7C0%7C&cv=1&br=30896&bt=15448&ds=4&ft=4KLMeMzm8Zmo0EP6GI4jVC6ZdpWrKsd.&mime_type=video_mp4&qs=13&rc=M3FxeHA5cjV3NDMzbzgzNUBpM3FxeHA5cjV3NDMzbzgzNUBvbWpuMmRzLmthLS1kLzFzYSNvbWpuMmRzLmthLS1kLzFzcw%3D%3D&l=2025081321155665C74B45F80A6504225F&btag=e00050000",
+                "source": "MT",
+                "sourceUnabbreviated": "machine translation",
+                "version": "4"
+              },
+              {
+                "language": "deu-DE",
+                "downloadLink": "https://v16m-webapp.tiktokcdn-us.com/7bc3ca1f1142a26153835523b1111584/689fa3d3/video/tos/useast5/tos-useast5-v-0068c799-tx/5065b1f0e6fb4eb4a456143e23cb7ecf/?a=1988&bti=ODszNWYuMDE6&ch=0&cr=3&dr=0&lr=all&cd=0%7C0%7C0%7C&cv=1&br=30896&bt=15448&ds=4&ft=4KLMeMzm8Zmo0EP6GI4jVC6ZdpWrKsd.&mime_type=video_mp4&qs=13&rc=M3FxeHA5cjV3NDMzbzgzNUBpM3FxeHA5cjV3NDMzbzgzNUBvbWpuMmRzLmthLS1kLzFzYSNvbWpuMmRzLmthLS1kLzFzcw%3D%3D&l=2025081321155665C74B45F80A6504225F&btag=e00050000",
+                "tiktokLink": "https://v16m-webapp.tiktokcdn-us.com/7bc3ca1f1142a26153835523b1111584/689fa3d3/video/tos/useast5/tos-useast5-v-0068c799-tx/5065b1f0e6fb4eb4a456143e23cb7ecf/?a=1988&bti=ODszNWYuMDE6&ch=0&cr=3&dr=0&lr=all&cd=0%7C0%7C0%7C&cv=1&br=30896&bt=15448&ds=4&ft=4KLMeMzm8Zmo0EP6GI4jVC6ZdpWrKsd.&mime_type=video_mp4&qs=13&rc=M3FxeHA5cjV3NDMzbzgzNUBpM3FxeHA5cjV3NDMzbzgzNUBvbWpuMmRzLmthLS1kLzFzYSNvbWpuMmRzLmthLS1kLzFzcw%3D%3D&l=2025081321155665C74B45F80A6504225F&btag=e00050000",
+                "source": "ASR",
+                "sourceUnabbreviated": "automatic speech recognition",
+                "version": "1:whisper_lid"
+              }
+            ]
+          },
+          "diggCount": 8215,
+          "shareCount": 2445,
+          "playCount": 275100,
+          "collectCount": 10539,
+          "commentCount": 52,
+          "mentions": [],
+          "detailedMentions": [],
+          "hashtags": [],
+          "effectStickers": [],
+          "isSlideshow": false,
+          "isPinned": false,
+          "isSponsored": false,
+          "submittedVideoUrl": "https://vm.tiktok.com/ZNdQgds81/"
+        }
+      }
+    ],
+    "Code1": [
+      {
+        "json": {
+          "id": "24eed138-daa3-81d7-ac4d-f6e73bb135b3",
+          "name": "Neues Rezept",
+          "url": "https://www.notion.so/Neues-Rezept-24eed138daa381d7ac4df6e73bb135b3",
+          "property_created": "2025-08-13T21:36:00.000Z",
+          "property_on_the_list": false,
+          "property_meal_type": [],
+          "property_summary": "",
+          "property_rand": "318",
+          "property_want_to_try": true,
+          "property_ingredients": [],
+          "property_rating": null,
+          "property_auf_dem_speiseplan": false,
+          "property_tags": [],
+          "property_n_hrwert_kcal_pro_portion": null,
+          "property_source": "andiverwuerzt",
+          "property_images": [],
+          "property_meal_planning": [],
+          "property_date": null,
+          "property_basis": [],
+          "property_instant_gratification": "",
+          "property_planned_for_shopping": false,
+          "property_planned": "",
+          "property_aufwand": null,
+          "property_recipe_link": "https://www.tiktok.com/@andiverwuerzt/video/7525463108811230486",
+          "property_name": "Neues Rezept",
+          "deepLink": "notion://www.notion.so/Neues-Rezept-24eed138daa381d7ac4df6e73bb135b3",
+          "universalLink": "https://www.notion.so/Neues-Rezept-24eed138daa381d7ac4df6e73bb135b3",
+          "markdown": "[In Notion öffnen](notion://www.notion.so/Neues-Rezept-24eed138daa381d7ac4df6e73bb135b3) • [Im Browser](https://www.notion.so/Neues-Rezept-24eed138daa381d7ac4df6e73bb135b3)",
+          "changed": false
+        }
+      }
+    ],
+    "HTTP Request3": [
+      {
+        "json": {
+          "inputUrl": "https://www.instagram.com/reel/DNDNeSxIDZI/?igsh=ZHpjZDY3NGVkcm8x",
+          "id": "3693855375714432584",
+          "type": "Video",
+          "shortCode": "DNDNeSxIDZI",
+          "caption": "FITNESS DÖNERSTAG! So wird er perfekt👇🏽\nZutaten für 2 Döner:\n-2 Fladenbrote\n-1 große Tomate\n-1/2 Gurke\n-1/2 rote Zwiebel\n-1 Zehe Knoblauch\n-300g Hähnchenbrust\n-4 Blätter Rotkohl\n-250g Joghurt\n-1/2 Zitrone\n-Petersilie\n-Salz, Chiliflocken, Gyrosgewürz\n\nNährwerte pro Döner:\n753 kcal\n57g Protein\n112g KH\n6g Fett\n#döner #muskelaufbau #highprotein #gesunderezepte",
+          "hashtags": [
+            "döner",
+            "muskelaufbau",
+            "highprotein",
+            "gesunderezepte"
+          ],
+          "mentions": [],
+          "url": "https://www.instagram.com/p/DNDNeSxIDZI/",
+          "commentsCount": 80,
+          "firstComment": "Ich liebe es - auch nicht schlecht für die Darmgesundheit 😍",
+          "latestComments": [
+            {
+              "id": "17948889998885254",
+              "text": "Ich liebe es - auch nicht schlecht für die Darmgesundheit 😍",
+              "ownerUsername": "essenmitsina",
+              "ownerProfilePicUrl": "https://scontent-den2-1.cdninstagram.com/v/t51.2885-19/483876017_1051002197051636_8570767406549599098_n.jpg?stp=dst-jpg_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=scontent-den2-1.cdninstagram.com&_nc_cat=108&_nc_oc=Q6cZ2QE8oURfJ6C8lm_Mrf06hcMssPWvuTwt1emSRnWHjoP6niHcMv3OgntGfiQ44QMBAcg&_nc_ohc=weX69rMpZIYQ7kNvwEHDlXI&_nc_gid=jpqiTYEpvnrdBectjqnJhA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=GLFc1xz0CJ2E4bsDAHqD4t_Le-F2bkULAAAB1501500j-ccb7-5&oh=00_AfW_5S-5fVt97qfkV0DK821HqRnbAkWOT7j_sDKZ_kWvOA&oe=68A57273&_nc_sid=10d13b",
+              "timestamp": "2025-08-15T07:45:35.000Z",
+              "repliesCount": 0,
+              "replies": [],
+              "likesCount": 0,
+              "owner": {
+                "id": "57571435189",
+                "is_verified": false,
+                "profile_pic_url": "https://scontent-den2-1.cdninstagram.com/v/t51.2885-19/483876017_1051002197051636_8570767406549599098_n.jpg?stp=dst-jpg_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=scontent-den2-1.cdninstagram.com&_nc_cat=108&_nc_oc=Q6cZ2QE8oURfJ6C8lm_Mrf06hcMssPWvuTwt1emSRnWHjoP6niHcMv3OgntGfiQ44QMBAcg&_nc_ohc=weX69rMpZIYQ7kNvwEHDlXI&_nc_gid=jpqiTYEpvnrdBectjqnJhA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=GLFc1xz0CJ2E4bsDAHqD4t_Le-F2bkULAAAB1501500j-ccb7-5&oh=00_AfW_5S-5fVt97qfkV0DK821HqRnbAkWOT7j_sDKZ_kWvOA&oe=68A57273&_nc_sid=10d13b",
+                "username": "essenmitsina"
+              }
+            },
+            {
+              "id": "18318892159235648",
+              "text": "@lisalangnr @marc0.marc0",
+              "ownerUsername": "janinchen2601",
+              "ownerProfilePicUrl": "https://scontent-den2-1.cdninstagram.com/v/t51.2885-19/26225582_1842653672476198_8749253216979386368_n.jpg?stp=dst-jpg_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby43MjAuYzIifQ&_nc_ht=scontent-den2-1.cdninstagram.com&_nc_cat=110&_nc_oc=Q6cZ2QE8oURfJ6C8lm_Mrf06hcMssPWvuTwt1emSRnWHjoP6niHcMv3OgntGfiQ44QMBAcg&_nc_ohc=F5yXCtiDmkUQ7kNvwGtZ4Td&_nc_gid=jpqiTYEpvnrdBectjqnJhA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=GK4rkAEmjpc94osGAAAAAAByl2t5bkULAAAB1501500j-ccb7-5&oh=00_AfVbrTLrNdvUXdeKuxnUUWYIiJps_NlA_YCF0oY9HWQ6kg&oe=68A56D94&_nc_sid=10d13b",
+              "timestamp": "2025-08-13T16:47:37.000Z",
+              "repliesCount": 0,
+              "replies": [],
+              "likesCount": 0,
+              "owner": {
+                "id": "475044572",
+                "is_verified": false,
+                "profile_pic_url": "https://scontent-den2-1.cdninstagram.com/v/t51.2885-19/26225582_1842653672476198_8749253216979386368_n.jpg?stp=dst-jpg_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby43MjAuYzIifQ&_nc_ht=scontent-den2-1.cdninstagram.com&_nc_cat=110&_nc_oc=Q6cZ2QE8oURfJ6C8lm_Mrf06hcMssPWvuTwt1emSRnWHjoP6niHcMv3OgntGfiQ44QMBAcg&_nc_ohc=F5yXCtiDmkUQ7kNvwGtZ4Td&_nc_gid=jpqiTYEpvnrdBectjqnJhA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=GK4rkAEmjpc94osGAAAAAAByl2t5bkULAAAB1501500j-ccb7-5&oh=00_AfVbrTLrNdvUXdeKuxnUUWYIiJps_NlA_YCF0oY9HWQ6kg&oe=68A56D94&_nc_sid=10d13b",
+                "username": "janinchen2601"
+              }
+            },
+            {
+              "id": "18169047739361422",
+              "text": "Das müssen wir testen 😍",
+              "ownerUsername": "bee_liciouskitchen",
+              "ownerProfilePicUrl": "https://scontent-den2-1.cdninstagram.com/v/t51.2885-19/528741265_17844019785551021_5780768163948529526_n.jpg?stp=dst-jpg_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDI0LmMyIn0&_nc_ht=scontent-den2-1.cdninstagram.com&_nc_cat=105&_nc_oc=Q6cZ2QE8oURfJ6C8lm_Mrf06hcMssPWvuTwt1emSRnWHjoP6niHcMv3OgntGfiQ44QMBAcg&_nc_ohc=Lg_nbJzh-isQ7kNvwHkqa1N&_nc_gid=jpqiTYEpvnrdBectjqnJhA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=GJHzgx_tzK6cCmU-AHYHCm0EajlQbmNDAQAB1501500j-ccb7-5&oh=00_AfWUaEoi7qt7pZr0uFypGNZBZuoo4uF1R7rOrG_mgulkXg&oe=68A56F01&_nc_sid=10d13b",
+              "timestamp": "2025-08-13T08:32:31.000Z",
+              "repliesCount": 0,
+              "replies": [],
+              "likesCount": 0,
+              "owner": {
+                "id": "76396311020",
+                "is_verified": false,
+                "profile_pic_url": "https://scontent-den2-1.cdninstagram.com/v/t51.2885-19/528741265_17844019785551021_5780768163948529526_n.jpg?stp=dst-jpg_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDI0LmMyIn0&_nc_ht=scontent-den2-1.cdninstagram.com&_nc_cat=105&_nc_oc=Q6cZ2QE8oURfJ6C8lm_Mrf06hcMssPWvuTwt1emSRnWHjoP6niHcMv3OgntGfiQ44QMBAcg&_nc_ohc=Lg_nbJzh-isQ7kNvwHkqa1N&_nc_gid=jpqiTYEpvnrdBectjqnJhA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=GJHzgx_tzK6cCmU-AHYHCm0EajlQbmNDAQAB1501500j-ccb7-5&oh=00_AfWUaEoi7qt7pZr0uFypGNZBZuoo4uF1R7rOrG_mgulkXg&oe=68A56F01&_nc_sid=10d13b",
+                "username": "bee_liciouskitchen"
+              }
+            },
+            {
+              "id": "18053658824399807",
+              "text": "Hab ich gemacht , war der Hammer 🙌❤️",
+              "ownerUsername": "kimmemimme",
+              "ownerProfilePicUrl": "https://scontent-den2-1.cdninstagram.com/v/t51.2885-19/503677009_18500513281037317_7852953790343904173_n.jpg?stp=dst-jpg_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=scontent-den2-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2QE8oURfJ6C8lm_Mrf06hcMssPWvuTwt1emSRnWHjoP6niHcMv3OgntGfiQ44QMBAcg&_nc_ohc=TbmvmXrkMIMQ7kNvwEaffUl&_nc_gid=jpqiTYEpvnrdBectjqnJhA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=GFGABR4FVEdqHrpBAK17AZfdS-tsbvEnAQAB1501500j-ccb7-5&oh=00_AfVYQnzqV584oua1iWuopgYJEowZFNkwijO2CngHRJ2KNg&oe=68A552BF&_nc_sid=10d13b",
+              "timestamp": "2025-08-11T19:36:27.000Z",
+              "repliesCount": 0,
+              "replies": [],
+              "likesCount": 0,
+              "owner": {
+                "id": "256293316",
+                "is_verified": false,
+                "profile_pic_url": "https://scontent-den2-1.cdninstagram.com/v/t51.2885-19/503677009_18500513281037317_7852953790343904173_n.jpg?stp=dst-jpg_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=scontent-den2-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2QE8oURfJ6C8lm_Mrf06hcMssPWvuTwt1emSRnWHjoP6niHcMv3OgntGfiQ44QMBAcg&_nc_ohc=TbmvmXrkMIMQ7kNvwEaffUl&_nc_gid=jpqiTYEpvnrdBectjqnJhA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=GFGABR4FVEdqHrpBAK17AZfdS-tsbvEnAQAB1501500j-ccb7-5&oh=00_AfVYQnzqV584oua1iWuopgYJEowZFNkwijO2CngHRJ2KNg&oe=68A552BF&_nc_sid=10d13b",
+                "username": "kimmemimme"
+              }
+            },
+            {
+              "id": "17914149357177693",
+              "text": "👌Gerade gemacht und für mega legger befunden 👍😋😋😋😋",
+              "ownerUsername": "zibbe48",
+              "ownerProfilePicUrl": "https://scontent-den2-1.cdninstagram.com/v/t51.2885-19/466127617_1793639881407393_5307455460992761254_n.jpg?stp=dst-jpg_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=scontent-den2-1.cdninstagram.com&_nc_cat=109&_nc_oc=Q6cZ2QE8oURfJ6C8lm_Mrf06hcMssPWvuTwt1emSRnWHjoP6niHcMv3OgntGfiQ44QMBAcg&_nc_ohc=TdHHy9HSj9YQ7kNvwFvhzgD&_nc_gid=jpqiTYEpvnrdBectjqnJhA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=GAGLyBuhe-xTTl8GAKY9riWf3qdJbkULAAAB1501500j-ccb7-5&oh=00_AfVqLfNkBjly1s05EPJ9CRV_n4FEyLfX53oNgj70v3NJeQ&oe=68A5720F&_nc_sid=10d13b",
+              "timestamp": "2025-08-11T18:09:47.000Z",
+              "repliesCount": 0,
+              "replies": [],
+              "likesCount": 0,
+              "owner": {
+                "id": "2124629210",
+                "is_verified": false,
+                "profile_pic_url": "https://scontent-den2-1.cdninstagram.com/v/t51.2885-19/466127617_1793639881407393_5307455460992761254_n.jpg?stp=dst-jpg_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=scontent-den2-1.cdninstagram.com&_nc_cat=109&_nc_oc=Q6cZ2QE8oURfJ6C8lm_Mrf06hcMssPWvuTwt1emSRnWHjoP6niHcMv3OgntGfiQ44QMBAcg&_nc_ohc=TdHHy9HSj9YQ7kNvwFvhzgD&_nc_gid=jpqiTYEpvnrdBectjqnJhA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=GAGLyBuhe-xTTl8GAKY9riWf3qdJbkULAAAB1501500j-ccb7-5&oh=00_AfVqLfNkBjly1s05EPJ9CRV_n4FEyLfX53oNgj70v3NJeQ&oe=68A5720F&_nc_sid=10d13b",
+                "username": "zibbe48"
+              }
+            },
+            {
+              "id": "18404553022116330",
+              "text": "Wo siehst du die ganzen Kalorien?",
+              "ownerUsername": "p.ruuehl",
+              "ownerProfilePicUrl": "https://scontent-den2-1.cdninstagram.com/v/t51.2885-19/466419866_499285026599229_1902509078904096216_n.jpg?stp=dst-jpg_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=scontent-den2-1.cdninstagram.com&_nc_cat=109&_nc_oc=Q6cZ2QE8oURfJ6C8lm_Mrf06hcMssPWvuTwt1emSRnWHjoP6niHcMv3OgntGfiQ44QMBAcg&_nc_ohc=awlFLqapEd4Q7kNvwFKGN9N&_nc_gid=jpqiTYEpvnrdBectjqnJhA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=GJoAzRs98abaGMYBANjFCGbtEWcabkULAAAB1501500j-ccb7-5&oh=00_AfW5inVSIpgLMvPfNIRclOdTlx8HGlFPcD3hYuugqJJsPw&oe=68A57731&_nc_sid=10d13b",
+              "timestamp": "2025-08-09T21:49:21.000Z",
+              "repliesCount": 0,
+              "replies": [],
+              "likesCount": 0,
+              "owner": {
+                "id": "5609730707",
+                "is_verified": false,
+                "profile_pic_url": "https://scontent-den2-1.cdninstagram.com/v/t51.2885-19/466419866_499285026599229_1902509078904096216_n.jpg?stp=dst-jpg_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=scontent-den2-1.cdninstagram.com&_nc_cat=109&_nc_oc=Q6cZ2QE8oURfJ6C8lm_Mrf06hcMssPWvuTwt1emSRnWHjoP6niHcMv3OgntGfiQ44QMBAcg&_nc_ohc=awlFLqapEd4Q7kNvwFKGN9N&_nc_gid=jpqiTYEpvnrdBectjqnJhA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=GJoAzRs98abaGMYBANjFCGbtEWcabkULAAAB1501500j-ccb7-5&oh=00_AfW5inVSIpgLMvPfNIRclOdTlx8HGlFPcD3hYuugqJJsPw&oe=68A57731&_nc_sid=10d13b",
+                "username": "p.ruuehl"
+              }
+            },
+            {
+              "id": "18025277057516488",
+              "text": "@schmaleschulter Wieso machst du eigentlich nichts vegetarisches oder veganes?? Bist doch nicht so ein MuskelDepp der kognitiv retardiert ist?",
+              "ownerUsername": "d.bettermann",
+              "ownerProfilePicUrl": "https://scontent-den2-1.cdninstagram.com/v/t51.2885-19/14295465_1585814728381963_223878685_a.jpg?stp=dst-jpg_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4yMDAuYzIifQ&_nc_ht=scontent-den2-1.cdninstagram.com&_nc_cat=107&_nc_oc=Q6cZ2QE8oURfJ6C8lm_Mrf06hcMssPWvuTwt1emSRnWHjoP6niHcMv3OgntGfiQ44QMBAcg&_nc_ohc=LeNG5tNF7zoQ7kNvwHQ6Uhx&_nc_gid=jpqiTYEpvnrdBectjqnJhA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=GKkh2gALlpBDSqIFAB0eWA0AAAAAYUULAAAB1501500j-ccb7-5&oh=00_AfXPsxz7nGDUaY_LuPr6DuvVXMbtL9iP1Xx6DibyCd_wWw&oe=68A561F2&_nc_sid=10d13b",
+              "timestamp": "2025-08-09T20:28:31.000Z",
+              "repliesCount": 0,
+              "replies": [],
+              "likesCount": 0,
+              "owner": {
+                "id": "2049909724",
+                "is_verified": false,
+                "profile_pic_url": "https://scontent-den2-1.cdninstagram.com/v/t51.2885-19/14295465_1585814728381963_223878685_a.jpg?stp=dst-jpg_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4yMDAuYzIifQ&_nc_ht=scontent-den2-1.cdninstagram.com&_nc_cat=107&_nc_oc=Q6cZ2QE8oURfJ6C8lm_Mrf06hcMssPWvuTwt1emSRnWHjoP6niHcMv3OgntGfiQ44QMBAcg&_nc_ohc=LeNG5tNF7zoQ7kNvwHQ6Uhx&_nc_gid=jpqiTYEpvnrdBectjqnJhA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=GKkh2gALlpBDSqIFAB0eWA0AAAAAYUULAAAB1501500j-ccb7-5&oh=00_AfXPsxz7nGDUaY_LuPr6DuvVXMbtL9iP1Xx6DibyCd_wWw&oe=68A561F2&_nc_sid=10d13b",
+                "username": "d.bettermann"
+              }
+            },
+            {
+              "id": "18098044018717563",
+              "text": "Genau so ☝️👌",
+              "ownerUsername": "sgexecnxfw",
+              "ownerProfilePicUrl": "https://scontent-den2-1.cdninstagram.com/v/t51.2885-19/298048029_126435223432062_7081894794644850403_n.jpg?stp=dst-jpg_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby42MzUuYzIifQ&_nc_ht=scontent-den2-1.cdninstagram.com&_nc_cat=106&_nc_oc=Q6cZ2QE8oURfJ6C8lm_Mrf06hcMssPWvuTwt1emSRnWHjoP6niHcMv3OgntGfiQ44QMBAcg&_nc_ohc=oenBtMq57cQQ7kNvwEEodEC&_nc_gid=jpqiTYEpvnrdBectjqnJhA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=GB3awxF_a5T_-XIAAOOGflPL8UdibkULAAAB1501500j-ccb7-5&oh=00_AfVLkHigI52fLoLtnX2ZAsM6QCa_IyFiKeVDTKVaKWJ-_Q&oe=68A54C15&_nc_sid=10d13b",
+              "timestamp": "2025-08-15T14:22:08.000Z",
+              "repliesCount": 0,
+              "replies": [],
+              "likesCount": 0,
+              "owner": {
+                "id": "5896868308",
+                "is_verified": false,
+                "profile_pic_url": "https://scontent-den2-1.cdninstagram.com/v/t51.2885-19/298048029_126435223432062_7081894794644850403_n.jpg?stp=dst-jpg_s150x150_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby42MzUuYzIifQ&_nc_ht=scontent-den2-1.cdninstagram.com&_nc_cat=106&_nc_oc=Q6cZ2QE8oURfJ6C8lm_Mrf06hcMssPWvuTwt1emSRnWHjoP6niHcMv3OgntGfiQ44QMBAcg&_nc_ohc=oenBtMq57cQQ7kNvwEEodEC&_nc_gid=jpqiTYEpvnrdBectjqnJhA&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=GB3awxF_a5T_-XIAAOOGflPL8UdibkULAAAB1501500j-ccb7-5&oh=00_AfVLkHigI52fLoLtnX2ZAsM6QCa_IyFiKeVDTKVaKWJ-_Q&oe=68A54C15&_nc_sid=10d13b",
+                "username": "sgexecnxfw"
+              }
+            }
+          ],
+          "dimensionsHeight": 1920,
+          "dimensionsWidth": 1080,
+          "displayUrl": "https://scontent-den2-1.cdninstagram.com/v/t51.2885-15/529653914_18521178928008730_6796213754580654244_n.jpg?stp=dst-jpg_e35_p1080x1080_sh0.08_tt6&_nc_ht=scontent-den2-1.cdninstagram.com&_nc_cat=110&_nc_oc=Q6cZ2QE8oURfJ6C8lm_Mrf06hcMssPWvuTwt1emSRnWHjoP6niHcMv3OgntGfiQ44QMBAcg&_nc_ohc=0S_o6-FBvtsQ7kNvwEyV84L&_nc_gid=jpqiTYEpvnrdBectjqnJhA&edm=APs17CUBAAAA&ccb=7-5&oh=00_AfUSbNqCuYDYyBodcv5iahWET_Iep1lijRavRDm94icUjw&oe=68A56EA0&_nc_sid=10d13b",
+          "images": [],
+          "videoUrl": "https://scontent-den2-1.cdninstagram.com/o1/v/t16/f2/m86/AQNgZRTbZiUYyKKFuXzElMTc5Q5Aqu-yeeME9VmZgKED8R03nfWRDZs58iCo283OGfkV8lOHElEl6zj6rgH8VaAkdpX29bHiMUPWgyI.mp4?stp=dst-mp4&efg=eyJxZV9ncm91cHMiOiJbXCJpZ193ZWJfZGVsaXZlcnlfdnRzX290ZlwiXSIsInZlbmNvZGVfdGFnIjoidnRzX3ZvZF91cmxnZW4uY2xpcHMuYzIuNzIwLmJhc2VsaW5lIn0&_nc_cat=108&vs=664005316700741_2660114464&_nc_vs=HBksFQIYUmlnX3hwdl9yZWVsc19wZXJtYW5lbnRfc3JfcHJvZC82RDQ2MEU4QTkzREI0NTY2RUJBNTFBMzAzMjgzNDFBN192aWRlb19kYXNoaW5pdC5tcDQVAALIARIAFQIYOnBhc3N0aHJvdWdoX2V2ZXJzdG9yZS9HTHdjZXg4aUkzalg2RVlFQUNPZkV5bXdid0ExYnFfRUFBQUYVAgLIARIAKAAYABsAFQAAJoqj6Irrl9U%2FFQIoAkMzLBdAPPXCj1wo9hgSZGFzaF9iYXNlbGluZV8xX3YxEQB1%2Fgdl5p0BAA%3D%3D&_nc_rid=8c24e6147b&ccb=9-4&oh=00_AfXGyPJn96_QP1hDgQ_tZ3Rj7CO34eVDALaY9DIFOYxfrw&oe=68A16376&_nc_sid=10d13b",
+          "alt": null,
+          "likesCount": 16774,
+          "videoViewCount": 292523,
+          "videoPlayCount": 1977635,
+          "timestamp": "2025-08-07T10:19:18.000Z",
+          "childPosts": [],
+          "ownerFullName": "Kay Jaster | Koch dich Fit!",
+          "ownerUsername": "schmaleschulter",
+          "ownerId": "265352729",
+          "productType": "clips",
+          "videoDuration": 28.979,
+          "isSponsored": false,
+          "musicInfo": {
+            "artist_name": "schmaleschulter",
+            "song_name": "Original audio",
+            "uses_original_audio": true,
+            "should_mute_audio": false,
+            "should_mute_audio_reason": "",
+            "audio_id": "1300393248465574"
+          },
+          "isCommentsDisabled": false
+        }
+      }
+    ],
+    "Create a database page1": [
+      {
+        "json": {
+          "id": "24eed138-daa3-81d7-ac4d-f6e73bb135b3",
+          "name": "Neues Rezept",
+          "url": "https://www.notion.so/Neues-Rezept-24eed138daa381d7ac4df6e73bb135b3",
+          "property_created": "2025-08-13T21:36:00.000Z",
+          "property_on_the_list": false,
+          "property_meal_type": [],
+          "property_summary": "",
+          "property_rand": "318",
+          "property_want_to_try": true,
+          "property_ingredients": [],
+          "property_rating": null,
+          "property_auf_dem_speiseplan": false,
+          "property_tags": [],
+          "property_n_hrwert_kcal_pro_portion": null,
+          "property_source": "andiverwuerzt",
+          "property_images": [],
+          "property_meal_planning": [],
+          "property_date": null,
+          "property_basis": [],
+          "property_instant_gratification": "",
+          "property_planned_for_shopping": false,
+          "property_planned": "",
+          "property_aufwand": null,
+          "property_recipe_link": "https://www.tiktok.com/@andiverwuerzt/video/7525463108811230486",
+          "property_name": "Neues Rezept"
+        }
+      }
+    ]
+  },
+  "repo_name": "n8n-workflows",
+  "repo_owner": "DoPaNik",
+  "repo_path": "n8n.automatisier.bar",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-08-17T13:36:12.449Z",
+  "versionId": "d2023876-ccbb-4f7b-a8d0-6fd07f4d7984"
+}
