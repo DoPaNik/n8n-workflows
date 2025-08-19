@@ -1,0 +1,66 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2025-08-03T14:10:51.041Z",
+  "id": "ZhGhUG1oEO1NaiMH",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        0
+      ],
+      "id": "dd93daf1-1d22-4d40-9a82-0292dacaa336",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "resource": "block",
+        "blockId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        }
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d5dc7dc8-60e1-4bed-847e-221c9529a802",
+      "name": "Append a block",
+      "credentials": {
+        "notionApi": {
+          "id": "7kg3KZgjdzfGvzOE",
+          "name": "Notion account DP"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "repo_name": "n8n-workflows",
+  "repo_owner": "DoPaNik",
+  "repo_path": "n8n.automatisier.bar",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-08-16T20:12:39.963Z",
+  "versionId": "83f7833e-b784-4a90-865b-4cd6f5037840"
+}
