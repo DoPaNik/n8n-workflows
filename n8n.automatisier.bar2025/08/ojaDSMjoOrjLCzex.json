@@ -1,0 +1,259 @@
+{
+  "active": false,
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Params",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Params": {
+      "main": [
+        [
+          {
+            "node": "Replicate • Create Prediction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replicate • Create Prediction": {
+      "main": [
+        [
+          {
+            "node": "Wait 2s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 2s": {
+      "main": [
+        [
+          {
+            "node": "Replicate • Get Prediction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replicate • Get Prediction": {
+      "main": [
+        [
+          {
+            "node": "IF not finished",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF not finished": {
+      "main": [
+        [
+          {
+            "node": "Wait 2s",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Image": {
+      "main": [
+        [
+          {
+            "node": "Save File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-08-21T15:11:37.354Z",
+  "id": "ojaDSMjoOrjLCzex",
+  "isArchived": false,
+  "meta": null,
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "a2256b6d-2a84-4c8e-8c96-1e8013e358d8",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -688,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "prompt",
+              "value": "ultra-realistic headshot of a {avatar_description}, professional lighting, shallow depth of field, cinematic bokeh, natural skin texture, LinkedIn style, neutral background"
+            },
+            {
+              "name": "width",
+              "value": "1080"
+            },
+            {
+              "name": "height",
+              "value": "1080"
+            },
+            {
+              "name": "num_inference_steps",
+              "value": "28"
+            },
+            {
+              "name": "guidance",
+              "value": "4.0"
+            },
+            {
+              "name": "seed",
+              "value": "42"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "dada5ad4-f442-439e-beb3-09492f668b4b",
+      "name": "Set Params",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        -464,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.replicate.com/v1/predictions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "headerAuth",
+        "options": {
+          "response": {}
+        }
+      },
+      "id": "a2715df7-49ef-496b-8673-c544207f42f0",
+      "name": "Replicate • Create Prediction",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -224,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "unit": "seconds"
+      },
+      "id": "4aff08f6-3ca4-4dc5-b65b-e1ffaafa37cb",
+      "name": "Wait 2s",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "3ccdbd01-60dd-4b13-8c4b-68b82cac617a"
+    },
+    {
+      "parameters": {
+        "url": "={{$json[\"urls\"][\"get\"]}}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "headerAuth",
+        "options": {
+          "response": {}
+        }
+      },
+      "id": "50cb7d44-805b-4204-9bed-228f4e169875",
+      "name": "Replicate • Get Prediction",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        224,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"status\"]}}",
+              "operation": "notEqual",
+              "value2": "succeeded"
+            }
+          ]
+        }
+      },
+      "id": "a4181137-3c44-4eaf-9e60-1f95f03234cb",
+      "name": "IF not finished",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        448,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{$json[\"output\"][0]}}",
+        "options": {}
+      },
+      "id": "341434f2-1b45-4aa1-b522-6e20daf748cf",
+      "name": "Download Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        672,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "fileName": "=/data/outputs/linkedin_{{$now}}.png",
+        "options": {}
+      },
+      "id": "571985f6-c9a8-4159-807c-024ecba54b75",
+      "name": "Save File",
+      "type": "n8n-nodes-base.writeBinaryFile",
+      "typeVersion": 1,
+      "position": [
+        880,
+        128
+      ]
+    }
+  ],
+  "pinData": {},
+  "repo_name": "n8n-workflows",
+  "repo_owner": "DoPaNik",
+  "repo_path": "n8n.automatisier.bar",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-08-21T15:11:37.354Z",
+  "versionId": "15788daf-0334-43ce-9f50-0dd4e84f8a48"
+}
