@@ -1,0 +1,22 @@
+{
+  "active": false,
+  "connections": {},
+  "createdAt": "2025-08-24T11:33:45.029Z",
+  "id": "oaQABhV43OuWpqzX",
+  "isArchived": false,
+  "meta": null,
+  "name": "Etsy",
+  "nodes": [],
+  "pinData": {},
+  "repo_name": "n8n-workflows",
+  "repo_owner": "DoPaNik",
+  "repo_path": "n8n.automatisier.bar",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-08-24T11:33:45.029Z",
+  "versionId": "5f475b08-e824-4132-8f2c-22820fb87c98"
+}
