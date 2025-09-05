@@ -551,7 +551,6 @@
     },
     {
       "parameters": {
-        "authentication": "basicAuth",
         "formTitle": "Upload your transcription here",
         "formFields": {
           "values": [
@@ -573,13 +572,7 @@
       ],
       "id": "d4b63061-8f21-4cca-b7ad-a20419c7d94d",
       "name": "Upload your file here",
-      "webhookId": "82848bc4-5ea2-4e5a-8bb6-3c09b94a8c5d",
-      "credentials": {
-        "httpBasicAuth": {
-          "id": "IsRp5fVKcHRRtp5h",
-          "name": "English - VTT Upload"
-        }
-      }
+      "webhookId": "82848bc4-5ea2-4e5a-8bb6-3c09b94a8c5d"
     },
     {
       "parameters": {
@@ -717,6 +710,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2025-08-03T13:15:20.072Z",
-  "versionId": "a033a7e7-0a4e-4be6-b2ea-ab37a17f8a59"
+  "updatedAt": "2025-08-22T09:31:18.016Z",
+  "versionId": "5ea98a88-826a-42d1-ae5b-d8692c22b2fc"
 }
