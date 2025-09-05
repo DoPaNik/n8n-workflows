@@ -90,7 +90,7 @@
   "id": "ojaDSMjoOrjLCzex",
   "isArchived": false,
   "meta": null,
-  "name": "My workflow",
+  "name": "Replicate",
   "nodes": [
     {
       "parameters": {},
@@ -146,21 +146,38 @@
     },
     {
       "parameters": {
-        "url": "https://api.replicate.com/v1/predictions",
+        "method": "POST",
+        "url": "https://api.replicate.com/v1/models/black-forest-labs/flux-dev/predictions",
         "authentication": "genericCredentialType",
-        "genericAuthType": "headerAuth",
-        "options": {
-          "response": {}
-        }
+        "genericAuthType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Prefer",
+              "value": "wait"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\t\"input\": {\n      \"prompt\": \"{{ $json.prompt }}\"\n\t}\n}",
+        "options": {}
       },
       "id": "a2715df7-49ef-496b-8673-c544207f42f0",
       "name": "Replicate • Create Prediction",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
       "position": [
-        -224,
+        -240,
         64
-      ]
+      ],
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "1g2vJj3llimEc9m4",
+          "name": "Replicate_Token"
+        }
+      }
     },
     {
       "parameters": {
@@ -180,7 +197,7 @@
       "parameters": {
         "url": "={{$json[\"urls\"][\"get\"]}}",
         "authentication": "genericCredentialType",
-        "genericAuthType": "headerAuth",
+        "genericAuthType": "httpBearerAuth",
         "options": {
           "response": {}
         }
@@ -192,7 +209,13 @@
       "position": [
         224,
         0
-      ]
+      ],
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "1g2vJj3llimEc9m4",
+          "name": "Replicate_Token"
+        }
+      }
     },
     {
       "parameters": {
@@ -231,7 +254,7 @@
     },
     {
       "parameters": {
-        "fileName": "=/data/outputs/linkedin_{{$now}}.png",
+        "fileName": "=/tmp/photos/linkedin_{{$now}}.png",
         "options": {}
       },
       "id": "571985f6-c9a8-4159-807c-024ecba54b75",
@@ -240,7 +263,7 @@
       "typeVersion": 1,
       "position": [
         880,
-        128
+        112
       ]
     }
   ],
@@ -254,6 +277,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-08-21T15:11:37.354Z",
-  "versionId": "15788daf-0334-43ce-9f50-0dd4e84f8a48"
+  "updatedAt": "2025-08-24T11:33:16.079Z",
+  "versionId": "2635125c-5322-4180-b7ca-4cfa55fad197"
 }
