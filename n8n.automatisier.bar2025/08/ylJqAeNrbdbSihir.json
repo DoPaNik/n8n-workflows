@@ -1,5 +1,5 @@
 {
-  "active": false,
+  "active": true,
   "connections": {
     "n8n": {
       "main": [
@@ -511,13 +511,17 @@
         "resource": "file",
         "owner": {
           "__rl": true,
-          "value": "={{ $('Config').item.json.repo_owner }}",
-          "mode": ""
+          "value": "DoPaNik",
+          "mode": "list",
+          "cachedResultName": "DoPaNik",
+          "cachedResultUrl": "https://github.com/DoPaNik"
         },
         "repository": {
           "__rl": true,
-          "value": "={{ $('Config').item.json.repo_name }}",
-          "mode": ""
+          "value": "n8n-workflows",
+          "mode": "list",
+          "cachedResultName": "n8n-workflows",
+          "cachedResultUrl": "https://github.com/DoPaNik/n8n-workflows"
         },
         "filePath": "={{ $('Config').item.json.repo_path }}{{ $json.subPath }}{{$('Execute Workflow Trigger').first().json.id}}.json",
         "fileContent": "={{$('isDiffOrNew').item.json[\"n8n_data_stringy\"]}}",
@@ -545,15 +549,19 @@
         "operation": "edit",
         "owner": {
           "__rl": true,
-          "value": "={{ $('Config').item.repo_owner }}",
-          "mode": ""
+          "value": "DoPaNik",
+          "mode": "list",
+          "cachedResultName": "DoPaNik",
+          "cachedResultUrl": "https://github.com/DoPaNik"
         },
         "repository": {
           "__rl": true,
-          "value": "={{ $('Config').item.repo_name }}",
-          "mode": ""
+          "value": "n8n-workflows",
+          "mode": "list",
+          "cachedResultName": "n8n-workflows",
+          "cachedResultUrl": "https://github.com/DoPaNik/n8n-workflows"
         },
-        "filePath": "={{ $('Config').item.repo_path }}{{ $json.subPath }}{{$('Execute Workflow Trigger').first().json.id}}.json",
+        "filePath": "=n8n.automatisier.bar{{ $json.subPath }}{{$('Execute Workflow Trigger').first().json.id}}.json",
         "fileContent": "={{$('isDiffOrNew').item.json[\"n8n_data_stringy\"]}}",
         "commitMessage": "={{$('Execute Workflow Trigger').first().json.name}} ({{$json.github_status}})"
       },
@@ -842,9 +850,13 @@
   "repo_owner": "DoPaNik",
   "repo_path": "n8n.automatisier.bar",
   "settings": {},
-  "staticData": null,
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
   "tags": [],
-  "triggerCount": 0,
-  "updatedAt": "2025-08-19T22:32:02.044Z",
-  "versionId": "cce5c88b-7eea-4e2d-9deb-2605a6119247"
+  "triggerCount": 1,
+  "updatedAt": "2025-09-05T22:05:42.787Z",
+  "versionId": "9f503ccb-3202-4634-95c8-e48ace82d778"
 }
