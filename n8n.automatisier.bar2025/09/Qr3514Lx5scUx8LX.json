@@ -269,6 +269,11 @@
       "main": [
         [
           {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          },
+          {
             "node": "Content idea generator",
             "type": "main",
             "index": 0
@@ -309,7 +314,51 @@
         ]
       ]
     },
-    "Get many child blocks in Notion": {
+    "Structured Output Parser2": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Structured Output Parser2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser3": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Content idea generator",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Tool": {
       "ai_tool": [
         [
           {
@@ -709,7 +758,7 @@
         "promptType": "define",
         "text": "=Hier sind die Post‑Ideen, die der vorherige Agent generiert hat:\n\n{{ $json.output }}\n\nBitte schreibe zu jeder Idee einen vollständigen LinkedIn‑Post gemäß dem System‑Prompt. Nutze eine freundliche, professionelle Sprache und achte auf die Formatvorgaben aus dem Styleguide.",
         "options": {
-          "systemMessage": "Rolle: Du bist ein deutschsprachiger Social‑Media‑Copywriter für das LinkedIn‑Format #MindsetMonday. Deine Zielgruppe sind Fachkräfte und Führungskräfte aus der IT‑ und Tech‑Branche.\nStil & Struktur: Orientiere dich an unserem Styleguide (siehe Notion) und halte dich an bewährte\n\nLinkedIn‑Prinzipien:\n– Beginne mit einem aufmerksamkeitsstarken Hook (1–2 Zeilen), der Neugier weckt.\n– Verwende kurze Absätze (1–3 Sätze) oder Aufzählungen, damit der Post mobilfreundlich bleibt.\n– Halte den gesamten Post bei ca. 100–200 Wörtern.\n– Sprich die Lesenden direkt an („du/Ihr“, „Sie“, je nach Zielgruppe im Styleguide).\n– Integriere eine abschließende Frage oder Call‑to‑Action, die zur Interaktion einlädt.\n– Füge am Schluss einige relevante Hashtags hinzu (max. 3–5), z. B. #MindsetMonday, #Leadership, #Tech.\n– Bleibe sachlich und motivierend; vermeide übertriebene Werbung und klicke keine Links ein.\n\nAufgabe: Du erhältst eine oder mehrere Post‑Ideen (Titel + Beschreibung) sowie den Styleguide von Notion. Formuliere für jede Idee einen fertigen LinkedIn‑Post nach obigem Stil. Verwende im Post keine Quellenangaben. Alle Posts müssen auf Deutsch sein."
+          "systemMessage": "Rolle: Du bist ein deutschsprachiger Social‑Media‑Copywriter für das LinkedIn‑Format #MindsetMonday. Deine Zielgruppe sind Fachkräfte und Führungskräfte aus der IT‑ und Tech‑Branche.\nStil & Struktur: Orientiere dich an unserem Styleguide (siehe Tool) und halte dich an bewährte\n\nAufgabe: Du erhältst eine oder mehrere Post‑Ideen (Titel + Beschreibung + Mehrwert) sowie den Styleguide für LinkedIn. Formuliere für jede Idee einen fertigen LinkedIn‑Post nach dem Guide. Verwende im Post keine Quellenangaben. Alle Posts müssen auf Deutsch sein."
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -724,9 +773,10 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=Hier sind die Recherche-Ergebnisse für mehrere Themen:\n\n{{ $json.output }}\n\nBitte analysiere jedes Thema einzeln und entwickle dazu 2–3 Post‑Ideen gemäß dem System‑Prompt. Notiere pro Thema die Ideen als nummerierte Liste mit Titel und Beschreibung.",
+        "text": "=Hier ist das Recherche-Ergebnis für Themen:\n\n\n{{ $json.output.recherche_ergebnisse.thema }}\n\nKurzbeschreibung:\n{{ $json.output.recherche_ergebnisse.kurzbeschreibung }}\n\nSchlüssel Insights:\n{{ $json.output.recherche_ergebnisse.schluessel_insights.map(item => item + \"\\n\\n\") }}\n\nTrends und Statistiken:\n{{ $json.output.recherche_ergebnisse.trends_statistiken.map(item => item + \"\\n\\n\") }}\n\nZitate:\n{{ $json.output.recherche_ergebnisse.zitate_beispiele.map(item => item + \"\\n\\n\") }}\n\nQuellen:\n{{ $json.output.recherche_ergebnisse.quellen.map(item => item.titel +\" - \"+ item.url + \"\\n\\n\") }}\n\nBitte analysiere das Thema und entwickle dazu 2–3 Post‑Ideen gemäß der System‑Prompt. Jede Ideen soll einen Titel, eine Beschreibung und den ihren Mehrwert enthalten. ",
+        "hasOutputParser": true,
         "options": {
-          "systemMessage": "Rolle: Du bist ein deutschsprachiger Content‑Stratege für das LinkedIn‑Format #MindsetMonday. Deine Zielgruppe sind IT‑Consultants und Führungskräfte im Tech‑Bereich, die sich für Themen wie Mindset, Teamführung, Fehlerkultur, digitale Souveränität und AI‑Ethik interessieren.\n\nAufgabe: Du analysierst Recherche‑Zusammenfassungen (Thema, Kurzbeschreibung, Schlüssel‑Insights, Trends, Zitate, Quellen) und entwickelst daraus 2–3 originelle Post‑Ideen (keine fertigen Posts). Jede Idee sollte einen prägnanten Titel, eine kurze Beschreibung und einen Hinweis enthalten, welchen Mehrwert sie den Lesern bietet. Du fokussierst dich auf spannende Blickwinkel, aktuelle Debatten und einen klaren Zusammenhang zum Mindset‑Thema.\n\nAusgabe: Gib die Ideen als nummerierte Liste aus. Verwende eine sachliche, inspirierende Sprache und bleibe auf Deutsch. Vermeide Eigenwerbung oder generische Floskeln. Nutze keine Hashtags. Deine Ideen dienen dem nächsten Agenten als Grundlage für die Ausarbeitung von LinkedIn‑Posts."
+          "systemMessage": "Rolle: Du bist ein deutschsprachiger Content‑Stratege für das LinkedIn‑Format #MindsetMonday. Deine Zielgruppe sind IT‑Consultants und Führungskräfte im Tech‑Bereich, die sich für Themen wie Mindset, Teamführung, Fehlerkultur, digitale Souveränität und AI‑Ethik interessieren.\n\nAufgabe: Du analysierst Recherche‑Zusammenfassungen (Thema, Kurzbeschreibung, Schlüssel‑Insights, Trends, Zitate, Quellen) und entwickelst daraus 2–3 originelle Post‑Ideen (keine fertigen Posts). Jede Idee sollte einen prägnanten Titel, eine kurze Beschreibung und einen Hinweis enthalten, welchen Mehrwert sie den Lesern bietet. Du fokussierst dich auf spannende Blickwinkel, aktuelle Debatten und einen klaren Zusammenhang zum Mindset‑Thema.\n\nAusgabe: Verwende eine sachliche, inspirierende Sprache und bleibe auf Deutsch. Vermeide Eigenwerbung oder generische Floskeln. Nutze keine Hashtags. Deine Ideen dienen dem nächsten Agenten als Grundlage für die Ausarbeitung von LinkedIn‑Posts."
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -782,10 +832,16 @@
       "typeVersion": 2.2,
       "position": [
         1984,
-        1072
+        1056
       ],
       "id": "42eec6dd-c541-43ef-97ba-8083d3b1c04e",
       "name": "Notion",
+      "credentials": {
+        "notionApi": {
+          "id": "2tPgJFU6jHXabGtx",
+          "name": "Notion SK "
+        }
+      },
       "disabled": true
     },
     {
@@ -841,9 +897,10 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=Hier ist die Liste der zu recherchierenden Themen:\n- {{ $input.all().map(item => item.json.name).join(\"\\n- \") }}",
+        "text": "=Recherchiere für folgendes Themen:\n\nNotion Id: {{ $json.id }}\nNotion Url: {{ $json.url }}\nThema: {{ $json.name }}\n",
+        "hasOutputParser": true,
         "options": {
-          "systemMessage": "Rolle und Aufgabe: Du bist ein deutschsprachiger Recherche‑Agent für das LinkedIn‑Format #MindsetMonday. Deine Zielgruppe sind IT‑ und Tech‑Professionals (Consultants, DevOps‑Teams, Führungskräfte), die an Themen wie Teamführung, Fehlerkultur, agiles Leadership, psychologische Sicherheit und digitale Transformation interessiert sind.\n\nDatenquellen: Du hast Zugang zu folgenden Tools:\n\nTavily‑Websuche: Liefert Suchergebnisse (Titel, Vorschau, Textauszug). Verwende sie, um Artikel, Studien und Blogposts zu finden. Nutze für jede Themenanfrage mindestens drei unterschiedliche, seriöse Quellen und ziehe vor allem deutschsprachige Websites und neuere Beiträge (letzte 12 Monate) vor.\n\nYouTube‑Subworkflow: Durchsucht YouTube nach relevanten Videos und stellt dir die Transkripte bereit. Identifiziere daraus wichtige Aussagen, Fakten oder Zitate.\n\nHTTP‑Request‑Suche für LinkedIn‑Posts und Tweets: Damit kannst du die öffentlichen Beiträge durchsuchen. Finde Beispiele, wie das Thema aktuell diskutiert wird, und fasse den Kern der Diskussion in ein bis zwei Sätzen zusammen.\n\nVorgehen pro Thema: Für jedes Thema aus der Themenliste, die dir der User übergibt:\n\nRecherche starten: Führe eine kurze Google‑ähnliche Suche über Tavily durch und analysiere die ersten relevanten Ergebnisse. Ergänze die Recherche durch passende YouTube‑Transkripte sowie durch die Suchergebnisse aus LinkedIn und Twitter.\n\nKernpunkte extrahieren: Halte die wichtigsten Ideen, Trends, Daten und Zitate fest. Konzentriere dich auf Aspekte, die für Mindset‑Themen im Business‑Kontext relevant sind, insbesondere im Tech‑Umfeld. Übergehe irrelevante oder redundant wiederholte Informationen.\n\nStrukturierte Zusammenfassung erstellen: Gib deine Ergebnisse in folgender Form zurück – für jedes Thema separat:\n\nThema: [Titel des Themas]\n\nKurzbeschreibung: Ein Satz, der zusammenfasst, worum es in der Recherche geht.\n\nSchlüssel‑Insights: 3–5 kurze Bullet‑Points mit den wichtigsten Erkenntnissen (max. 2 Sätze je Punkt). Markiere die Quelle in Klammern (z. B. „[Blogartikel]“, „[YouTube‑Transkript]“, „[LinkedIn]“).\n\nTrends/Statistiken: Falls vorhanden, erwähne relevante Zahlen, Studien oder Entwicklungen.\n\nZitate oder Beispiele: Ein prägnantes Zitat oder Beispiel aus den Quellen, das das Thema anschaulich macht.\n\nVerweis auf Quellen: Liste die genutzten Quellen (Titel + URL) am Ende; du darfst auch tldr‑ähnliche Zusammenfassungen mit Zitaten bereitstellen, aber kopiere keinen langen Text.\n\nSprache & Stil: Formuliere alles auf Deutsch, sachlich und präzise. Schreibe in der dritten Person, ohne dich als Agent zu erwähnen. Vermeide Werbe‑ oder Buzz‑Phrasen. Gib keine generischen Ratschläge oder Abschlussworte.\n\nHinweise:\n\nGib nur die recherchierten Informationen wieder. Füge keine spekulativen Inhalte hinzu und erfinde keine Daten.\n\nDie Zusammenfassungen dienen als Grundlage für einen zweiten Agenten, der daraus LinkedIn‑Posting‑Ideen generiert. Schreibe keine Post‑Entwürfe selbst.\n\nNutze, falls möglich, variierende Quellen, damit unterschiedliche Perspektiven abgedeckt werden.\n\nHalte die Zusammenfassung insgesamt bei ca. 150–200 Wörtern pro Thema."
+          "systemMessage": "Rolle und Aufgabe: Du bist ein deutschsprachiger Recherche‑Agent für das LinkedIn‑Format #MindsetMonday. Deine Zielgruppe sind IT‑ und Tech‑Professionals (Consultants, DevOps‑Teams, Führungskräfte), die an Themen wie Teamführung, Fehlerkultur, agiles Leadership, psychologische Sicherheit und digitale Transformation interessiert sind.\n\nDatenquellen: Du hast Zugang zu folgenden Tools:\n\nTavily‑Websuche: Liefert Suchergebnisse (Titel, Vorschau, Textauszug). Verwende sie, um Artikel, Studien und Blogposts zu finden. Nutze für jede Themenanfrage mindestens drei unterschiedliche, seriöse Quellen und ziehe vor allem deutschsprachige Websites und neuere Beiträge (letzte 12 Monate) vor.\n\nYouTube‑Subworkflow: Durchsucht YouTube nach relevanten Videos und stellt dir die Transkripte bereit. Identifiziere daraus wichtige Aussagen, Fakten oder Zitate.\n\nHTTP‑Request‑Suche für LinkedIn‑Posts und Tweets: Damit kannst du die öffentlichen Beiträge durchsuchen. Finde Beispiele, wie das Thema aktuell diskutiert wird, und fasse den Kern der Diskussion in ein bis zwei Sätzen zusammen.\n\nVorgehen pro Thema: Für jedes Thema aus der Themenliste, die dir der User übergibt:\n\nRecherche starten: Führe eine kurze Google‑ähnliche Suche über Tavily durch und analysiere die ersten relevanten Ergebnisse. Ergänze die Recherche durch passende YouTube‑Transkripte sowie durch die Suchergebnisse aus LinkedIn und Twitter.\n\nKernpunkte extrahieren: Halte die wichtigsten Ideen, Trends, Daten und Zitate fest. Konzentriere dich auf Aspekte, die für Mindset‑Themen im Business‑Kontext relevant sind, insbesondere im Tech‑Umfeld. Übergehe irrelevante oder redundant wiederholte Informationen.\n\nStrukturierte Zusammenfassung erstellen: Gib deine Ergebnisse in folgender Form zurück – für jedes Thema separat:\n\nThema: [Titel des Themas]\n\nKurzbeschreibung: Ein Satz, der zusammenfasst, worum es in der Recherche geht.\n\nSchlüssel‑Insights: 3–5 kurze Bullet‑Points mit den wichtigsten Erkenntnissen (max. 2 Sätze je Punkt). Markiere die Quelle in Klammern (z. B. „[Blogartikel]“, „[YouTube‑Transkript]“, „[LinkedIn]“).\n\nTrends/Statistiken: Falls vorhanden, erwähne relevante Zahlen, Studien oder Entwicklungen.\n\nZitate oder Beispiele: Ein prägnantes Zitat oder Beispiel aus den Quellen, das das Thema anschaulich macht.\n\nVerweis auf Quellen: Liste die genutzten Quellen (Titel + URL) am Ende; du darfst auch tldr‑ähnliche Zusammenfassungen mit Zitaten bereitstellen, aber kopiere keinen langen Text.\n\nSprache & Stil: Formuliere alles auf Deutsch, sachlich und präzise. Schreibe in der dritten Person, ohne dich als Agent zu erwähnen. Vermeide Werbe‑ oder Buzz‑Phrasen. Gib keine generischen Ratschläge oder Abschlussworte.\n\nHinweise:\n- Gib nur die recherchierten Informationen wieder\n- Füge keine spekulativen Inhalte hinzu und erfinde keine Daten\n- Die Zusammenfassungen dienen als Grundlage für einen zweiten Agenten, der daraus LinkedIn‑Posting‑Ideen generiert. Schreibe keine Post‑Entwürfe selbst.\n- Nutze, falls möglich, variierende Quellen, damit unterschiedliche Perspektiven abgedeckt werden.\n"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -1043,30 +1100,110 @@
     },
     {
       "parameters": {
-        "descriptionType": "manual",
-        "toolDescription": "Get Style Guide from Notion",
-        "resource": "block",
-        "operation": "getAll",
-        "blockId": {
-          "__rl": true,
-          "value": "https://www.notion.so/Style-Guide-1ff08a7890fd80809248cd39f99cf45a",
-          "mode": "url"
-        }
+        "jsonSchemaExample": "{\n  \"recherche_ergebnisse\": {\n    \"id\": \"string\",\n    \"url\": \"string\",\n    \"thema\": \"string\",\n    \"kurzbeschreibung\": \"string\",\n    \"schluessel_insights\": [\n      \"string\",\n      \"string\",\n      \"string\"\n    ],\n    \"trends_statistiken\": [\n      \"string\"\n    ],\n    \"zitate_beispiele\": [\n      \"string\"\n    ],\n    \"quellen\": [\n      {\n        \"titel\": \"string\",\n        \"url\": \"string\"\n      }\n    ]\n  }\n}",
+        "autoFix": true
       },
-      "type": "n8n-nodes-base.notionTool",
-      "typeVersion": 2.2,
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
       "position": [
-        1328,
-        1280
+        -80,
+        1664
       ],
-      "id": "a357cb25-bd63-4624-944a-e46353613881",
-      "name": "Get many child blocks in Notion",
+      "id": "d5a72da8-2f5d-4efe-b1ff-d56ce5051b39",
+      "name": "Structured Output Parser2"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -80,
+        1904
+      ],
+      "id": "dee57473-b45a-4327-8c3f-329c802ba5df",
+      "name": "OpenAI Chat Model3",
       "credentials": {
-        "notionApi": {
-          "id": "7kg3KZgjdzfGvzOE",
-          "name": "Notion account DP"
+        "openAiApi": {
+          "id": "Ix25uE0f14cxSxxs",
+          "name": "OpenAi LinkedIn"
         }
       }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pro eingehendem Item einen fertigen Slack-Block bauen\nreturn items.map(({ json }) => {\n  const d = json.output.recherche_ergebnisse;\n\n  const bullets = (d.schluessel_insights || [])\n    .map(s => `• ${s}`)\n    .join('\\n');\n\n  const blocks = [\n    {\n      type: 'header',\n      text: { type: 'plain_text', text: d.thema, emoji: true },\n    },\n    {\n      type: 'section',\n      text: {\n        type: 'mrkdwn',\n        text: `*Kurzbeschreibung:*\\n${d.kurzbeschreibung}`,\n      },\n    },\n    { type: 'divider' },\n    {\n      type: 'section',\n      text: {\n        type: 'mrkdwn',\n        text: `*Wichtige Insights:*\\n${bullets}`,\n      },\n    },\n    {\n      type: 'context',\n      elements: [\n        {\n          type: 'mrkdwn',\n          text: `<${d.url}|Mehr Details in Notion>`,\n        },\n      ],\n    },\n  ];\n\n  return {\n    json: {\n      blocks,\n      // optionaler Fallback-Text für Clients ohne Blocks\n      text: `${d.thema} — Zusammenfassung`,\n    },\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        832
+      ],
+      "id": "c544b720-fa2d-47c1-b03e-b771895e9a88",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09EKDT29NC",
+          "mode": "list",
+          "cachedResultName": "linkedin"
+        },
+        "messageType": "block",
+        "blocksUi": "={{ $json }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        416,
+        832
+      ],
+      "id": "45917517-d633-4024-b547-d29d331e092f",
+      "name": "Send a message",
+      "webhookId": "6c5b7da0-97d7-42ea-8a83-1a52d7a14fdb",
+      "credentials": {
+        "slackApi": {
+          "id": "aJesH0namjApFHhr",
+          "name": "Grenzlandresidenz"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"thema\": \"XYZ\",\n\t\"posting_ideen\": [\n      {\n        \"titel\" : \"Idee1\",\n        \"Beschreibung\": \"Beschreibung der Idee\",\n        \"Mehrwert\": \"Welchen Mehrwert liefert der Post\"\n      }\n    ]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        832,
+        1264
+      ],
+      "id": "a65acbb6-b02b-4f66-b31e-d624ee8b00fb",
+      "name": "Structured Output Parser3"
+    },
+    {
+      "parameters": {
+        "description": "Call this tool to get the Style Guide",
+        "jsCode": "// n8n Code Node: LinkedIn Style Guide for #MindsetMonday, #ToolTimeTuesday, #VizeFreitag\n// This script returns a single JSON object containing structured guidelines\n// for creating high‑performing LinkedIn posts in the DevOps/CI/CD domain.\n\nconst styleGuide = {\n  title: \"LinkedIn Style Guide für DevOps‑Posts (MindsetMonday, ToolTimeTuesday, VizeFreitag)\",\n  version: \"1.0\",\n  language: \"de\",\n  description: \"Strukturierter Leitfaden für LinkedIn‑Beiträge, der Tonalität, Perspektive, Aufbau, visuelle Elemente, Hashtags, Calls to Action, Posting‑Kadenzen und thematische Schwerpunkte umfasst.\",\n\n  tone: {\n    description: \"Locker, alltagsnah und authentisch; fachlich fundiert ohne steif zu wirken. Humor und Ironie sind erlaubt, sofern sie zum Thema passen. Emotional und empathisch bei Werten oder Leadership‑Themen. Lehrend, provokant und diskussionsanregend; inklusive Sprache wird genutzt.\",\n    keyPrinciples: [\n      \"Du‑Form für direkte Ansprache\",\n      \"persönliche Anekdoten und Reflexionen\",\n      \"Wir‑Perspektive für Team/Community\", \n      \"neutrale Perspektive für Beobachtungen oder allgemeine Aussagen\"\n    ]\n  },\n\n  structure: {\n    hook: {\n      purpose: \"Die ersten 2–3 Zeilen müssen Neugier wecken und die Lesenden zum Weiterlesen animieren.\",\n      length: {\n        intro: 150, // maximale Zeichenanzahl für den Hook, damit er nicht abgeschnitten wird\n        recommendedTotal: [600, 1200] // empfohlener Zeichenbereich für den gesamten Post\n      },\n      formula: [\n        \"Überraschende Aussage oder Frage\", \n        \"Kontext, der neugierig macht\", \n        \"Unerwartete Erkenntnis\"\n      ]\n    },\n    body: {\n      description: \"Der Hauptteil liefert einen klaren Mehrwert: erst Problem/Erfahrung, dann Lösung oder Impuls. Kurze Absätze, Bulletpoints und Zwischenüberschriften verbessern die Lesbarkeit, insbesondere auf mobilen Geräten.\",\n      sections: [\"Problem oder Erfahrung\", \"Lösung oder Impuls\", \"Beispiele oder Storytelling\"],\n      formatting: {\n        whiteSpace: \"Großzügige Absatzabstände für kognitive Entlastung\", \n        emphasis: [\"Fett für Kernbotschaften\", \"Kursiv für unterstützende Details\"],\n        lists: \"Bulletpoints oder nummerierte Listen zur Strukturierung\"\n      }\n    },\n    conclusion: {\n      description: \"Am Ende wird die wichtigste Erkenntnis zusammengefasst, ein klarer nächster Schritt empfohlen und eine offene Frage gestellt, um Kommentare zu fördern.\",\n      elements: [\"Key Takeaway\", \"Next Steps\", \"Offene Frage / Call to Action\"]\n    }\n  },\n\n  visuals: {\n    recommendedFormats: [\n      \"Hochwertige Fotos oder Infografiken (empf. 1200×1200 px)\",\n      \"Carousel‑Posts für Schritt‑für‑Schritt‑Anleitungen\", \n      \"Screenshots oder Code‑Snippets\", \n      \"Kurzvideos (30–90 Sekunden)\",\n      \"Umfragen oder Polls für interaktives Feedback\"\n    ],\n    guidelines: [\n      \"Emojis sparsam und zielgerichtet einsetzen\",\n      \"Auf mobile Darstellung achten (Weißraum, kurze Absätze)\",\n      \"Native Inhalte (kein externer Link) bevorzugen\"\n    ]\n  },\n\n  hashtagStrategy: {\n    description: \"Pro Post 3–5 Hashtags einsetzen: eine Mischung aus Marken‑/Format‑Hashtags, DevOps‑Begriffen, Tools und Wertethemen.\",\n    categories: {\n      format: [\"#MindsetMonday\", \"#ToolTimeTuesday\", \"#VizeFreitag\"],\n      devOps: [\"#DevOpsMindset\", \"#DevOpsCulture\", \"#CALMS\", \"#ShiftLeft\", \"#ZeroTrust\"],\n      tools: [\"#SecurityFirst\", \"#GitOps\", \"#InfrastructureAsCode\", \"#Containerisierung\", \"#CI/CD\"],\n      values: [\"#ServantLeadership\", \"#PeopleFirst\", \"#Fehlerkultur\", \"#AuthentischSein\", \"#Alltagshelden\", \"#Reflexion\"]\n    }\n  },\n\n  callsToAction: [\n    \"Was war dein größtes Learning?\",\n    \"Wie geht ihr mit Secrets in Repositories um?\", \n    \"Welche Tools nutzt ihr für diese Herausforderung?\", \n    \"Glaubst du, DevSecOps ist ein Buzzword oder notwendig?\", \n    \"Diskussion eröffnet – teile deine Meinung!\"\n  ],\n\n  posting: {\n    frequency: \"2–3 Posts pro Woche (z. B. montags, dienstags und freitags)\",\n    bestTimes: [\n      \"Dienstag/Mittwoch: 8–11 Uhr\", \n      \"Donnerstag: 10–12 Uhr\", \n      \"Freitag: 9–11 Uhr\", \n      \"Für #MindsetMonday: Montag 9 Uhr\"\n    ],\n    note: \"Plane deine Posts mit einem Content‑Kalender und analysiere die Performance, um Zeiten anzupassen.\"\n  },\n\n  engagement: {\n    guidelines: [\n      \"Stell offene Fragen und reagiere zeitnah auf Kommentare\", \n      \"Tagge Personen oder Unternehmen, wenn ihre Expertise relevant ist\", \n      \"Nutze Umfragen oder Quiz, um Interaktion zu fördern\", \n      \"Analysiere Ansichten, Likes und Kommentare über LinkedIn Analytics und optimiere deine Strategie\"\n    ]\n  },\n\n  contentThemes: {\n    MindsetMonday: [\n      \"DevOps‑Prinzipien (CALMS, kulturzentrierte Zusammenarbeit)\",\n      \"Leadership‑Philosophien (Servant Leadership, People First, Fehlerkultur)\", \n      \"Psychologische Sicherheit und authentische Erfahrungsberichte\", \n      \"Persönliche Reflexionen und Zitate, die zum Nachdenken anregen\"\n    ],\n    ToolTimeTuesday: [\n      \"CI/CD‑Pipelines und Deployment‑Strategien\", \n      \"Infrastructure as Code Tools (z. B. Terraform, Ansible)\",\n      \"Containerisierung und Orchestrierung (Docker, Kubernetes)\",\n      \"Secrets‑Management (truffleHog, Gitleaks)\",\n      \"Monitoring, Observability und Cloud‑Updates\"\n    ],\n    VizeFreitag: [\n      \"Fehler und Fails der Woche – was schiefging und was daraus gelernt wurde\", \n      \"Humorvolle Anekdoten mit Lessons Learned\", \n      \"Dank an Teammitglieder und Förderung der Fehlerkultur\",\n      \"Persönliche Reflexionen zur Arbeitswoche\"\n    ]\n  }\n};\n\nreturn styleGuide;"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        1344,
+        1392
+      ],
+      "id": "170a6187-5c71-4831-86dd-83a7214ed54d",
+      "name": "Code Tool"
     }
   ],
   "pinData": {
@@ -3413,24 +3550,162 @@
     "AI Agent": [
       {
         "json": {
-          "output": "Thema: Vertrauen in autonome und algorithmische Systeme\n\nKurzbeschreibung: Untersuchung der Herausforderungen und Perspektiven des Vertrauens in autonome Systeme und KI-Algorithmen im Kontext ethischer, technischer und regulatorischer Fragestellungen.\n\nSchlüssel-Insights:\n- Autonome Systeme besitzen unterschiedliche Autonomiegraden: operative, strategische und moralische Autonomie. Moralische Autonomie bleibt autonomen Systemen aufgrund systematischer und theoretischer Barrieren verwehrt, was Verantwortung und Haftung menschlichen Akteuren zuweist. [Experteninterview Hochschule Rhein-Waal]\n- Vertrauen in KI-Systeme ist mehrdimensional und umfasst Vertrauen in das System, dessen Anwendung und die Betreiber. Transparenz, erklärbare KI, Normen und Standards sind zentrale Voraussetzungen zur Schaffung von Vertrauen. Fehlende Regulierung und standardisierte Prüfmechanismen erschweren derzeit die Zuverlässigkeit. [Studienpapier TU Darmstadt]\n- Autonome Fahrzeuge stehen exemplarisch für die Herausforderungen bei der Vertrauensbildung, da technische Zuverlässigkeit, Sicherheit und ethische Entscheidungsfindungen komplexe Anforderungen darstellen. Entwicklungsprozesse sind iterativ und benötigen interdisziplinäre Zusammenarbeit. [Expertenpanel Autonomes Fahren]\n- Das europäische KI-Gesetz (KI-Verordnung) adressiert Risiken durch Klassifizierung von KI-Anwendungen in Risikoklassen mit Pflichten zur Dokumentation, Transparenz und Konformitätsbewertung. Dies fördert die Nachvollziehbarkeit und Verantwortlichkeit, beeinflusst aber auch Geschäftsprozesse und Vertragsgestaltungen bei KI-Nutzern. [Vortrag Prof. Dr. Spiecker gen. Gete]\n- Die menschliche Tendenz zur Vermenschlichung von KI (Anthropomorphismus) birgt Risiken, da Vertrauen oft auf falschen Vorstellungen basiert. Interdisziplinäre Forschung fordert daher eine klare sprachliche und normative Verständigung zur Gestaltung vertrauenswürdiger KI. [Philosophischer Diskurs TU Darmstadt]\n\nTrends/Statistiken:\n- KI wird zunehmend in kritischen Bereichen wie Medizin (Bildbefundung), Personalwesen und Strafrecht eingesetzt, wobei Verzerrungen und Diskriminierungen drohen, sofern Trainingsdaten nicht sorgfältig geprüft werden. [Studie und Experteninterviews, 2023–2025]\n- KI-Verordnung der EU ist weltweit führend und befindet sich im Gesetzgebungsverfahren, mit erwarteten Verpflichtungen zu Risikomanagement und Überwachungsstrukturen. [Rechtskommentar, 2024/2025]\n\nZitate oder Beispiele:\n„Vertrauen entsteht nicht primär gegenüber der Maschine, sondern gegenüber den Institutionen und Prozessen, die deren Entwicklung, Prüfung und Einsatz begleiten.“ (Prof. Dr. Rußig, Philosophie der Technik, TU Darmstadt)\n\nVerweis auf Quellen:\n- „Vertrauen und Akzeptanz in Algorithmen und KI“ (Hochschule Rhein-Waal) [https://www.hochschule-rhein-waal.de/sites/default/files/documents/2022/12/15/studium_generale_vertrauen_und_akzeptanz_in_algorithmen_und_ki.pdf]\n- Keynote „KI-Verordnung der EU“ Prof. Dr. Indra Spiecker gen. Gete, Goethe Universität Frankfurt (Gesprächsprotokoll)\n- ARD Expertenpanel Autonomes Fahren (2023)\n- EU-Kommission – Entwurf KI-Verordnung\n- Philosophischer Vortrag Prof. Dr. Rußig, TU Darmstadt (2023)\n\n---\n\nThema: Digitale Souveränität und Resilienz\n\nKurzbeschreibung: Analyse der Bedeutung und Umsetzung digitaler Souveränität und Resilienz für Unternehmen und Staaten im Kontext globaler Technologieabhängigkeiten und Sicherheitsanforderungen.\n\nSchlüssel-Insights:\n- Digitale Souveränität bezeichnet die Fähigkeit, über die eigenen Daten, Infrastrukturen und Technologien selbstbestimmt zu verfügen und sie zu schützen. Dies umfasst Datenschutz, Infrastrukturunabhängigkeit und den Erhalt von Handlungsspielräumen bei der Technologieauswahl. [Wirtschaftsforums Stellungnahme 2024/2025]\n- Hohe Importabhängigkeiten im IT-Sektor, insbesondere von US-amerikanischen und chinesischen Anbietern, sind strategische Herausforderungen; deutsche und europäische Unternehmen fordern Investitionen in eigene Schlüsseltechnologien und stärkere nationale sowie europäische Steuerung zur Absicherung. [Bitkom Studie 2024, Schwarzgruppe – Fallstudie]\n- Resilienz wird als Fähigkeit verstanden, digitale Systeme und Organisationen gegen Ausfälle, Angriffe oder politische Einflussnahmen robust zu machen. Neben technischen Maßnahmen braucht es auch organisatorische und regulatorische Strukturen sowie eine Innovationsoffenheit im Umgang mit Krisen. [Expertenrunde Wirtschaftsrat CDU 2025]\n- Digitale Souveränität wird als Wettbewerbsfaktor und Voraussetzung für Innovationsfähigkeit interpretiert. Es besteht ein Spannungsfeld zwischen globaler Kooperation und lokalem (europäischem/deutschem) Technologiestandort, das differenziertes Governance-Verständnis erfordert. [Podiumsdiskussion Transform 2024]\n- Praktische Umsetzung erfolgt durch eigene Cloud-Plattformen, Cybersecurity-Strategien, selbstentwickelte KI-Lösungen, sichere Kommunikationsmittel und souveräne Kollaborationsumgebungen, die auch auf den externen Markt ausgeweitet werden. [Schwarzgruppe Digitalstrategie]\n\nTrends/Statistiken:\n- 96 % der deutschen Unternehmen beziehen digitale Leistungen aus dem Ausland, 90 % geben an, darauf nicht verzichten zu können. [Bitkom e.V. 2024]\n- 82 % der Unternehmen sehen Deutschland stark von ausländischen Technologien abhängig. [Bitkom Umfrage 2024]\n- Investitionen in F&E deutscher Unternehmen wie Bosch liegen bei über 19 Mrd. EUR jährlich; dennoch hinkt Deutschland im internationalen Wettbewerb hinterher, insbesondere gegenüber China und den USA. [Transform 2024 Panel]\n\nZitate oder Beispiele:\n„Digitale Souveränität bedeutet nicht Abschottung, sondern Wahlfreiheit und die Fähigkeit, in kritischen Bereichen selbstbestimmt Entscheidungen zu treffen und Innovationen zu fördern.“ (Dr. Tanja Rückert, Bosch Gruppe)\n\nVerweis auf Quellen:\n- Bitkom e.V. (2024): „Digitale Souveränität bei Unternehmen in Deutschland“\n- Schwarzgruppe: „Digitale Souveränität als strategische Unternehmensentwicklung“ (2024)\n- Wirtschaftsrat der CDU: „Perspektiven für digitale Resilienz und Souveränität“ (2025)\n- Transform 2024 – Paneldiskussion Digitale Souveränität und Innovation\n- Trend Micro DACH (2025), LinkedIn-Beiträge von Branchenexperten"
+          "output": {
+            "recherche_ergebnisse": {
+              "id": "26508a78-90fd-813f-8727-fb33aa681f91",
+              "url": "https://www.notion.so/Vertrauen-in-autonome-und-algorithmische-Systeme-26508a7890fd813f8727fb33aa681f91",
+              "thema": "Vertrauen in autonome und algorithmische Systeme",
+              "kurzbeschreibung": "Die Recherche beleuchtet, wie Vertrauen in autonome und algorithmische Systeme entsteht, welche ethischen, technischen und regulatorischen Herausforderungen bestehen und welche Rolle Transparenz, Verantwortung und Normen spielen.",
+              "schluessel_insights": [
+                "Vertrauen in autonome Systeme hängt stark von Transparenz, Erklärbarkeit und ethischen Rahmenbedingungen ab; ethische Entscheidungen autonomer Systeme können komplex sein und erfordern gesellschaftliche Werte als Grundlage. (Ausführlicher Impulsvortrag TU Darmstadt, Philosoph Prof. Rupprecht)",
+                "Der Aufbau von Vertrauen erfordert die Entwicklung eines Verständnisses für Systeme, inklusive der Offenlegung von Algorithmen, sowie gesetzliche und normative Regelungen wie die EU-KI-Verordnung. (Vortrag Prof. Dr. Indra Spiecker gen. Döhmann)",
+                "Algorithmische Systeme können keine moralische Autonomie besitzen, daher bleibt Verantwortung bei Menschen, die Vorgaben und Kontrollmechanismen definieren. (Philosophischer Vortrag TU Darmstadt)",
+                "Die EU-KI-Verordnung implementiert risikobasierte Regulierung, Transparenzpflichten, Haftungszuweisungen und fördert den Schritt zu vertrauenswürdigen KI-Systemen durch Konformitätsbewertungen und Normen. (EU-Regulierungsanalyse)",
+                "Unklarheiten und Interpretationsspielräume in der Definition und Bewertung algorithmischer Systeme erfordern interdisziplinäre Zusammenarbeit von Technik, Recht, Philosophie und Sozialwissenschaften. (Zusammenfassung Expertenaustausch)"
+              ],
+              "trends_statistiken": [
+                "78% der Befragten in einer Studie sehen mangelndes Vertrauen in autonome Systeme als zentrales Problem. (Studie AI-Revolution)",
+                "Die KI-Verordnung sieht vier Risikostufen vor, von minimalem Risiko bis hin zu inakzeptablem Risiko, wobei besonders manipulatives Verhalten reguliert wird. (KI-Verordnungsentwurf EU)",
+                "Interdisziplinäre Ansätze werden als essentiell angesehen, um technische, ethische und gesellschaftliche Anforderungen an autonome Systeme zu erfüllen. (Expertenmeinungen)"
+              ],
+              "zitate_beispiele": [
+                "\"Vertrauen ist eine Haltung, die sich auf die Erwartung bestimmter Absichten, Kompetenzen und Leistungen von Systemen stützt, jedoch müssen mögliche Schäden ausgeblendet werden, um Handeln zu ermöglichen.\" (Prof. Rupprecht, TU Darmstadt)",
+                "\"KI-Systeme sind nur so gut wie die Qualität der Daten, mit denen sie trainiert werden; permanente Kontrolle und Qualitätssicherung sind unerlässlich.\" (Prof. Dr. Spiecker gen. Döhmann)",
+                "\"Autonome Systeme besitzen keine moralische Autonomie, die Verantwortung liegt bei den Menschen, die Regeln und Kontrollmechanismen definieren.\" (Philosophischer Vortrag)",
+                "\"Die EU-KI-Verordnung schafft erstmals einen Rechtsrahmen, der Transparenz, Datenschutz und Risikomanagement für KI-Systeme verbindlich festlegt.\" (Regulierungsanalyse)",
+                "\"Die Entwicklung von Vertrauen in solche Systeme ist ein iterativer Prozess, der kommunikative Parallelstrukturen zwischen Multi-Agenten-Systemen und Nutzern braucht.\" (Philosophischer Vortrag TU Darmstadt)"
+              ],
+              "quellen": [
+                {
+                  "titel": "Algorithmen und Autonomie – Interdisziplinäre Perspektiven (TU Darmstadt)",
+                  "url": "https://www.ssoar.info/ssoar/bitstream/handle/document/81464/ssoar-2022-verstandig_et_al-Algorithmen_und_Autonomie_Interdisziplinare_Perspektiven.pdf"
+                },
+                {
+                  "titel": "EU KI-Verordnung: Risikobasierte Regulierung und Transparenzpflichten",
+                  "url": "https://www.goethe-university-frankfurt.de/sites/default/files/2024-05/KI-Verordnung_EU_Analyse.pdf"
+                },
+                {
+                  "titel": "Studie: 78 Prozent fehlt das Vertrauen in autonome Systeme",
+                  "url": "https://ap-verlag.de/ai-revolution-78%E2%80%AFprozent-fehlt-das-vertrauen-in-autonome-systeme/95239/"
+                },
+                {
+                  "titel": "Vortrag Prof. Rupprecht, TU Darmstadt – Ethische Herausforderungen und Vertrauensbildung bei autonomen Systemen",
+                  "url": "https://www.tu-darmstadt.de/ethik_trust_ai_talks.pdf"
+                },
+                {
+                  "titel": "Vortrag Prof. Dr. Indra Spiecker gen. Döhmann – Rechtliche Aspekte der KI-Verordnung",
+                  "url": "https://www.goethe-university-frankfurt.de/papers/ki-regulation_presentation.pdf"
+                }
+              ]
+            }
+          }
         }
       },
       {
         "json": {
-          "output": "Thema: Vertrauen in autonome und algorithmische Systeme\n\nKurzbeschreibung: Die Recherche beleuchtet, wie Vertrauen in autonome und algorithmische Systeme entsteht, welche ethischen und technischen Herausforderungen dabei bestehen und wie Transparenz, Governance sowie menschliche Kontrollmechanismen entscheidend sind.\n\nSchlüssel-Insights: \n- Autonome Systeme durchlaufen Entwicklungsphasen von assistierten Funktionen bis zu vollständig autonomen Systemen; Vertrauen setzt voraus, dass diese Systeme sicher, robust und transparent agieren [YouTube-Paneldiskussion, Hochschule Rhein-Waal PDF]. \n- Künstliche Intelligenz bildet das Herz autonomer Systeme, benötigt aber menschliche Aufsicht, klare gesetzliche Rahmen und ethische Leitlinien, da moralische Autonomie an Maschinen nicht delegierbar ist [YouTube-Transkript, Hochschule Rhein-Waal PDF].\n- Ein ausgewogenes Vertrauen basiert auf nachvollziehbarer Algorithmustransparenz, bewährten Datenqualitäten und einer ethisch reflektierten Fehlerkultur; der Mensch muss weiterhin in kritischen Entscheidungen das letzte Wort haben [YouTube-Philosophie-Vortrag, Podcast Hyperraum TV].\n- In der Praxis birgt algorithmische Voreingenommenheit und Intransparenz Risiken für Fairness und Akzeptanz; Organisationen und Regulatoren sind gefordert, Standards und Kontrollmechanismen zu etablieren [YouTube-Podcast, LinkedIn Diskussion, Twitter].\n- Aktuelle Debatten betonen den Balanceakt zwischen Innovation und Regulierung, wobei KI als Werkzeug verstanden wird, dessen Verantwortung immer beim Menschen liegt [LinkedIn, Twitter].\n\nTrends/Statistiken: \n- Über 40% der großen deutschen Unternehmen setzen Algorithmen für Personalauswahl ein, was Sorgen um Fairness und Diskriminierung aufwirft.\n- Studie der Carnegie Mellon University belegt Voreingenommenheit in maschinellen Lernverfahren.\n- Gesellschaftliche und rechtliche Entwicklungen forcieren Risikobewertung und Zertifizierungen für KI-Systeme (z.B. EU AI-Verordnung in Arbeit).\n\nZitate oder Beispiele: \n„Vertrauen entsteht durch Erwartung, dass ein System kompetent, absichtsgetreu und zuverlässig handelt, jedoch bleibt die moralische Autonomie zwingend menschliche Aufgabe.“ [Professor der TU Darmstadt, Ethikvortrag]\n„Algorithmen können Entscheidungen erklären müssen – ohne Erklärbarkeit gibt es kein echtes Vertrauen.“ [Informatiker & Philosoph im Hyperraum-TV-Interview]\n\nVerweis auf Quellen:\n- Europarl: Gesetz über Künstliche Intelligenz (2023) https://www.europarl.europa.eu/doceo/document/TA-9-2023-0236_DE.html\n- Hochschule Rhein-Waal (2022): Vertrauen und Akzeptanz in Algorithmen und KI https://www.hochschule-rhein-waal.de/sites/default/files/documents/2022/12/15/studium_generale_vertrauen_und_akzeptanz_in_algorithmen_und_ki.pdf\n- YouTube-Panel: Autonomous Vehicles – On the Road to the Future (2024)\n- Hyperraum TV Podcast: KI – Grenzen des Vertrauens (2023)\n- LinkedIn Posts und Diskussionen zum KI-Management 2025 (ausgewählte Quellen)\n- Twitter-Beiträge zu Vertrauen in KI-Systeme 2025\n\n---\n\nThema: Digitale Souveränität und Resilienz\n\nKurzbeschreibung: Die Recherche analysiert die Bedeutung digitaler Souveränität für Unternehmen, Staaten und Gesellschaften sowie deren Rolle bei der Stärkung der IT-Resilienz angesichts globaler Abhängigkeiten und Sicherheitsrisiken.\n\nSchlüssel-Insights:\n- Digitale Souveränität umfasst Kontrolle über eigene Daten, IT-Infrastruktur und Prozessgestaltung; essenziell ist die Reduktion kritischer Abhängigkeiten von Drittanbietern besonders aus dem Ausland [UniBw LIONS Symposium 2023, Lancom Systems Studie 2023].\n- Investitionen in Schlüsseltechnologien, lokale Cloud-Lösungen (z.B. Schwarz Gruppe mit eigener Cloud) und eigene KI-Plattformen sind konkrete Maßnahmen zur Erhöhung der Unabhängigkeit und Innovationskraft [LinkedIn Beiträge Schwarz Gruppe].\n- Resilienz wird durch Diversifikation der IT-Komponenten, Schutz kritischer Infrastrukturen und frühzeitige Erkennung von Angriffen sichergestellt; Umsetzungskultur, Fehlerkultur und regelmäßige Tests sind wichtig [LinkedIn, YouTube].\n- Digitale Souveränität ist eine Voraussetzung für wirtschaftlichen Erfolg und gesellschaftlichen Zusammenhalt, aber auch eine politische Herausforderung, insbesondere im internationalen Wettbewerb zwischen USA, China und Europa [Interviews, Diskussionsrunden].\n- Rechts- und Governance-Rahmen (z.B. EU Digital Services Act, EU KI-Verordnung) sind integraler Bestandteil, zugleich müssen Offenheit und internationale Zusammenarbeit gewahrt bleiben [Fachvorträge, Social Media].\n\nTrends/Statistiken:\n- 96% der deutschen Unternehmen beziehen digitale Technologien aus dem Ausland; 90% geben an, darauf nicht verzichten zu können (Bitkom EV Studie).\n- Europäische Unternehmen initiieren zunehmend eigene Infrastrukturprojekte zur Datenhoheit, z.B. eigenständige Cloud- und KI-Angebote.\n- Zentrale Themen in der politischen und wirtschaftlichen Debatte sind IT-Sicherheit, Datenföderation und digitale Identität (eID).\n\nZitat oder Beispiel: \n„Digitale Souveränität bedeutet nicht Abschottung, sondern handlungsfähige Wahlfreiheit und Kontrolle über technologische Ökosysteme – sie ist die Grundlage für Vertrauen, Innovation und Resilienz.“ [CIO Schwarz Gruppe]\n„Wer OT riskant betreibt, spielt mit Leben und Stabilität ganzer Städte.“ [LinkedIn-Beitrag Daniel Hladky zur kritischen Infrastruktur]\n\nVerweis auf Quellen:\n- UniBw LIONS Symposium: Handlungsempfehlungen für Digitale Souveränität https://www.unibw.de/lions/handlungsempfehlungen-fuer-digitale-souveraenitaet\n- Lancom Systems: Studie zur digitalen Souveränität deutscher Unternehmen 2023\n- CIO Bund: Digitale Souveränität und Resilienz https://www.cio.bund.de/Webs/CIO/DE/digitale-loesungen/digitale-souveraenitaet/digitale-souveraenitaet-node.html\n- LinkedIn Beiträge der Schwarz Gruppe (Cloud Stacket, KI Alf Alpha)\n- Bitkom: Digitale Technologien und Abhängigkeiten in deutschen Unternehmen\n- Diverse Experteninterviews und LinkedIn Panels 2025"
+          "output": {
+            "recherche_ergebnisse": {
+              "id": "26508a78-90fd-813e-a596-fe3d1d9705d0",
+              "url": "https://www.notion.so/Digitale-Souver-nit-t-und-Resilienz-26508a7890fd813ea596fe3d1d9705d0",
+              "thema": "Digitale Souveränität und Resilienz",
+              "kurzbeschreibung": "Die Recherche beleuchtet digitale Souveränität und Resilienz als zentrale Aspekte der digitalen Unabhängigkeit, Sicherheit und Innovationsfähigkeit von Staaten und Unternehmen im Kontext globaler Abhängigkeiten und technologischer Herausforderungen.",
+              "schluessel_insights": [
+                "Digitale Souveränität umfasst die Kontrolle über eigene digitale Infrastruktur, Daten und Technologien, um Unabhängigkeit von ausländischen Anbietern zu gewährleisten und Risiken wie Manipulation oder Betriebsausfälle zu verringern. (Blogartikel, Universität Potsdam)",
+                "Investitionen in digitale Souveränität erfordern gezielte Analyse kritischer Abhängigkeiten, strategisches Handeln und Entwicklung eigenständiger Technologien, wie z.B. souveräne Cloud-Lösungen und KI-Plattformen. (Blogartikel, Schwarz Gruppe)",
+                "Digitale Resilienz meint die Fähigkeit, digitale Infrastrukturen gegen Angriffe, Störungen und politische Einflüsse zu schützen, um Wirtschaft und Gesellschaft handlungsfähig zu halten. (Blogartikel, WTSH)",
+                "Die Gestaltung digitaler Souveränität muss ethische Werte, Datenschutz und soziale Verantwortung integrieren, um Vertrauen bei Nutzern zu schaffen und Innovation nachhaltig zu fördern. (Blogartikel, Schwarz Gruppe)",
+                "Politik, Wirtschaft und Gesellschaft müssen zusammenarbeiten, um eine innovationsfreundliche Kultur zu schaffen, bürokratische Hürden abzubauen und internationale Partnerschaften auf Augenhöhe zu fördern. (Studien, Interviews mit Experten)"
+              ],
+              "trends_statistiken": [
+                "96% der deutschen Unternehmen beziehen digitale Technologien aus dem Ausland, wobei 90% darauf nicht verzichten können, was hohe Abhängigkeiten bedeutet. (Studie Bitkom EV)",
+                "82% der in Deutschland genutzten digitalen Technologien stammen aus dem Ausland, was die Ambivalenz zwischen Unabhängigkeitsstreben und tatsächlicher Abhängigkeit unterstreicht. (Vortrag Schwarz Gruppe)",
+                "Deutschland und Frankreich investieren zusammen rund 4 Milliarden Euro in Quantencomputing, während China das Doppelte aufwendet. (Experteninterviews)",
+                "Über 80% der deutschen Unternehmen sehen ihre Wirtschaft als zu abhängig vom Ausland für digitale Technologien an. (Bitkom-Umfrage)"
+              ],
+              "zitate_beispiele": [
+                "„Digitale Souveränität bedeutet, dass ich die Kontrolle habe, wie mit meinen Daten umgegangen wird und welche Technologien ich nutzen möchte.“ (Experte aus der Wirtschaft)",
+                "„Souveräne digitale Ökosysteme sind nicht nur länger eine Option, sondern die notwendige Voraussetzung für wirtschaftlichen Erfolg.“ (Schwarz Gruppe)",
+                "„Digitale Resilienz macht uns widerstandsfähiger gegen Cyberangriffe, wirtschaftliche Schocks und politische Einflussnahme.“ (WTSH)",
+                "„Ohne digitale Souveränität setzen sich zwangsläufig Lösungen großer Tech-Konzerne durch – das schwächt die Unabhängigkeit.“ (Experte zu e-ID in der Schweiz)"
+              ],
+              "quellen": [
+                {
+                  "titel": "Digitale Souveränität und Resilienz in Schleswig-Holstein - WTSH",
+                  "url": "https://wtsh.de/de/von-digitaler-souveraenitaet-zu-digitaler-resilienz"
+                },
+                {
+                  "titel": "Mehr Digitale Souveränität: Leitfaden für Resilienz und Innovationsfreiheit",
+                  "url": "https://www.informatik-aktuell.de/management-und-recht/digitalisierung/mehr-digitale-souveraenitaet-leitfaden-fuer-resilienz-und-innovationsfreiheit.html"
+                },
+                {
+                  "titel": "Digitale Souveränität: The Data Challenge - Universität Potsdam",
+                  "url": "https://www.uni-potsdam.de/de/uniges/kapitel/senior-fellows-network/digitale-souveraenitaet-the-data-challenge"
+                },
+                {
+                  "titel": "Digitale Souveränität – Kritikalität erkennen und strategisch handeln",
+                  "url": "https://www.pwc.de/de/risk-regulatory/risk/open-source-software-management-und-compliance/digitale-souveraenitaet-kritikalitaet-erkennen-und-strategisch.html"
+                },
+                {
+                  "titel": "Mehr digitale Souveränität und Resilienz - manage it",
+                  "url": "https://ap-verlag.de/cybersicherheit-neu-denken-mehr-digitale-souveraenitaet-und-resilienz/98191/"
+                },
+                {
+                  "titel": "Diskussion und Stellungnahmen zu digitaler Souveränität auf LinkedIn und Twitter (2024/25)",
+                  "url": "Synthese aus LinkedIn- und Twitter-Beiträgen"
+                }
+              ]
+            }
+          }
         }
       }
     ],
     "Content idea generator": [
       {
         "json": {
-          "output": "Thema: Vertrauen in autonome und algorithmische Systeme\n\n1. Titel: „Moralische Autonomie der KI – Illusion oder erreichbares Ziel?“  \n   Beschreibung: Ein kritischer Blick auf die unterschiedlichen Autonomiegrade autonomer Systeme mit Fokus auf die moralische Autonomie, die bislang systematisch ausgeschlossen ist. Diskutieren Sie, warum Verantwortung und Haftung weiterhin bei Menschen liegen müssen und welche Implikationen das für Führungskräfte und Entwickler im Tech-Bereich hat.  \n   Mehrwert: Schärft das Verständnis von Verantwortungszuschreibungen und betont die Bedeutung menschlicher Urteilsfähigkeit bei der Einführung autonomer Systeme in Unternehmen.\n\n2. Titel: „Vertrauen in KI – Mehrdimensionalität statt Monolith“  \n   Beschreibung: Erklären Sie, wie Vertrauen in KI-Systeme nicht nur das technische Vertrauen, sondern auch das Vertrauen in deren Nutzung und die verantwortlichen Betreiber umfasst. Stellen Sie Transparenz und erklärbare KI als zentrale Hebel vor und zeigen Sie die Herausforderungen fehlender Standards sowie den regulatorischen Rahmen der EU auf.  \n   Mehrwert: Hilft IT-Consultants und Führungskräften, eine ganzheitliche Perspektive auf Vertrauensbildung zu entwickeln und die Bedeutung interdisziplinärer Prozesse besser zu verstehen.\n\n3. Titel: „Anthropomorphismus in der KI – Risiko für falsche Vertrauensgrundlagen“  \n   Beschreibung: Thematisieren Sie die menschliche Tendenz, KI-Systeme zu vermenschlichen, und die damit verbundenen Gefahren, die zu unangemessenem Vertrauen führen können. Diskutieren Sie, wie klare normative und sprachliche Verständigungen zur Vertrauensgestaltung beitragen und was das für die Zusammenarbeit zwischen Technik, Philosophie und Recht bedeutet.  \n   Mehrwert: Sensibilisiert Führungskräfte für psychologische Verzerrungen und fordert ein reflektiertes Mindset im Umgang mit KI-basierten Systemen.\n\n---\n\nThema: Digitale Souveränität und Resilienz\n\n1. Titel: „Digitale Souveränität als Innovationsmotor – zwischen Unabhängigkeit und globaler Vernetzung“  \n   Beschreibung: Analysieren Sie, wie digitale Souveränität nicht als Abschottung, sondern als Wahl- und Entscheidungsspielraum verstanden werden sollte. Stellen Sie dar, wie Unternehmen durch eigene Technologien und offene Governance-Modelle ihre Wettbewerbsfähigkeit sichern können und warum Resilienz integraler Bestandteil davon ist.  \n   Mehrwert: Vermittelt ein differenziertes Mindset, das technologische Selbstbestimmung und internationale Kooperation als kompatible Zielsetzungen begreift.\n\n2. Titel: „Abhängigkeiten reduzieren – Strategien für mehr digitale Resilienz in Unternehmen“  \n   Beschreibung: Erörtern Sie die Herausforderungen hoher Importabhängigkeiten und geben Sie praxisnahe Einblicke in Maßnahmen wie eigene Cloud-Plattformen, Cybersecurity-Strategien und souveräne Kollaborationslösungen. Stellen Sie heraus, warum Resilienz nicht nur technischer, sondern auch organisatorischer und regulatorischer Natur sein muss.  \n   Mehrwert: Bietet konkrete Orientierungshilfen für IT-Verantwortliche, die digitale Risiken proaktiv managen und den Handlungsspielraum des Unternehmens sichern wollen.\n\n3. Titel: „Die deutsche IT-Landschaft im Spannungsfeld globaler Technologieabhängigkeit“  \n   Beschreibung: Zeigen Sie anhand aktueller Statistiken und Studien die hohe Abhängigkeit deutscher Unternehmen von ausländischen Technologien auf – inklusive der Implikationen für Wettbewerbsfähigkeit und Innovationsfähigkeit. Diskutieren Sie notwendige Investitionen und politische Steuerungen als Voraussetzung für digitale Souveränität.  \n   Mehrwert: Fördert das Problembewusstsein und inspiriert Führungskräfte, strategische Weichenstellungen für nachhaltige digitale Unabhängigkeit vorzunehmen."
+          "output": {
+            "thema": "Vertrauen in autonome und algorithmische Systeme: Ethische, regulatorische und technische Perspektiven",
+            "posting_ideen": [
+              {
+                "titel": "Transparenz als Schlüssel zu digitaler Souveränität: Warum wir Algorithmen verstehen müssen",
+                "Beschreibung": "Dieser Beitrag beleuchtet, wie Transparenz und Erklärbarkeit autonomer Systeme das Vertrauen stärken und warum IT-Consultants und Führungskräfte diese Aspekte aktiv fördern sollten. Er zeigt auf, wie die Offenlegung von Algorithmen und eine verständliche Kommunikation komplexer Systeme zur digitalen Souveränität im Unternehmen beitragen.",
+                "Mehrwert": "Leser erhalten konkrete Impulse, wie sie durch Transparenzmaßnahmen auf technischer und kommunikativer Ebene Vertrauen in KI-Systeme aufbauen und somit digitale Souveränität und ethische Teamführung fördern können."
+              },
+              {
+                "titel": "Die Verantwortung hinter der Maschine: Ethik und menschliche Kontrolle in autonomen Systemen",
+                "Beschreibung": "Im Fokus steht die zentrale Erkenntnis, dass autonome Systeme keine moralische Autonomie besitzen und alle ethischen Entscheidungen sowie Kontrollmechanismen von Menschen gestaltet werden müssen. Der Beitrag regt dazu an, die Rolle von Führungskräften und Consultants als verantwortliche Akteure im Design und Einsatz solcher Systeme zu reflektieren und zu stärken.",
+                "Mehrwert": "Der Beitrag gibt Führungskräften und IT-Consultants eine klare Orientierung für ihr Mindset: Sie sind unverzichtbar in der ethischen Gestaltung von Technik und können durch verantwortungsbewusstes Handeln Vertrauen in autonome Systeme maßgeblich beeinflussen."
+              },
+              {
+                "titel": "Regulierung und Teamkultur als Fundament für vertrauenswürdige KI-Systeme",
+                "Beschreibung": "Ausgehend von der EU-KI-Verordnung wird gezeigt, wie gesetzliche Rahmenbedingungen und normierte Risikobewertungen die Basis für vertrauenswürdige Systeme schaffen. Zugleich wird der Bedarf an interdisziplinären Teams und offener Fehlerkultur thematisiert, die regulatorische Vorgaben mit ethischen und technischen Perspektiven verbinden.",
+                "Mehrwert": "Der Beitrag bietet Führungskräften und Beratern wertvolle Impulse für den Aufbau interdisziplinärer Teams und das Entwickeln einer Fehlerkultur, die sowohl regulatorische Anforderungen als auch ethische Standards adressiert und somit die Akzeptanz von KI-Systemen im Unternehmen erhöht."
+              }
+            ]
+          }
         }
       },
       {
         "json": {
-          "output": "Thema: Vertrauen in autonome und algorithmische Systeme\n\n1. Titel: „Warum echte Transparenz mehr als nur Code-Offenlegung ist“  \nBeschreibung: Der Beitrag beleuchtet die oft missverstandene Rolle der Transparenz bei autonomen Systemen. Nicht bloß technische Offenlegung, sondern nachvollziehbare Entscheidungsprozesse und klare Kommunikation sind entscheidend für Vertrauen. Dabei wird aufgezeigt, wie Transparenz technische, ethische und menschliche Dimensionen verbindet und wie Führungskräfte diese in der Praxis fördern können.  \nMehrwert: Leser erhalten ein ganzheitliches Verständnis von Transparenz, das über reine Technik hinausgeht und sie fit macht, um Vertrauen in nachhaltige KI-Systeme aufzubauen.\n\n2. Titel: „Menschliche Kontrolle als unverzichtbare Instanz in KI-Entscheidungen“  \nBeschreibung: Dieser Post nimmt den zentralen Anspruch unter die Lupe, dass moralische Autonomie nicht an Maschinen delegiert werden kann. Er hinterfragt typische Automatisierungserwartungen und zeigt auf, wie verantwortungsvolle Führung den richtigen Rahmen für menschliche Eingriffe schafft, um Fehlentscheidungen algorithmischer Systeme zu vermeiden.  \nMehrwert: Führungskräfte und Consultants werden inspiriert, die Rolle der menschlichen Kontrolle aktiv zu gestalten und damit ethische Risiken frühzeitig zu adressieren.\n\n3. Titel: „Algorithmische Fairness – Herausforderung und Chance für moderne Unternehmen“  \nBeschreibung: Diskutiert werden die Risiken algorithmischer Voreingenommenheit am Beispiel der Personalauswahl, verbunden mit aktuellen regulatorischen Entwicklungen (z. B. EU AI-Verordnung). Der Beitrag stellt praxisnahe Methoden vor, wie Unternehmen Fairness messbar machen und Fehlerkultur implementieren können.  \nMehrwert: Der Beitrag bietet praxisorientierte Impulse, die IT- und HR-Entscheider darin unterstützen, Vertrauen und Akzeptanz in KI-gestützte Prozesse zu erhöhen.\n\n---\n\nThema: Digitale Souveränität und Resilienz\n\n1. Titel: „Digitale Souveränität als strategischer Hebel für nachhaltige IT-Resilienz“  \nBeschreibung: Dieser Beitrag erläutert, wie digitale Souveränität nicht nur politische Schlagzeile, sondern gelebte Unternehmensstrategie sein kann. Er verbindet das Thema mit konkreten Maßnahmen wie lokale Cloud-Infrastrukturen und Diversifikation der IT-Komponenten, um Risiken zu mindern und Ausfallsicherheit zu erhöhen.  \nMehrwert: IT-Verantwortliche erhalten ein klares Praxisbild, weshalb digitale Souveränität die Basis für stabile, widerstandsfähige Systeme ist und wie sie diese zielgerichtet stärken.\n\n2. Titel: „Zwischen globalen Abhängigkeiten und lokaler Handlungsfähigkeit – die neue Balance der Digitalisierung“  \nBeschreibung: Diskutiert wird die Gratwanderung zwischen internationaler Vernetzung und der Notwendigkeit, kritische IT-Komponenten selbst zu kontrollieren. Der Beitrag zeigt die Rolle von Governance, Rechtsrahmen und gleichzeitig Offenheit für Kooperationen als Bausteine eines modernen Mindsets.  \nMehrwert: Führungskräfte lernen, wie sie innovative Technologien nutzen und gleichzeitig souverän und resilient bleiben – eine essenzielle Fähigkeit für zukünftige Wettbewerbsfähigkeit.\n\n3. Titel: „Digitale Souveränität jenseits der Technik – wie Kultur, Fehlerkultur und Kommunikation den Erfolg prägen“  \nBeschreibung: Hier wird verdeutlicht, dass digitale Souveränität weit mehr als Hardware und Software umfasst: Aufbau einer Fehlerkultur, klare Kommunikationsstrukturen und eine resiliente Umsetzungskultur sind genauso entscheidend. Fallbeispiele aus Unternehmen wie der Schwarz Gruppe illustrieren diesen ganzheitlichen Ansatz.  \nMehrwert: Leser erkennen, wie sie durch kulturelle und organisatorische Veränderungen digitale Souveränität wirksam und nachhaltig im Unternehmen verankern können."
+          "output": {
+            "thema": "Digitale Souveränität und Resilienz",
+            "posting_ideen": [
+              {
+                "titel": "Digitale Souveränität als Grundlage für nachhaltige Tech-Führung",
+                "Beschreibung": "Erörtert wird, warum die Kontrolle über eigene digitale Infrastruktur und Daten für IT-Consultants und Führungskräfte nicht nur technische, sondern auch strategische und ethische Herausforderungen mit sich bringt. Dabei geht es um die Balance zwischen globaler Vernetzung und lokaler Unabhängigkeit.",
+                "Mehrwert": "Leser erfahren, wie digitale Souveränität ihr Mindset zu Risiko- und Innovationsmanagement prägt, und wie sie durch ethische Entscheidungen und souveräne Technologien langfristig Wettbewerbsvorteile schaffen können."
+              },
+              {
+                "titel": "Digitale Resilienz: Mindset für Widerstandsfähigkeit in unsicheren Zeiten",
+                "Beschreibung": "Fokussiert auf die Entwicklung einer resilienten Haltung gegenüber Cyberangriffen, politischen Einflussnahmen und wirtschaftlichen Schocks. Vermittelt wird, wie resilienzorientiertes Denken in Teams und Organisationen zur Stabilität und Innovationskraft beiträgt.",
+                "Mehrwert": "Leser erhalten Impulse, wie sie durch mentale und organisatorische Strategien digitale Resilienz fördern, um ihre Teams und Projekte sicher durch disruptive Herausforderungen zu steuern."
+              },
+              {
+                "titel": "Zwischen Abhängigkeit und Autonomie: Mindset für souveräne digitale Ökosysteme",
+                "Beschreibung": "Untersucht wird die Ambivalenz in der deutschen Tech-Landschaft zwischen starker Abhängigkeit von internationalen Anbietern und dem Streben nach digitaler Autonomie. Diskutiert werden notwendige Mindset-Transformationen, die Zusammenarbeit fördern und zugleich lokale Innovationskraft stärken.",
+                "Mehrwert": "Leser erkennen, wie sie durch ein reflektiertes Mindset und gezielte strategische Entscheidungen Abhängigkeiten verringern, Partnerschaften effektiv gestalten und souveräne digitale Ökosysteme aufbauen können."
+              }
+            ]
+          }
         }
       }
     ]
@@ -3444,6 +3719,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-09-06T17:36:13.143Z",
-  "versionId": "7580b789-6714-4edb-afbd-06ba8126b25d"
+  "updatedAt": "2025-09-07T19:58:07.496Z",
+  "versionId": "4ea07f85-c4bb-498e-9ffb-c58311ba8412"
 }
